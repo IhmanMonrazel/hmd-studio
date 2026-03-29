@@ -1,0 +1,92 @@
+<%# ─── PAGE CONTACT — TICKET DE CAISSE ─────────────────── %>
+<div class="receipt-page" data-controller="ticket-reveal">
+
+  <div class="ticket">
+    <div class="ticket__edge ticket__edge--top"></div>
+
+    <div class="ticket__body">
+
+      <%# ── En-tête ──────────────────────────────────────── %>
+      <p class="tl tl--center tl--xs tl--muted" data-ticket-reveal-target="line">RECEIPT N&deg; HMD-<%= Date.today.strftime("%Y%m%d") %>-001</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+      <p class="tl tl--center tl--xl tl--bold" data-ticket-reveal-target="line">HMD STUDIO</p>
+      <p class="tl tl--center" data-ticket-reveal-target="line">EDITORIAL WEB STUDIO</p>
+      <p class="tl tl--center tl--muted tl--xs" data-ticket-reveal-target="line">Paris &mdash; Working Worldwide</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+
+      <%# ── Séparateur ───────────────────────────────────── %>
+      <p class="tl tl--center tl--sep" data-ticket-reveal-target="line">* * * * * * * * * * * * * * *</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+
+      <%# ── Infos transaction ───────────────────────────── %>
+      <p class="tl" data-ticket-reveal-target="line">DATE &nbsp;&nbsp;&nbsp;&nbsp;: <%= Date.today.strftime("%d/%m/%Y") %></p>
+      <p class="tl" data-ticket-reveal-target="line">TIME &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <%= Time.now.strftime("%H:%M") %></p>
+      <p class="tl" data-ticket-reveal-target="line">ADVISOR &nbsp;&nbsp;: IHMAN M.</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+
+      <%# ── Séparateur ───────────────────────────────────── %>
+      <p class="tl tl--center tl--sep" data-ticket-reveal-target="line">- - - - - - - - - - - - - - -</p>
+
+      <%# ── Catalogue ────────────────────────────────────── %>
+      <p class="tl tl--label" data-ticket-reveal-target="line">CATALOGUE</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+      <p class="tl" data-ticket-reveal-target="line">WEB DEVELOPMENT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#10003;</p>
+      <p class="tl" data-ticket-reveal-target="line">VISUAL IDENTITY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#10003;</p>
+      <p class="tl" data-ticket-reveal-target="line">WEB DESIGN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#10003;</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+      <p class="tl tl--bold" data-ticket-reveal-target="line">RATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON QUOTE</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+
+      <%# ── Séparateur ───────────────────────────────────── %>
+      <p class="tl tl--center tl--sep" data-ticket-reveal-target="line">- - - - - - - - - - - - - - -</p>
+
+      <%# ── Formulaire ──────────────────────────────────── %>
+      <p class="tl tl--label" data-ticket-reveal-target="line">YOUR ORDER</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+
+      <div class="tl ticket-form" data-ticket-reveal-target="line">
+        <form action="#" method="post" class="ticket-form__inner">
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+          <div class="ticket-form__field">
+            <label class="ticket-form__label" for="tnom">NAME</label>
+            <input class="ticket-form__input" type="text" id="tnom" name="name" autocomplete="off" spellcheck="false">
+          </div>
+
+          <div class="ticket-form__field">
+            <label class="ticket-form__label" for="temail">EMAIL</label>
+            <input class="ticket-form__input" type="email" id="temail" name="email" autocomplete="off" spellcheck="false">
+          </div>
+
+          <div class="ticket-form__field">
+            <label class="ticket-form__label" for="tmessage">MESSAGE</label>
+            <textarea class="ticket-form__input ticket-form__textarea" id="tmessage" name="message" rows="3" spellcheck="false"></textarea>
+          </div>
+
+          <button class="ticket-form__submit" type="submit">&#9654; SEND</button>
+        </form>
+      </div>
+
+      <%# ── Séparateur ───────────────────────────────────── %>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+      <p class="tl tl--center tl--sep" data-ticket-reveal-target="line">* * * * * * * * * * * * * * *</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+
+      <%# ── Pied de page ────────────────────────────────── %>
+      <p class="tl tl--center tl--xs tl--muted" data-ticket-reveal-target="line">hello@hmdstudio.com</p>
+      <p class="tl tl--center tl--xs tl--muted" data-ticket-reveal-target="line">INSTAGRAM &nbsp;/&nbsp; LINKEDIN</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+      <p class="tl tl--center tl--bold" data-ticket-reveal-target="line">THANK YOU &amp; SEE YOU SOON!</p>
+      <p class="tl tl--center tl--xs tl--muted" data-ticket-reveal-target="line">Keep this receipt.</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+
+      <%# ── Code-barres ─────────────────────────────────── %>
+      <p class="tl tl--center tl--xs tl--muted" data-ticket-reveal-target="line">* HMD-STUDIO-2025 *</p>
+      <p class="tl tl--empty" data-ticket-reveal-target="line">&nbsp;</p>
+
+    </div><%# /ticket__body %>
+
+    <div class="ticket__edge ticket__edge--bottom"></div>
+  </div><%# /ticket %>
+
+</div><%# /receipt-page %>

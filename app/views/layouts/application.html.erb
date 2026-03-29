@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>HMD Studio</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+
+  <body>
+    <nav class="navbar" data-controller="navbar navbar-scroll">
+      <div class="navbar__inner">
+        <%= link_to root_path, class: "navbar__logo" do %>
+          <span class="navbar__logo-name">HMD STUDIO</span>
+          <span class="navbar__logo-sub">Editorial Web Studio</span>
+        <% end %>
+
+        <div class="navbar__links">
+          <%= link_to "01—WORK",    work_path,    class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'work'}" %>
+          <%= link_to "02—ABOUT",   about_path,   class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'about'}" %>
+          <%= link_to "03—CONTACT", contact_path, class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'contact'}" %>
+        </div>
+
+        <button class="navbar__burger" data-navbar-target="burger" data-action="click->navbar#toggle" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <div class="navbar__overlay" data-navbar-target="overlay" data-action="click->navbar#toggle">
+        <div class="navbar__overlay-links">
+          <%= link_to "01—WORK",    work_path,    class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
+          <%= link_to "02—ABOUT",   about_path,   class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
+          <%= link_to "03—CONTACT", contact_path, class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main <%= 'main--fullbleed' if controller_name == 'pages' && action_name == 'home' %>">
+      <%= yield %>
+    </main>
+  </body>
+</html>
