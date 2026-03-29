@@ -265,11 +265,16 @@ img { display: block; max-width: 100%; }
 /* ============================================================
    HERO VIDEO
    ============================================================ */
+.hero-s2-sequence {
+  position: relative;
+  overflow: hidden;
+  height: 300vh;
+}
+
 .hero-video {
   position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 }
 
 .hero-video__media {
@@ -370,6 +375,7 @@ img { display: block; max-width: 100%; }
    ============================================================ */
 .s3 {
   background: var(--white);
+  overflow: hidden;
 }
 
 .s3__header {
@@ -415,6 +421,7 @@ img { display: block; max-width: 100%; }
 .s4 {
   background: var(--white);
   padding: 80px 40px;
+  overflow: hidden;
 }
 
 .s4__header {
@@ -495,7 +502,7 @@ img { display: block; max-width: 100%; }
 
 .s5__image {
   width: 100%;
-  height: 400px;
+  height: 100vh;
   object-fit: cover;
   object-position: center;
   display: block;
@@ -1950,16 +1957,20 @@ img { display: block; max-width: 100%; }
 }
 
 /* ============================================================
-   HOME SCROLL ANIMATIONS — performance hints
+   HOME SCROLL ANIMATIONS — cinematic scroll (performance hints)
    ============================================================ */
+.hero-video__media,
+.s2,
 .s2__title,
 .s2__image-wrap,
 .s3__cell,
+.s3__grid,
 .s4__col,
 .s5__image,
 .s6 .s6__title,
 .s6__block,
-.s7__title {
+.s7__title,
+.s6 {
   will-change: transform, opacity;
 }
 
