@@ -17,6 +17,7 @@
   --nav-h:  72px;
   --font-display: 'Bebas Neue', sans-serif;
   --font-body:    'Inter', sans-serif;
+  --space-unit:   1rem;
 }
 
 html {
@@ -262,22 +263,36 @@ img { display: block; max-width: 100%; }
 .js-reveal { opacity: 0; }
 .js-stagger > * { opacity: 0; }
 
+/* Accessible visually-hidden utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
 /* ============================================================
-   HERO VIDEO
+   S1–S2 SEQUENCE (cinematic scroll wrapper)
    ============================================================ */
-.hero-s2-sequence {
+.s1-s2-sequence {
   position: relative;
   overflow: hidden;
   height: 300vh;
 }
 
-.hero-video {
+/* ============================================================
+   SECTION 1 — HERO VIDEO
+   ============================================================ */
+.s1 {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
-.hero-video__media {
+.s1__media {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -286,338 +301,254 @@ img { display: block; max-width: 100%; }
   display: block;
 }
 
-.hero-video__overlay {
+.s1__overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.25);
 }
 
-.hero-video__content {
-  position: absolute;
-  bottom: 60px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  padding: 0 40px;
-}
-
-.hero-video__title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 7rem);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--white);
-  text-align: center;
-  line-height: 1;
-}
-
 /* ============================================================
-   SECTION 2 — two columns
+   SECTION 2 — HOOK / POSITIONING
    ============================================================ */
 .s2 {
+  background: var(--black);
+  min-height: 100dvh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 100vh;
-  background: var(--white);
-}
-
-.s2__col {
-  display: flex;
   align-items: center;
-}
-
-.s2__col--left {
-  padding: 80px 60px 80px 80px;
-  border-right: 1px solid var(--border);
-}
-
-.s2__col--right {
-  padding: 80px 80px 80px 60px;
+  padding: clamp(2rem, 8vh, 8rem) clamp(2rem, 6vw, 6rem);
+  gap: clamp(2rem, 5vw, 5rem);
   position: relative;
+  overflow: hidden;
+}
+
+.s2__content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(calc(var(--space-unit) * 1), 2vw, calc(var(--space-unit) * 2));
 }
 
 .s2__title {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 6.5vw, 7.5rem);
-  line-height: 0.92;
+  font-size: clamp(4rem, 12vw, 14rem);
+  line-height: 0.88;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--black);
+  color: var(--white);
 }
 
-/* Image + gazette overlay */
-.s2__image-wrap {
-  position: relative;
+.s2__sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 36ch;
+}
+
+/* Sphere placeholder: fills right grid column as a square.
+   min() ensures it never exceeds either the column width or
+   the available vertical space inside the section. */
+.s2__sphere-mount {
   width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: min(45vw, 80dvh);
+  justify-self: center;
+  align-self: center;
 }
-
-.s2__image-wrap::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, transparent 75%, white 100%);
-  pointer-events: none;
-}
-
-.s2__image {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
 
 /* ============================================================
-   SECTION 3 — IDENTITY
+   SECTION 3 — SERVICES
    ============================================================ */
+/* On desktop: 3-col grid, red left border between items.
+   hr.s3__rule is hidden on desktop, visible on mobile stack. */
 .s3 {
   background: var(--white);
-  overflow: hidden;
-}
-
-.s3__header {
-  padding: 80px 40px 48px;
-  text-align: center;
-}
-
-.s3__label {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.55em;
-  text-transform: uppercase;
-  color: var(--black);
-}
-
-.s3__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 400px 400px;
-  gap: 0;
-  width: 100%;
-  perspective: 1000px;
+  grid-template-columns: repeat(3, 1fr);
+  min-height: 60dvh;
 }
 
-.s3__cell {
-  overflow: hidden;
-  transform-style: preserve-3d;
+.s3__item {
+  padding: clamp(3rem, 8vh, 8rem) clamp(1.5rem, 4vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(calc(var(--space-unit) * 0.75), 1.5vw, calc(var(--space-unit) * 1.5));
+  border-left: 2px solid var(--red);
 }
 
-.s3__cell img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  display: block;
-}
-
-
-/* ============================================================
-   SECTION 4 — WHAT WE DO
-   ============================================================ */
-.s4 {
-  background: var(--white);
-  padding: 80px 40px;
-  overflow: hidden;
-}
-
-.s4__header {
-  margin-bottom: 64px;
-}
-
-.s4__title {
-  font-family: var(--font-display);
-  font-size: clamp(3.5rem, 8vw, 8rem);
-  letter-spacing: 0.02em;
-  line-height: 1;
-  color: var(--black);
-  text-align: left;
-}
-
-.s4__cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.s4__col {
-  padding: 0 48px;
-  text-align: center;
-  border-left: 1px solid var(--border);
-}
-
-.s4__col:first-child {
+.s3__item:first-of-type {
   border-left: none;
   padding-left: 0;
 }
 
-.s4__col:last-child {
-  padding-right: 0;
-}
-
-.s4__col-title {
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--black);
-  margin-bottom: 20px;
-}
-
-.s4__col-text {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 300;
-  line-height: 1.8;
-  color: var(--muted);
-}
-
-/* ============================================================
-   SECTION 5 — WORK TEASER
-   ============================================================ */
-.s5 {
-  background: #ffffff;
-  position: relative;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-.s5__link {
-  display: block;
-  width: 100%;
-  cursor: pointer;
-  position: relative;
-  outline: 3px solid transparent;
-  transition: outline-color 0.3s ease;
-  overflow: hidden;
-}
-
-.s5__link:hover {
-  outline-color: var(--red);
-}
-
-.s5__image {
-  width: 100%;
-  height: 100vh;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.s5__link:hover .s5__image {
-  transform: scale(1.01);
-}
-
-/* ============================================================
-   SECTION 6 — WHY WORK WITH US
-   ============================================================ */
-.s6 {
-  background: var(--white);
-  padding: 80px 40px 100px;
-  position: relative;
-  overflow: hidden;
-}
-
-.s6__header {
-  margin-bottom: 72px;
-}
-
-.s6__title {
+.s3__item-title {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 7vw, 7rem);
-  letter-spacing: 0.02em;
+  font-size: clamp(1.5rem, 3.5vw, 3.5rem);
+  letter-spacing: 0.04em;
   line-height: 1;
   color: var(--black);
 }
 
-.s6__blocks {
-  display: flex;
-  flex-direction: column;
-  gap: 56px;
-  max-width: 900px;
-}
-
-.s6__block {
-  max-width: 420px;
-}
-
-.s6__block--1 { margin-left: 0; }
-.s6__block--2 { margin-left: 30%; }
-.s6__block--3 { margin-left: 10%; }
-
-.s6__block-title {
+.s3__item-desc {
   font-family: var(--font-body);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--black);
-  margin-bottom: 12px;
-}
-
-.s6__block-text {
-  font-family: var(--font-body);
-  font-size: 0.88rem;
+  font-size: clamp(0.82rem, 1.1vw, 1rem);
   font-weight: 300;
   line-height: 1.8;
   color: var(--muted);
 }
 
+.s3__rule {
+  display: none;
+}
 
 /* ============================================================
-   SECTION 7 — FINAL CTA
+   SECTION 4 — WORK TEASER
    ============================================================ */
-.s7 {
+.s4 {
+  position: relative;
+  overflow: hidden;
+  height: 100dvh;
+}
+
+.s4__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.s4__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.s4__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(2rem, 5vw, 5rem);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 55%);
+  transition: background 0.4s ease;
+}
+
+.s4__link:hover .s4__overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, transparent 60%);
+}
+
+.s4__overlay-text {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 10rem);
+  color: var(--white);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+/* ============================================================
+   SECTION 5 — DIFFERENTIATOR (red)
+   ============================================================ */
+/* Padding calculated from vw so text never touches edges:
+   horizontal = max(3rem, 8vw), vertical = max(4rem, 10vh). */
+.s5 {
+  background: var(--red);
+  padding: clamp(4rem, 10vh, 10rem) clamp(3rem, 8vw, 8rem);
+  min-height: 60dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Asymmetric grid: equal columns, staggered vertical offsets
+   on blocks 2 and 3 to break the uniform baseline. */
+.s5__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.s5__block--1 { align-self: start; }
+
+.s5__block--2 {
+  align-self: start;
+  margin-top: clamp(3rem, 8vh, 8rem);
+}
+
+.s5__block--3 {
+  align-self: start;
+  margin-top: clamp(1.5rem, 4vh, 4rem);
+}
+
+.s5__block-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.8rem);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--white);
+  display: block;
+  margin-bottom: clamp(calc(var(--space-unit) * 0.5), 1.5vh, calc(var(--space-unit) * 1.5));
+}
+
+.s5__block-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.82rem, 1.1vw, 1rem);
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ============================================================
+   SECTION 6 — CTA
+   ============================================================ */
+.s6 {
   background: var(--black);
   color: var(--white);
-  padding: 100px 40px 64px;
+  padding: clamp(4rem, 10vh, 10rem) clamp(2rem, 6vw, 6rem) clamp(3rem, 6vh, 6rem);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 60vh;
-  margin-bottom: 0;
+  min-height: 60dvh;
 }
 
-.s7__top {
+.s6__top {
   flex: 1;
   display: flex;
   align-items: flex-start;
 }
 
-.s7__title {
+/* clamp: min=4rem (readable on 375px), preferred=9vw,
+   max=11rem (caps before overflowing 1440px containers) */
+.s6__title {
   font-family: var(--font-display);
-  font-size: clamp(5rem, 10vw, 12rem);
+  font-size: clamp(4rem, 9vw, 11rem);
   line-height: 0.88;
   letter-spacing: 0.01em;
   color: var(--white);
-  max-width: 900px;
+  max-width: 90vw;
 }
 
-.s7__rule {
+.s6__rule {
   border: none;
-  border-top: 1px solid rgba(255,255,255,0.2);
-  margin: 80px 0 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: clamp(3rem, 6vh, 6rem) 0 clamp(2rem, 4vh, 4rem);
 }
 
-.s7__colophon {
+.s6__colophon {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: clamp(calc(var(--space-unit) * 0.5), 1vh, var(--space-unit));
 }
 
-.s7__colophon p {
+.s6__colophon p {
   font-family: var(--font-body);
   font-size: 0.65rem;
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 /* ============================================================
@@ -1959,18 +1890,17 @@ img { display: block; max-width: 100%; }
 /* ============================================================
    HOME SCROLL ANIMATIONS — cinematic scroll (performance hints)
    ============================================================ */
-.hero-video__media,
+.s1__media,
 .s2,
-.s2__title,
-.s2__image-wrap,
-.s3__cell,
-.s3__grid,
-.s4__col,
-.s5__image,
-.s6 .s6__title,
-.s6__block,
-.s7__title,
-.s6 {
+.s2__content,
+.s3,
+.s3__item,
+.s4,
+.s4__image,
+.s5,
+.s5__block,
+.s6,
+.s6__title {
   will-change: transform, opacity;
 }
 
@@ -1982,18 +1912,56 @@ img { display: block; max-width: 100%; }
   .navbar__burger { display: flex; }
 
   .section { padding: 80px 24px; }
-  .hero { padding: 0 24px; }
   .page-hero { padding: 80px 24px 60px; }
+  .navbar__inner { padding: 0 24px; }
 
-  .s2 { grid-template-columns: 1fr; }
-  .s2__col--left { padding: 60px 24px 40px; border-right: none; border-bottom: 1px solid var(--border); }
-  .s2__col--right { padding: 40px 24px 60px; }
-  .gazette { left: -12px; width: 72%; }
+  /* S2 — stack content above sphere on mobile */
+  .s2 {
+    grid-template-columns: 1fr;
+    padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 5vw, 2.5rem);
+  }
+  .s2__sphere-mount {
+    max-width: min(80vw, 60dvh);
+    justify-self: center;
+  }
 
+  /* S3 — vertical stack with red hr separators */
+  .s3 {
+    display: flex;
+    flex-direction: column;
+  }
+  .s3__rule {
+    display: block;
+    border: none;
+    border-top: 1px solid var(--red);
+    margin: 0;
+  }
+  .s3__item {
+    border-left: none;
+    padding-left: clamp(1.5rem, 5vw, 2.5rem);
+  }
+  .s3__item:first-of-type {
+    padding-left: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  /* S4 — shorter height on mobile */
+  .s4 { height: 70dvh; }
+
+  /* S5 — single column, remove vertical offsets */
+  .s5 {
+    padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 5vw, 2.5rem);
+  }
+  .s5__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 5vw, 3rem);
+  }
+  .s5__block--2,
+  .s5__block--3 { margin-top: 0; }
+
+  /* Shared grid overrides */
   .featured__grid { grid-template-columns: 1fr; }
   .work-grid__inner { grid-template-columns: 1fr; }
   .about-story__inner { grid-template-columns: 1fr; gap: 40px; }
   .values__grid { grid-template-columns: 1fr; }
   .contact-section__inner { grid-template-columns: 1fr; gap: 48px; }
-  .navbar__inner { padding: 0 24px; }
 }
