@@ -18,6 +18,7 @@
     <div class="s2__content">
       <h1 class="s2__title">HMD STUDIO</h1>
       <p class="s2__sub">Editorial web studio for brands that refuse to be forgettable.</p>
+      <p class="s2__cred">Branding — Web — Direction Artistique</p>
     </div>
     <div class="s2__sphere-mount" aria-hidden="true"></div>
   </section>
@@ -41,20 +42,20 @@
     </div>
   </section>
 
-  <%# ── S4 · Work teaser ──────────────────────────────────── %>
+  <%# ── S4 · Work teaser — cloud morphing video ──────────── %>
   <section class="s4">
     <h2 class="visually-hidden">Our Work</h2>
-    <%= link_to work_path, class: "s4__link" do %>
-      <img
-        class="s4__image"
-        src="https://res.cloudinary.com/dtlybacjm/image/upload/v1774458352/GFS_Didot_6_xlasdg.jpg"
-        alt="Our Work — HMD Studio"
-        loading="eager"
-      >
-      <div class="s4__overlay">
-        <span class="s4__overlay-text">OUR WORK</span>
+    <a href="/work" class="s4__cloud-link">
+      <div class="s4__cloud-wrap">
+        <video class="s4__cloud-video"
+               preload="auto"
+               muted
+               playsinline
+               crossorigin="anonymous">
+          <source src="https://res.cloudinary.com/dtlybacjm/video/upload/v1775127289/cloud_seekable_bvna1d.webm" type="video/webm">
+        </video>
       </div>
-    <% end %>
+    </a>
   </section>
 
   <%# ── S5 · Differentiator (red) ─────────────────────────── %>
@@ -76,18 +77,56 @@
     </div>
   </section>
 
-  <%# ── S6 · CTA ───────────────────────────────────────────── %>
-  <section class="s6">
-    <div class="s6__top">
-      <h2 class="s6__title">LET'S BUILD SOMETHING STRANGE</h2>
-    </div>
-    <hr class="s6__rule">
-    <div class="s6__colophon">
-      <p>HMD STUDIO &mdash; EDITORIAL WEB STUDIO</p>
-      <p>hello@hmdstudio.com</p>
-      <p>INSTAGRAM / LINKEDIN</p>
-      <p>&copy; 2025 HMD STUDIO</p>
-    </div>
-  </section>
 
 </div><%# /home-scroll %>
+
+<%# ── Diagnostic: s2 spacing + all-section background audit ── %>
+<script type="module">
+  document.addEventListener("turbo:load", () => {
+    // S2 — detailed spacing audit for s2 and its direct children
+    const s2 = document.querySelector(".s2")
+    if (s2) {
+      const cs = getComputedStyle(s2)
+      console.group("[home-scroll] s2 spacing audit")
+      console.log("s2:", {
+        height:    cs.height,
+        minHeight: cs.minHeight,
+        padTop:    cs.paddingTop,
+        padBot:    cs.paddingBottom,
+        bg:        cs.backgroundColor,
+      })
+      Array.from(s2.children).forEach(child => {
+        const cc = getComputedStyle(child)
+        console.log(`  .${child.className.split(" ")[0]}:`, {
+          height:    cc.height,
+          minHeight: cc.minHeight,
+          padTop:    cc.paddingTop,
+          padBot:    cc.paddingBottom,
+          marginTop: cc.marginTop,
+          marginBot: cc.marginBottom,
+        })
+      })
+      console.groupEnd()
+    }
+
+    // All sections — background audit (no rgb(255,255,255) expected)
+    const targets = [
+      { id: "main--fullbleed", el: document.querySelector(".main--fullbleed") },
+      { id: "s1-s2-sequence",  el: document.querySelector(".s1-s2-sequence") },
+      { id: "S1", el: document.querySelector(".s1") },
+      { id: "S2", el: document.querySelector(".s2") },
+      { id: "S3", el: document.querySelector(".s3") },
+      { id: "S4", el: document.querySelector(".s4") },
+      { id: "S5", el: document.querySelector(".s5") },
+      { id: "S6", el: document.querySelector(".s6") },
+    ]
+    console.group("[home-scroll] background audit")
+    targets.forEach(({ id, el }) => {
+      if (!el) return
+      const bg = getComputedStyle(el).backgroundColor
+      const isWhite = bg === "rgb(255, 255, 255)"
+      console[isWhite ? "warn" : "log"](`${id}: ${bg}${isWhite ? " ← UNEXPECTED WHITE" : ""}`)
+    })
+    console.groupEnd()
+  })
+</script>

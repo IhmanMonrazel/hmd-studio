@@ -2,301 +2,184 @@ import { useState } from "react";
 
 const PROJECTS = [
   {
+    num: "01",
     title: "BOOKING CLUB",
     description: "Full-stack booking system for sports clubs",
     stack: "Rails / PostgreSQL / Stripe / Heroku",
     link: "/work/booking-club",
+    image: "https://res.cloudinary.com/dtlybacjm/image/upload/v1775130737/Image_02-04-2026_a%CC%80_13.49_grer8m.png",
   },
   {
+    num: "02",
     title: "SAFEMOOV",
     description: "Real-time incident reporting app",
     stack: "Rails / JS / Cloudinary",
     link: "/work/safemoov",
+    image: "https://res.cloudinary.com/dtlybacjm/image/upload/v1775130738/Image_02-04-2026_a%CC%80_13.50_wf7kpl.png",
   },
   {
+    num: "03",
     title: "PERSONAL PORTFOLIO",
     description: "Multilingual dev portfolio with auto-email",
     stack: "Rails / Google API / PostgreSQL",
     link: "/work/personal-portfolio",
+    image: "https://res.cloudinary.com/dtlybacjm/image/upload/v1775130738/Image_02-04-2026_a%CC%80_13.51_jj39xo.png",
   },
 ];
 
-const CARD_W = 300;
-const CARD_H = 400;
-
-function getCardTransform(position) {
-  if (position === 0) {
-    return {
-      transform: "translateX(0px) rotateY(0deg) scale(1) translateZ(0px)",
-      zIndex: 3,
-      opacity: 1,
-      cursor: "default",
-    };
-  }
-  if (position === 1) {
-    return {
-      transform: "translateX(320px) rotateY(-18deg) scale(0.84) translateZ(-80px)",
-      zIndex: 2,
-      opacity: 0.82,
-      cursor: "pointer",
-    };
-  }
-  return {
-    transform: "translateX(-320px) rotateY(18deg) scale(0.84) translateZ(-80px)",
-    zIndex: 2,
-    opacity: 0.82,
-    cursor: "pointer",
-  };
-}
-
 export const WorkCarousel = () => {
-  const [active, setActive] = useState(0);
-
-  const prev = () => setActive((a) => (a + PROJECTS.length - 1) % PROJECTS.length);
-  const next = () => setActive((a) => (a + 1) % PROJECTS.length);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hovered, setHovered] = useState(false);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        minHeight: 540,
-        background: "#ffffff",
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "55fr 45fr",
+      minHeight: "calc(100dvh - 72px)",
+      background: "#000000",
+      color: "#ffffff",
+    }}>
+      {/* LEFT — project list */}
+      <div style={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         justifyContent: "center",
-        fontFamily: "sans-serif",
-        padding: "40px 0 60px",
-      }}
-    >
-      {/* Arc stage */}
-      <div
-        style={{
-          position: "relative",
-          width: CARD_W,
-          height: CARD_H,
-          perspective: "1200px",
-          perspectiveOrigin: "50% 50%",
-        }}
-      >
-        {PROJECTS.map((project, i) => {
-          const position = (i - active + PROJECTS.length) % PROJECTS.length;
-          const style = getCardTransform(position);
-          const isCenter = position === 0;
-          const isRight = position === 1;
-          const isLeft = position === 2;
+        padding: "0 clamp(2rem, 5vw, 6rem)",
+        borderRight: "1px solid rgba(255,255,255,0.08)",
+      }}>
+        <p style={{
+          fontSize: "0.7rem",
+          letterSpacing: "0.25em",
+          textTransform: "uppercase",
+          color: "rgba(255,255,255,0.25)",
+          marginBottom: "clamp(2rem, 4vh, 3rem)",
+          fontFamily: "Inter, sans-serif",
+        }}>
+          Selected Projects — 2024/2025
+        </p>
 
-          return (
-            <div
-              key={i}
-              onClick={() => {
-                if (isRight) next();
-                if (isLeft) prev();
-              }}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: CARD_W,
-                height: CARD_H,
-                background: "#ffffff",
-                border: "1.5px solid #000000",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                padding: "28px 24px 24px",
-                transformOrigin: "center center",
-                transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease",
-                boxShadow: isCenter
-                  ? "0 8px 40px rgba(0,0,0,0.12)"
-                  : "0 2px 12px rgba(0,0,0,0.06)",
-                ...style,
-              }}
-            >
-              {/* Index */}
-              <div>
-                <p
-                  style={{
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.22em",
-                    textTransform: "uppercase",
-                    color: "#CC0000",
-                    marginBottom: 12,
-                    fontFamily: "Inter, sans-serif",
-                    fontWeight: 400,
-                  }}
-                >
-                  0{i + 1}
-                </p>
+        {PROJECTS.map((project, i) => (
+          <a
+            key={i}
+            href={project.link}
+            data-turbo="true"
+            onMouseEnter={() => { setActiveIndex(i); setHovered(true); }}
+            onMouseLeave={() => setHovered(false)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1.5rem",
+              padding: "clamp(1.2rem, 2.5vh, 2rem) 0",
+              borderTop: "1px solid rgba(255,255,255,0.08)",
+              borderBottom: i === PROJECTS.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none",
+              textDecoration: "none",
+              color: activeIndex === i ? "#ffffff" : "rgba(255,255,255,0.4)",
+              transition: "color 0.3s ease",
+              cursor: "pointer",
+            }}
+          >
+            {/* Number */}
+            <span style={{
+              fontSize: "0.65rem",
+              letterSpacing: "0.2em",
+              color: "#CC0000",
+              fontFamily: "Inter, sans-serif",
+              minWidth: "2rem",
+            }}>
+              {project.num}
+            </span>
 
-                {/* Title */}
-                <h2
-                  style={{
-                    fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
-                    fontSize: "2.2rem",
-                    letterSpacing: "0.05em",
-                    lineHeight: 1,
-                    color: "#000000",
-                    marginBottom: 16,
-                  }}
-                >
-                  {project.title}
-                </h2>
-
-                {/* Description */}
-                <p
-                  style={{
-                    fontSize: "0.82rem",
-                    lineHeight: 1.7,
-                    color: "rgba(0,0,0,0.6)",
-                    fontFamily: "Inter, sans-serif",
-                    fontWeight: 300,
-                    marginBottom: 16,
-                  }}
-                >
-                  {project.description}
-                </p>
-
-                {/* Divider */}
-                <div
-                  style={{
-                    width: "100%",
-                    height: 1,
-                    background: "rgba(0,0,0,0.1)",
-                    marginBottom: 14,
-                  }}
-                />
-
-                {/* Stack */}
-                <p
-                  style={{
-                    fontSize: "0.62rem",
-                    letterSpacing: "0.14em",
-                    textTransform: "uppercase",
-                    color: "rgba(0,0,0,0.4)",
-                    fontFamily: "Inter, sans-serif",
-                    fontWeight: 400,
-                  }}
-                >
-                  {project.stack}
-                </p>
-              </div>
-
-              {/* CTA */}
-              {isCenter && (
-                <a
-                  href={project.link}
-                  data-turbo="true"
-                  style={{
-                    display: "block",
-                    background: "#000000",
-                    color: "#ffffff",
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "0.68rem",
-                    fontWeight: 500,
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    padding: "12px 20px",
-                    textDecoration: "none",
-                    textAlign: "center",
-                    transition: "background 0.2s",
-                    marginTop: 8,
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "#CC0000")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "#000000")}
-                >
-                  View Project →
-                </a>
-              )}
+            {/* Info */}
+            <div style={{ flex: 1 }}>
+              <h2 style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                letterSpacing: "0.04em",
+                margin: 0,
+                lineHeight: 1,
+                transform: activeIndex === i ? "translateX(8px)" : "translateX(0)",
+                transition: "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                color: "inherit",
+              }}>
+                {project.title}
+              </h2>
+              <p style={{
+                fontSize: "clamp(0.75rem, 1.1vw, 0.9rem)",
+                color: "rgba(255,255,255,0.35)",
+                margin: "0.4rem 0 0",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 300,
+                opacity: activeIndex === i ? 1 : 0,
+                transform: activeIndex === i ? "translateY(0)" : "translateY(4px)",
+                transition: "opacity 0.3s ease, transform 0.3s ease",
+              }}>
+                {project.description}
+              </p>
             </div>
-          );
-        })}
+
+            {/* Arrow */}
+            <span style={{
+              fontSize: "1.2rem",
+              opacity: activeIndex === i ? 1 : 0,
+              transform: activeIndex === i ? "translateX(0)" : "translateX(-8px)",
+              transition: "all 0.3s ease",
+              color: "#ffffff",
+            }}>→</span>
+          </a>
+        ))}
       </div>
 
-      {/* Navigation arrows */}
-      <div
-        style={{
-          display: "flex",
-          gap: 24,
-          marginTop: 48,
-          alignItems: "center",
-        }}
-      >
-        <button
-          onClick={prev}
-          style={{
-            background: "none",
-            border: "1.5px solid #000000",
-            width: 44,
-            height: 44,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "1.1rem",
-            color: "#000000",
-            transition: "background 0.2s, color 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#000000";
-            e.currentTarget.style.color = "#ffffff";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "none";
-            e.currentTarget.style.color = "#000000";
-          }}
-          aria-label="Previous"
-        >
-          ←
-        </button>
-
-        {/* Dots */}
-        <div style={{ display: "flex", gap: 8 }}>
-          {PROJECTS.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
+      {/* RIGHT — image preview */}
+      <div style={{
+        position: "sticky",
+        top: 0,
+        height: "100dvh",
+        overflow: "hidden",
+        background: "#111111",
+      }}>
+        {PROJECTS.map((project, i) => (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "#111111",
+              opacity: activeIndex === i ? 1 : 0,
+              transition: "opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            }}
+          >
+            <img
+              src={project.image}
+              alt={project.title}
               style={{
-                width: i === active ? 24 : 8,
-                height: 8,
-                background: i === active ? "#000000" : "rgba(0,0,0,0.2)",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
-                transition: "width 0.3s ease, background 0.3s ease",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                transform: activeIndex === i ? "scale(1)" : "scale(1.04)",
+                transition: "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
               }}
-              aria-label={`Go to project ${i + 1}`}
             />
-          ))}
-        </div>
-
-        <button
-          onClick={next}
-          style={{
-            background: "none",
-            border: "1.5px solid #000000",
-            width: 44,
-            height: 44,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "1.1rem",
-            color: "#000000",
-            transition: "background 0.2s, color 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#000000";
-            e.currentTarget.style.color = "#ffffff";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "none";
-            e.currentTarget.style.color = "#000000";
-          }}
-          aria-label="Next"
-        >
-          →
-        </button>
+            {/* Project number overlay */}
+            <div style={{
+              position: "absolute",
+              bottom: "clamp(2rem, 4vh, 3rem)",
+              left: "clamp(1.5rem, 3vw, 2.5rem)",
+              opacity: activeIndex === i ? 1 : 0,
+              transition: "opacity 0.4s ease 0.2s",
+            }}>
+              <p style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "clamp(4rem, 8vw, 7rem)",
+                color: "rgba(255,255,255,0.12)",
+                lineHeight: 1,
+                margin: 0,
+                letterSpacing: "0.02em",
+              }}>
+                {project.num}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

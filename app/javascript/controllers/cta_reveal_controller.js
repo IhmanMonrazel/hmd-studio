@@ -5,16 +5,16 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default class extends Controller {
   connect() {
-    const title = this.element.querySelector(".s7__title")
+    const title = this.element.querySelector(".s7__title, .site-footer__title")
     if (!title) return
 
     // Split titre en mots
     const words = title.textContent.trim().split(" ")
     title.innerHTML = words
-      .map(w => `<span class="s7__word" style="display:inline-block">${w}</span>`)
+      .map(w => `<span class="site-footer__word" style="display:inline-block">${w}</span>`)
       .join(" ")
 
-    const spans = title.querySelectorAll(".s7__word")
+    const spans = title.querySelectorAll(".site-footer__word")
     gsap.set(spans, { opacity: 0, y: 20 })
 
     ScrollTrigger.create({

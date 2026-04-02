@@ -8,5 +8,9 @@ Rails.application.routes.draw do
   get "/about",   to: "pages#about",   as: :about
   get "/contact", to: "pages#contact", as: :contact
 
+  get '/mentions-legales',           to: 'pages#mentions_legales',           as: 'mentions_legales'
+  get '/politique-confidentialite',  to: 'pages#politique_confidentialite',  as: 'politique_confidentialite'
+  get '/politique-cookies',          to: 'pages#politique_cookies',          as: 'politique_cookies'
+
   get "up" => "rails/health#show", as: :rails_health_check
 end

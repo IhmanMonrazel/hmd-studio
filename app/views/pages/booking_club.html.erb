@@ -12,6 +12,216 @@
   </div>
 </section>
 
+<%# ─── SCENE ───────────────────────────────────────────── %>
+<section class="bc-scene">
+  <div class="bc-scene__map">
+    <svg class="bc-scene__svg" viewBox="0 0 1200 600"
+         xmlns="http://www.w3.org/2000/svg"
+         preserveAspectRatio="xMidYMid slice">
+
+      <!-- Sky — cold morning gradient -->
+      <rect width="1200" height="600" fill="#1a2535"/>
+
+      <!-- Mist layers -->
+      <ellipse cx="600" cy="320" rx="700" ry="120"
+               fill="#b8c8d8" opacity="0.06"/>
+      <ellipse cx="400" cy="340" rx="500" ry="80"
+               fill="#c8d8e8" opacity="0.04"/>
+      <ellipse cx="800" cy="330" rx="400" ry="60"
+               fill="#d0dde8" opacity="0.04"/>
+
+      <!-- Water surface -->
+      <rect x="0" y="340" width="1200" height="260" fill="#1e3048"/>
+
+      <!-- Water shimmer lines -->
+      <line x1="0" y1="360" x2="1200" y2="358"
+            stroke="#4a6fa5" stroke-width="0.5" opacity="0.3"/>
+      <line x1="0" y1="380" x2="1200" y2="382"
+            stroke="#4a6fa5" stroke-width="0.3" opacity="0.2"/>
+      <line x1="0" y1="400" x2="1200" y2="398"
+            stroke="#4a6fa5" stroke-width="0.3" opacity="0.15"/>
+      <line x1="0" y1="420" x2="1200" y2="422"
+            stroke="#4a6fa5" stroke-width="0.2" opacity="0.1"/>
+      <line x1="0" y1="450" x2="1200" y2="448"
+            stroke="#4a6fa5" stroke-width="0.2" opacity="0.08"/>
+
+      <!-- Dock/pontoon -->
+      <rect x="80" y="330" width="400" height="18"
+            rx="2" fill="#2a3f5a"/>
+      <rect x="80" y="330" width="400" height="3"
+            rx="1" fill="#3a5470" opacity="0.8"/>
+      <!-- Dock posts -->
+      <rect x="100" y="348" width="6" height="40" fill="#243448"/>
+      <rect x="200" y="348" width="6" height="40" fill="#243448"/>
+      <rect x="300" y="348" width="6" height="40" fill="#243448"/>
+      <rect x="400" y="348" width="6" height="40" fill="#243448"/>
+      <rect x="460" y="348" width="6" height="35" fill="#243448"/>
+
+      <!-- Boat 1 — Eight+ Competition (long racing shell) -->
+      <g transform="translate(120, 316)">
+        <path d="M0,8 Q60,-2 280,6 Q340,8 360,12 Q340,16 280,14 Q60,18 0,12 Z"
+              fill="#2a4a7a" stroke="#4a7ab5" stroke-width="0.8"/>
+        <!-- Seats -->
+        <rect x="40" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+        <rect x="70" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+        <rect x="100" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+        <rect x="130" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+        <rect x="160" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+        <rect x="190" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+        <rect x="220" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+        <rect x="250" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+        <!-- Oars -->
+        <line x1="60" y1="10" x2="20" y2="30" stroke="#5a8abf" stroke-width="1.5" opacity="0.6"/>
+        <line x1="100" y1="10" x2="60" y2="32" stroke="#5a8abf" stroke-width="1.5" opacity="0.6"/>
+        <line x1="140" y1="10" x2="100" y2="32" stroke="#5a8abf" stroke-width="1.5" opacity="0.6"/>
+        <line x1="180" y1="10" x2="140" y2="32" stroke="#5a8abf" stroke-width="1.5" opacity="0.5"/>
+        <!-- Other side oars -->
+        <line x1="80" y1="9" x2="110" y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.6"/>
+        <line x1="120" y1="9" x2="150" y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.6"/>
+        <line x1="160" y1="9" x2="190" y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.5"/>
+        <line x1="200" y1="9" x2="230" y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.5"/>
+        <!-- Boat label -->
+        <text x="180" y="5" font-family="system-ui" font-size="7"
+              fill="#8ab4d4" opacity="0.7" text-anchor="middle">
+          HUIT+ COMPÉTITION
+        </text>
+      </g>
+
+      <!-- Boat 2 — Quatre+ (shorter) -->
+      <g transform="translate(140, 338)">
+        <path d="M0,6 Q40,-1 180,4 Q220,6 240,9 Q220,12 180,10 Q40,14 0,10 Z"
+              fill="#1e3a5a" stroke="#3a6090" stroke-width="0.8" opacity="0.85"/>
+        <text x="120" y="3" font-family="system-ui" font-size="6"
+              fill="#6a94b4" opacity="0.6" text-anchor="middle">
+          QUATRE+ DÉCOUVERTE
+        </text>
+      </g>
+
+      <!-- Boat 3 — Yolette (wider) -->
+      <g transform="translate(160, 354)">
+        <path d="M0,8 Q30,2 140,6 Q170,8 180,11 Q170,14 140,12 Q30,16 0,12 Z"
+              fill="#192d42" stroke="#2a4a6a" stroke-width="0.8" opacity="0.7"/>
+        <text x="90" y="4" font-family="system-ui" font-size="6"
+              fill="#5a84a4" opacity="0.5" text-anchor="middle">
+          YOLETTE LOISIRS
+        </text>
+      </g>
+
+      <!-- Water reflections from boats -->
+      <ellipse cx="240" cy="360" rx="180" ry="8"
+               fill="#2a4a7a" opacity="0.3"/>
+      <ellipse cx="220" cy="368" rx="120" ry="5"
+               fill="#2a4a7a" opacity="0.15"/>
+
+      <!-- Time display — morning atmosphere -->
+      <text x="80" y="80" font-family="'Helvetica Neue', Arial, sans-serif"
+            font-size="52" font-weight="700" fill="#ffffff" opacity="0.12"
+            letter-spacing="4">06:00</text>
+      <text x="80" y="110" font-family="'Helvetica Neue', Arial, sans-serif"
+            font-size="11" fill="#8ab4d4" opacity="0.5" letter-spacing="3">
+        OUVERTURE DU CLUB
+      </text>
+
+      <!-- Available slots floating UI -->
+      <g transform="translate(80, 140)">
+        <text font-family="system-ui" font-size="9" fill="#6a94b4"
+              opacity="0.7" letter-spacing="2">PROCHAINS CRÉNEAUX</text>
+
+        <!-- Slot 1 -->
+        <rect y="14" width="160" height="28" rx="4"
+              fill="#2a4a6a" opacity="0.7"/>
+        <rect y="14" width="4" height="28" rx="1" fill="#4dba7f" opacity="0.9"/>
+        <text x="12" y="25" font-family="system-ui" font-size="9"
+              font-weight="600" fill="#ffffff" opacity="0.9">14h00</text>
+        <text x="12" y="36" font-family="system-ui" font-size="7"
+              fill="#8ab4d4" opacity="0.7">Huit+ Compétition</text>
+
+        <!-- Slot 2 -->
+        <rect y="48" width="160" height="28" rx="4"
+              fill="#2a4a6a" opacity="0.6"/>
+        <rect y="48" width="4" height="28" rx="1" fill="#4dba7f" opacity="0.8"/>
+        <text x="12" y="59" font-family="system-ui" font-size="9"
+              font-weight="600" fill="#ffffff" opacity="0.85">14h00</text>
+        <text x="12" y="70" font-family="system-ui" font-size="7"
+              fill="#8ab4d4" opacity="0.6">Quatre+ Découverte</text>
+
+        <!-- Slot 3 -->
+        <rect y="82" width="160" height="28" rx="4"
+              fill="#2a4a6a" opacity="0.5"/>
+        <rect y="82" width="4" height="28" rx="1" fill="#4dba7f" opacity="0.7"/>
+        <text x="12" y="93" font-family="system-ui" font-size="9"
+              font-weight="600" fill="#ffffff" opacity="0.8">14h00</text>
+        <text x="12" y="104" font-family="system-ui" font-size="7"
+              fill="#8ab4d4" opacity="0.55">Yolette Loisirs</text>
+      </g>
+
+      <!-- Stripe payment badge -->
+      <g transform="translate(80, 280)">
+        <rect width="120" height="28" rx="4"
+              fill="#1e3048" stroke="#3a5470" stroke-width="0.8"/>
+        <text x="12" y="18" font-family="system-ui" font-size="9"
+              fill="#8ab4d4" opacity="0.7" letter-spacing="1">
+          STRIPE · SÉCURISÉ
+        </text>
+      </g>
+
+      <!-- Dark overlay right side for card readability -->
+      <rect x="700" y="0" width="500" height="600"
+            fill="#0d1520" opacity="0.6"/>
+
+      <!-- Overall dark overlay -->
+      <rect width="1200" height="600" fill="#000000" opacity="0.25"/>
+    </svg>
+  </div>
+
+  <!-- Booking card floating right -->
+  <div class="bc-scene__card">
+    <div class="bc-scene__card-header">
+      <span class="bc-scene__badge">DISPONIBLE</span>
+      <h3 class="bc-scene__title">Huit+ Compétition</h3>
+      <p class="bc-scene__price">30.00 € / heure</p>
+    </div>
+    <div class="bc-scene__divider"></div>
+    <div class="bc-scene__fields">
+      <div class="bc-scene__field">
+        <span class="bc-scene__label">DATE</span>
+        <div class="bc-scene__input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" width="13" height="13">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4M8 2v4M3 10h18"/>
+          </svg>
+          26/03/2026
+        </div>
+      </div>
+      <div class="bc-scene__row">
+        <div class="bc-scene__field">
+          <span class="bc-scene__label">DÉBUT</span>
+          <div class="bc-scene__input">06:00</div>
+        </div>
+        <div class="bc-scene__field">
+          <span class="bc-scene__label">FIN</span>
+          <div class="bc-scene__input">07:00</div>
+        </div>
+      </div>
+      <p class="bc-scene__avail">
+        <span class="bc-scene__avail-dot"></span>
+        Tous les créneaux disponibles
+      </p>
+    </div>
+    <div class="bc-scene__divider"></div>
+    <div class="bc-scene__total">
+      <div class="bc-scene__total-line">
+        <span>Tarif</span><span>60.00 €</span>
+      </div>
+      <div class="bc-scene__total-line bc-scene__total-line--bold">
+        <span>Total</span><span>60.00 €</span>
+      </div>
+    </div>
+    <button class="bc-scene__cta">VALIDER LA RÉSERVATION</button>
+  </div>
+</section>
+
 <%# ─── SHOWCASE GSAP ───────────────────────────────────── %>
 <section class="bc-showcase" data-controller="gsap-showcase">
   <div class="bc-showcase__inner">
@@ -101,16 +311,3 @@
   </div>
 </section>
 
-<%# ─── CTA FINAL ──────────────────────────────────────── %>
-<section class="s7">
-  <div class="s7__top">
-    <h2 class="s7__title">LET'S BUILD SOMETHING STRANGE</h2>
-  </div>
-  <hr class="s7__rule">
-  <div class="s7__colophon">
-    <p>HMD STUDIO &mdash; EDITORIAL WEB STUDIO</p>
-    <p>hello@hmdstudio.com</p>
-    <p>INSTAGRAM / LINKEDIN</p>
-    <p>&copy; 2025 HMD STUDIO</p>
-  </div>
-</section>

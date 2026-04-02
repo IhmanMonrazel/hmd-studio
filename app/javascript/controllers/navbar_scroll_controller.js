@@ -5,6 +5,10 @@ export default class extends Controller {
     this._lastY = window.scrollY
     this._onScroll = this._handleScroll.bind(this)
     window.addEventListener("scroll", this._onScroll, { passive: true })
+    // Initialize visual state immediately — without this, Turbo Drive
+    // leaves the navbar in whatever class state it had from the previous
+    // page, causing a frosted/hidden navbar at the top of a fresh page.
+    this._handleScroll()
   }
 
   disconnect() {

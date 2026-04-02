@@ -18,8 +18,6 @@ application.register("gsap-showcase", GsapShowcaseController)
 import SafemoovShowcaseController from "./safemoov_showcase_controller"
 application.register("safemoov-showcase", SafemoovShowcaseController)
 
-import PortfolioShowcaseController from "./portfolio_showcase_controller"
-application.register("portfolio-showcase", PortfolioShowcaseController)
 
 import TicketRevealController from "./ticket_reveal_controller"
 application.register("ticket-reveal", TicketRevealController)

@@ -28,6 +28,28 @@ export default class extends Controller {
         },
       })
     })
+
+    const sections = [
+      { el: document.querySelector('.ab-hero'),     color: '#000000' },
+      { el: document.querySelector('.ab-scan'),     color: '#ffffff' },
+      { el: document.querySelector('.ab-approach'), color: '#000000' },
+      { el: document.querySelector('.s7'),          color: '#000000' },
+    ]
+
+    sections.forEach(({ el, color }) => {
+      if (!el) return
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => gsap.to(document.body, {
+          backgroundColor: color, duration: 0.8, ease: 'power2.inOut'
+        }),
+        onEnterBack: () => gsap.to(document.body, {
+          backgroundColor: color, duration: 0.8, ease: 'power2.inOut'
+        }),
+      })
+    })
   }
 
   disconnect() {

@@ -31,7 +31,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>
+  <body class="<%= controller_name %> <%= action_name %>">
     <nav class="navbar" data-controller="navbar navbar-scroll">
       <div class="navbar__inner">
         <%= link_to root_path, class: "navbar__logo" do %>
@@ -63,6 +63,7 @@
 
     <main class="main <%= 'main--fullbleed' if controller_name == 'pages' && action_name == 'home' %>">
       <%= yield %>
+      <%= render 'shared/footer' %>
     </main>
   </body>
 </html>
