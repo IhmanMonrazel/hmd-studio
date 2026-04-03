@@ -119,86 +119,91 @@
     </style>
   </div>
 
-  <!-- Overlay card — mobile depth effect (scale 0.45, top-right) -->
-  <div class="sm-card sm-card--overlay" aria-hidden="true">
-    <div class="sm-card__img">
-      <img src="https://res.cloudinary.com/dtlybacjm/image/upload/v1775131850/Gemini_Generated_Image_gwmm5zgwmm5zgwmm_ackfkf.jpg"
-           alt=""
-           style="width:100%; height:100%; object-fit:cover; display:block;">
-    </div>
-    <div class="sm-card__sep"></div>
-    <div class="sm-card__header">
-      <span class="sm-card__badge">ACCIDENT</span>
-      <h2 class="sm-card__title">Incendie en zone rurale</h2>
-    </div>
-    <ul class="sm-card__meta">
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-          <circle cx="12" cy="9" r="2.5"/>
-        </svg>
-        Sector Santa Rosa, Provincia de Carchi
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-        </svg>
-        17/01/2025
-      </li>
-    </ul>
-  </div>
+  <!-- Cards wrapper — position:relative for the mini overlay card -->
+  <div class="sm-cards-wrap">
 
-  <!-- Incident card — floating on top -->
-  <div class="sm-card">
-    <div class="sm-card__img">
-      <img src="https://res.cloudinary.com/dtlybacjm/image/upload/v1775131850/Gemini_Generated_Image_gwmm5zgwmm5zgwmm_ackfkf.jpg"
-           alt="Incendie en zone rurale"
-           style="width:100%; height:100%; object-fit:cover; display:block;">
+    <!-- Mini floating card — mobile depth effect (hidden on desktop) -->
+    <div class="sm-card incident-card-mini" aria-hidden="true">
+      <div class="sm-card__img">
+        <img src="https://res.cloudinary.com/dtlybacjm/image/upload/v1775131850/Gemini_Generated_Image_gwmm5zgwmm5zgwmm_ackfkf.jpg"
+             alt=""
+             style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div class="sm-card__sep"></div>
+      <div class="sm-card__header">
+        <span class="sm-card__badge">ACCIDENT</span>
+        <h2 class="sm-card__title">Incendie en zone rurale</h2>
+      </div>
+      <ul class="sm-card__meta">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+          </svg>
+          Sector Santa Rosa, Provincia de Carchi
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+          </svg>
+          17/01/2025
+        </li>
+      </ul>
     </div>
-    <div class="sm-card__sep"></div>
-    <div class="sm-card__header">
-      <span class="sm-card__badge">ACCIDENT</span>
-      <h2 class="sm-card__title" data-safemoov-showcase-target="title">
-        Incendie en zone rurale
-      </h2>
-    </div>
-    <ul class="sm-card__meta">
-      <li data-safemoov-showcase-target="metaItem">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-          <circle cx="12" cy="9" r="2.5"/>
+
+    <!-- Main incident card — z-index: 1, in front -->
+    <div class="sm-card">
+      <div class="sm-card__img">
+        <img src="https://res.cloudinary.com/dtlybacjm/image/upload/v1775131850/Gemini_Generated_Image_gwmm5zgwmm5zgwmm_ackfkf.jpg"
+             alt="Incendie en zone rurale"
+             style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div class="sm-card__sep"></div>
+      <div class="sm-card__header">
+        <span class="sm-card__badge">ACCIDENT</span>
+        <h2 class="sm-card__title" data-safemoov-showcase-target="title">
+          Incendie en zone rurale
+        </h2>
+      </div>
+      <ul class="sm-card__meta">
+        <li data-safemoov-showcase-target="metaItem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+          </svg>
+          Sector Santa Rosa, Provincia de Carchi
+        </li>
+        <li data-safemoov-showcase-target="metaItem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+          </svg>
+          17/01/2025
+        </li>
+        <li data-safemoov-showcase-target="metaItem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+          10:42
+        </li>
+      </ul>
+      <div class="sm-card__sep"></div>
+      <div class="sm-card__desc" data-safemoov-showcase-target="description">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             width="15" height="15" style="flex-shrink:0;margin-top:2px">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
-        Sector Santa Rosa, Provincia de Carchi
-      </li>
-      <li data-safemoov-showcase-target="metaItem">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-        </svg>
-        17/01/2025
-      </li>
-      <li data-safemoov-showcase-target="metaItem">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-        </svg>
-        10:42
-      </li>
-    </ul>
-    <div class="sm-card__sep"></div>
-    <div class="sm-card__desc" data-safemoov-showcase-target="description">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-           width="15" height="15" style="flex-shrink:0;margin-top:2px">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
-      <p>Un départ de feu a été observé en bordure de la route nationale.
-         Les pompiers locaux ont été alertés. La zone est partiellement bloquée.</p>
+        <p>Un départ de feu a été observé en bordure de la route nationale.
+           Les pompiers locaux ont été alertés. La zone est partiellement bloquée.</p>
+      </div>
+      <div class="sm-card__sep"></div>
+      <div class="sm-card__votes" data-safemoov-showcase-target="votes">
+        <button class="sm-card__vote-btn">👍 4</button>
+        <button class="sm-card__vote-btn">👎 3</button>
+      </div>
+      <p class="sm-card__login-hint">Connectez-vous pour voter ou commenter</p>
     </div>
-    <div class="sm-card__sep"></div>
-    <div class="sm-card__votes" data-safemoov-showcase-target="votes">
-      <button class="sm-card__vote-btn">👍 4</button>
-      <button class="sm-card__vote-btn">👎 3</button>
-    </div>
-    <p class="sm-card__login-hint">Connectez-vous pour voter ou commenter</p>
-  </div>
+
+  </div><%# /sm-cards-wrap %>
 
 </section>
 

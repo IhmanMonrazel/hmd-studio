@@ -1438,8 +1438,8 @@ img { display: block; max-width: 100%; }
   text-align: center;
 }
 
-/* Overlay card — hidden on desktop, shown via 768px mobile block */
-.sm-card--overlay {
+/* Mini overlay card — hidden on desktop, shown via 768px mobile block */
+.incident-card-mini {
   display: none;
 }
 
@@ -1847,7 +1847,7 @@ body.pages.personal_portfolio .navbar__links a {
 body.pages.booking_club .navbar:not(.navbar--frosted),
 body.pages.safemoov .navbar:not(.navbar--frosted),
 body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.95) !important;
 }
 
 .ab-hero {
@@ -2568,20 +2568,20 @@ body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
   }
 
   .ab-hero__right {
-    height: auto;
-    min-height: unset;
-    max-height: none;
-    overflow: visible;
-    display: block;
-    padding: 0;
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
+    overflow: visible !important;
+    display: block !important;
+    padding: 0 !important;
   }
 
   .ab-hero__portrait {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
-    display: block;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    display: block !important;
   }
 
   /* ── ABOUT: Scan section ─────────────────────────────────── */
@@ -2768,14 +2768,21 @@ body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
     overflow: visible;
   }
 
+  .sm-cards-wrap {
+    position: relative;
+    width: 100%;
+  }
+
   .sm-card {
+    position: relative;
+    z-index: 1;
     max-width: 100%;
     width: 100%;
     margin: 0;
   }
 
-  /* Overlay card — small duplicate in top-right for depth effect */
-  .sm-card--overlay {
+  /* Mini floating card — depth effect, top-right corner */
+  .incident-card-mini {
     display: block;
     position: absolute;
     top: 80px;
@@ -2785,7 +2792,7 @@ body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
     transform-origin: top right;
     opacity: 0.7;
     pointer-events: none;
-    z-index: 3;
+    z-index: 0;
   }
 
   /* ── PERSONAL PORTFOLIO — mobile responsive ──────────────── */
@@ -2808,7 +2815,7 @@ body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
   }
 
   .pp-scene__ui-links span {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .pp-scene__ui-skills {
