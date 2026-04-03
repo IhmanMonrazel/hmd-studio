@@ -1,0 +1,316 @@
+/* ============================================================
+   SAFEMOOV PAGE
+   ============================================================ */
+
+/* ── Project page navbar ── */
+body.pages.safemoov .navbar__logo,
+body.pages.safemoov .navbar__logo-name,
+body.pages.safemoov .navbar__logo-sub,
+body.pages.safemoov .navbar__links a {
+  color: #ffffff;
+}
+
+body.pages.safemoov .navbar:not(.navbar--frosted) {
+  background: rgba(0, 0, 0, 0.95) !important;
+}
+
+.sm-showcase {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 clamp(2rem, 6vw, 8rem) 0 0;
+  overflow: hidden;
+  background: #1a2a3a;
+}
+
+.sm-map {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.sm-map__svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Mobile card container */
+.sm-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.2);
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin: clamp(4rem, 8vh, 6rem) 0;
+}
+
+/* Image placeholder */
+.sm-card__img {
+  background: #e5e7eb;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Séparateurs */
+.sm-card__sep {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 0 16px;
+}
+
+/* Header : badge + titre */
+.sm-card__header {
+  padding: 16px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sm-card__badge {
+  display: inline-block;
+  background: #CC0000;
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.sm-card__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Méta (localisation, date, heure) */
+.sm-card__meta {
+  list-style: none;
+  margin: 0;
+  padding: 12px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sm-card__meta li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.sm-card__meta li svg {
+  flex-shrink: 0;
+  color: #9ca3af;
+}
+
+/* Description */
+.sm-card__desc {
+  padding: 16px 20px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.sm-card__desc p {
+  font-size: 0.85rem;
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.sm-card__desc svg {
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* Votes */
+.sm-card__votes {
+  padding: 16px 20px 8px;
+  display: flex;
+  gap: 10px;
+}
+
+.sm-card__vote-btn {
+  background: #ffffff;
+  border: 1.5px solid #111827;
+  padding: 8px 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #111827;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sm-card__vote-btn:hover {
+  background: #111827;
+  color: #ffffff;
+}
+
+.sm-card__login-hint {
+  padding: 4px 20px 20px;
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin: 0;
+  text-align: center;
+}
+
+/* Mini overlay card — hidden on desktop, shown via 768px mobile block */
+.incident-card-mini {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .sm-showcase { padding: 0 clamp(1rem, 4vw, 2rem) 0 0; justify-content: center; }
+  .sm-card { margin: 3rem 0; max-width: 340px; }
+}
+
+/* ============================================================
+   RESPONSIVE — 768px
+   ============================================================ */
+@media (max-width: 768px) {
+  /* ── SAFEMOOV — mobile responsive ───────────────────────── */
+  .sm-showcase {
+    justify-content: center;
+    padding: 80px 16px 60px;
+    overflow: visible;
+  }
+
+  .sm-cards-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .sm-card {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Mini floating card — depth effect, top-right corner */
+  .incident-card-mini {
+    display: block;
+    position: absolute;
+    top: 80px;
+    right: -8px;
+    width: 380px;
+    transform: scale(0.45);
+    transform-origin: top right;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Nuclear overflow fix */
+  .sm-showcase,
+  .sm-cards-wrap,
+  .sm-card {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  .sm-cards-wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .sm-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* SafeMoov mini card — replaces sm-card--overlay */
+  .incident-card--mini {
+    display: block !important;
+    position: absolute !important;
+    top: 70px !important;
+    right: -10px !important;
+    width: 380px !important;
+    transform: scale(0.38) !important;
+    transform-origin: top right !important;
+    opacity: 0.65 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+  }
+
+  .incident-card-mini,
+  .sm-card.incident-card-mini {
+    display: block !important;
+    position: absolute !important;
+    top: 70px !important;
+    right: -10px !important;
+    width: 380px !important;
+    transform: scale(0.38) !important;
+    transform-origin: top right !important;
+    opacity: 0.65 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .sm-showcase,
+  .sm-cards-wrap,
+  [class*="sm-"] {
+    max-width: 100% !important;
+    min-width: unset !important;
+  }
+
+  .sm-showcase {
+    position: relative !important;
+    overflow: visible !important;
+    justify-content: center !important;
+    padding: 80px 16px 60px !important;
+  }
+
+  .sm-cards-wrap {
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .sm-card {
+    position: relative !important;
+    z-index: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .incident-card--mini,
+  .incident-card-mini,
+  .sm-card.incident-card-mini {
+    display: block !important;
+    position: absolute !important;
+    top: 70px !important;
+    right: -10px !important;
+    width: 380px !important;
+    transform: scale(0.38) !important;
+    transform-origin: top right !important;
+    opacity: 0.65 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+    overflow: visible !important;
+    max-width: none !important;
+  }
+}

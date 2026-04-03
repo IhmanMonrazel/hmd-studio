@@ -1,0 +1,213 @@
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  height: var(--nav-h);
+  background: transparent;
+  border-bottom: none;
+  transition: transform 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+/* Scroll vers le bas — navbar masquée */
+.navbar--hidden {
+  transform: translateY(-100%);
+}
+
+/* Scroll vers le haut — fond blanc flouté */
+.navbar--frosted {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--black);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.navbar__logo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: var(--black);
+  transition: opacity 0.2s;
+}
+.navbar__logo:hover { opacity: 0.6; }
+
+.navbar__logo-name {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  color: var(--black);
+}
+
+.navbar__logo-sub {
+  font-family: var(--font-body);
+  font-size: 0.52rem;
+  font-weight: 400;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1;
+}
+
+.navbar__links {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.navbar__link {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+  position: relative;
+}
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.navbar__link:hover,
+.navbar__link--active { color: var(--black); }
+.navbar__link:hover::after,
+.navbar__link--active::after { transform: scaleX(1); }
+
+/* Burger */
+.navbar__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.navbar__burger span {
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: #ffffff;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* Mobile overlay */
+.navbar__overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--white);
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.navbar__overlay.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+.navbar__overlay-links {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  text-align: center;
+}
+.navbar__overlay-link {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  letter-spacing: 0.08em;
+  color: var(--black);
+  transition: color 0.2s;
+}
+.navbar__overlay-link:hover { color: var(--red); }
+
+/* Burger open state — navbar always solid black when menu is open */
+.navbar--open {
+  background: #000000 !important;
+}
+
+.navbar--open .navbar__burger span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.navbar--open .navbar__burger span:nth-child(2) {
+  opacity: 0;
+}
+.navbar--open .navbar__burger span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ============================================================
+   RESPONSIVE — 900px
+   ============================================================ */
+@media (max-width: 900px) {
+  .navbar__links { display: none; }
+  .navbar__burger { display: flex; }
+  .navbar__inner { padding: 0 24px; }
+}
+
+/* ============================================================
+   RESPONSIVE — 768px
+   ============================================================ */
+@media (max-width: 768px) {
+  .navbar__inner {
+    padding: 0 20px;
+  }
+
+  .navbar__overlay-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    width: 100%;
+    text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  /* ── PROJECT PAGES — navbar burger always white ──────────── */
+  body.pages.booking_club .navbar__burger span,
+  body.pages.safemoov .navbar__burger span,
+  body.pages.personal_portfolio .navbar__burger span {
+    background: #ffffff;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar.navbar--open,
+  .navbar.navbar--open.navbar--scrolled,
+  .navbar.navbar--open.navbar--hidden {
+    background: #000000 !important;
+    opacity: 1 !important;
+  }
+}
+
+/* LAST-RESORT: burger always white */
+.navbar__burger span,
+.navbar__burger span::before,
+.navbar__burger span::after,
+.navbar--open .navbar__burger span,
+.navbar--frosted .navbar__burger span {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}

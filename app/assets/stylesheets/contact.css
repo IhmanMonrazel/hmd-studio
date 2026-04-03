@@ -1,0 +1,210 @@
+/* ============================================================
+   CONTACT PAGE
+   ============================================================ */
+body.pages.contact {
+  background-color: #000000;
+}
+
+body.pages.contact .navbar__logo,
+body.pages.contact .navbar__logo-name,
+body.pages.contact .navbar__logo-sub,
+body.pages.contact .navbar__links a {
+  color: var(--white) !important;
+}
+
+body.pages.contact .navbar:not(.navbar--frosted) {
+  background: transparent;
+}
+
+/* ============================================================
+   CONTACT — TICKET DE CAISSE
+   ============================================================ */
+
+/* Page wrapper */
+.receipt-page {
+  background: #0a0a0a;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 80px 24px 120px;
+}
+
+/* Ticket container */
+.ticket {
+  width: 100%;
+  max-width: 480px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.5),
+    0 4px 16px rgba(0,0,0,0.3);
+  filter: drop-shadow(0 0 40px rgba(0,0,0,0.4));
+  transform: rotate(-0.8deg);
+}
+
+/* Bord dentelé haut — scalloped */
+.ticket__edge--top {
+  height: 20px;
+  background:
+    radial-gradient(circle at 10px -2px, transparent 10px, #f5f0e8 10px)
+    0 0 / 20px 20px repeat-x;
+  border-left: 1px solid #c8c0b0;
+  border-right: 1px solid #c8c0b0;
+  clip-path: none;
+}
+
+/* Corps du ticket */
+.ticket__body {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(0,0,0,0.015) 28px,
+      rgba(0,0,0,0.015) 29px
+    ),
+    #f5f0e8;
+  border-left: 1px solid #c8c0b0;
+  border-right: 1px solid #c8c0b0;
+  padding: 8px 32px 16px;
+}
+
+/* Bord dentelé bas — scalloped */
+.ticket__edge--bottom {
+  height: 20px;
+  background:
+    radial-gradient(circle at 10px 22px, transparent 10px, #f5f0e8 10px)
+    0 0 / 20px 20px repeat-x;
+  border-left: 1px solid #c8c0b0;
+  border-right: 1px solid #c8c0b0;
+  clip-path: none;
+}
+
+/* ── Lignes du ticket ─────────────────────────────────── */
+.tl {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  color: #2a2018;
+  line-height: 1.9;
+  margin: 0;
+  white-space: pre;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+}
+
+.tl--center { text-align: center; }
+.tl--bold   { font-weight: 700; }
+.tl--label  { font-weight: 700; letter-spacing: 0.04em; }
+.tl--sep    { color: #b8a898; }
+.tl--muted  { color: #8a7a68; }
+.tl--empty  { line-height: 1; }
+
+/* ── Formulaire dans le ticket ────────────────────────── */
+.ticket-form {
+  margin: 4px 0;
+}
+
+.ticket-form__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ticket-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ticket-form__label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #2a2018;
+  letter-spacing: 0.04em;
+}
+
+.ticket-form__input {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  color: #2a2018;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #c8c0b0;
+  outline: none;
+  padding: 5px 0;
+  width: 100%;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.ticket-form__input:focus {
+  border-bottom-color: #2a2018;
+}
+
+.ticket-form__input::placeholder {
+  color: #bbb;
+}
+
+.ticket-form__textarea {
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+.ticket-form__submit {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: #2a2018;
+  color: #ffffff;
+  border: none;
+  padding: 11px 0;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+
+.ticket-form__submit:hover {
+  background: #CC0000;
+}
+
+/* ============================================================
+   RESPONSIVE — 768px
+   ============================================================ */
+@media (max-width: 768px) {
+  /* ── CONTACT: Ticket ─────────────────────────────────────── */
+  .receipt-page {
+    padding: calc(var(--nav-h) + 2rem) 20px 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+  }
+
+  .ticket {
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+  }
+
+  .ticket__body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* 16px minimum on inputs — prevents iOS Safari auto-zoom on focus */
+  .ticket-form__input,
+  .ticket-form__textarea {
+    font-size: 16px;
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ticket-form__submit {
+    width: 100%;
+    min-height: 52px;
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,435 @@
+/* ============================================================
+   HOME — S1 (no background)
+   ============================================================ */
+/* S1: no background — body color (#000000 default, GSAP-animated) shows through */
+.s1 {
+  background: transparent;
+}
+
+/* ============================================================
+   SECTION 1 — HERO VIDEO
+   ============================================================ */
+.s1 {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.s1__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.s1__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================================
+   SECTION 2 — HOOK / POSITIONING
+   ============================================================ */
+/* min-height removed — was 100dvh, forcing a full viewport of empty
+   black space after the subtitle. Height is now:
+     title (clamp(4rem,12vw,14rem) × 0.88 line-height)
+   + gap (clamp(1rem,2vw,2rem))
+   + subtitle (clamp(0.9rem,1.5vw,1.25rem) × 1.7 line-height)
+   + 2× var(--space-unit) base breathing
+   + 2× vertical padding clamp(2rem,8vh,8rem)
+   ≈ 26–28rem at desktop, ~16rem at 375px — premium, not wasteful. */
+.s2 {
+  background: transparent;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: clamp(2rem, 8vh, 8rem) clamp(2rem, 6vw, 6rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.s2__content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(calc(var(--space-unit) * 1), 2vw, calc(var(--space-unit) * 2));
+}
+
+/* Full-viewport-width title.
+   At 768px+ padding is 6vw each side → available = vw × (1 - 0.12) = 0.88vw.
+   "HMD STUDIO" (10 chars Bebas Neue) ≈ 5.53em wide → font = 0.88vw / 5.53 = 15.9vw.
+   min 7rem keeps it readable on narrow single-column views; max 14rem caps at ~1400px. */
+.s2__title {
+  font-family: var(--font-display);
+  font-size: clamp(7rem, 15.9vw, 14rem);
+  line-height: 0.88;
+  letter-spacing: 0.02em;
+  color: var(--white);
+}
+
+.s2__sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 36ch;
+}
+
+/* Credibility line — informational, not a headline.
+   font-size = base scale × 0.7 = 0.7rem (11.2px).
+   letter-spacing 0.22em matches the colophon cadence. */
+.s2__cred {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1;
+}
+
+/* Sphere placeholder — hidden until a 3D asset is ready */
+.s2__sphere-mount {
+  display: none;
+}
+
+/* ============================================================
+   SECTION 3 — SERVICES
+   ============================================================ */
+/* Vertical stack: items separated by horizontal red hr rules.
+   Font-size clamp ensures longest title ("DIRECTION ARTISTIQUE",
+   ~21 chars Bebas Neue) never wraps above 320px viewport width.
+   At 320px: 1.2rem=19.2px → ~222px rendered width < 272px avail. */
+/* Section height is content-driven — no min-height.
+   Target ≤ 80vh: 3 items × (title ~3.5rem + desc ~1.5rem + padding ~4rem) ≈ 27rem = ~43vh at 900px.
+   Body transitions to #1a1a1a when s3 is active (GSAP ScrollTrigger),
+   dark enough that var(--white) text stays fully readable. */
+.s3 {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  padding: 0 clamp(2rem, 6vw, 6rem);
+  border-bottom: 2px solid var(--red);
+}
+
+.s3__item {
+  padding: clamp(1rem, 2.5vh, 2rem) 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(calc(var(--space-unit) * 0.5), 1vw, var(--space-unit));
+}
+
+.s3__item:first-of-type {
+  padding-left: 0;
+}
+
+.s3__item-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 5vw, 6rem);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--white);
+}
+
+.s3__item-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.82rem, 1.1vw, 1rem);
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.s3__rule {
+  display: block;
+  border: none;
+  border-bottom: 2px solid var(--red);
+  margin: 0;
+}
+
+/* ============================================================
+   SECTION 4 — WORK TEASER (cloud morphing video)
+   ============================================================ */
+.s4 {
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Full-section link: flex child so it can center its inner wrap */
+.s4__cloud-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Video wrap: capped so it never bleeds outside viewport.
+   min(90vw, 85dvh) keeps it large on both landscape and portrait.
+   background: transparent so no black box shows through the video. */
+.s4__cloud-wrap {
+  width: min(90vw, 85dvh);
+  background: transparent;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.s4__cloud-link:hover .s4__cloud-wrap {
+  transform: scale(1.04);
+}
+
+/* mix-blend-mode: screen punches out the video's black background,
+   leaving only the bright cloud/text content visible against black. */
+.s4__cloud-video {
+  width: 100%;
+  display: block;
+  mix-blend-mode: screen;
+}
+
+/* ============================================================
+   SECTION 5 — DIFFERENTIATOR (red)
+   ============================================================ */
+/* Padding calculated from vw so text never touches edges:
+   horizontal = max(3rem, 8vw), vertical = max(4rem, 10vh).
+   Background comes from body (GSAP → #cc0000). Explicit color: white
+   ensures all text inherits white regardless of body color state. */
+.s5 {
+  background: transparent;
+  color: var(--white);
+  padding: clamp(4rem, 10vh, 10rem) clamp(3rem, 8vw, 8rem);
+  min-height: 60dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Intentional asymmetric grid: unequal column ratios create visual
+   tension. Middle column (1.4fr) is widest, third (0.8fr) narrowest.
+   Middle block offset = one title line-height = clamp(1.5rem, 3vw, 2.8rem)
+   (font-size × line-height:1), so offset tracks the rendered font size. */
+.s5__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 0.8fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.s5__block--1 { align-self: start; }
+
+/* Offset = 2× the title's rendered line-height (font-size × 1).
+   At desktop 1440px: 2 × 2.8rem = 5.6rem ≈ 89px — clearly visible drop. */
+.s5__block--2 {
+  align-self: start;
+  margin-top: clamp(3rem, 6vw, 5.6rem);
+}
+
+.s5__block--3 {
+  align-self: start;
+  margin-top: 0;
+}
+
+.s5__block-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--white);
+  display: block;
+  margin-bottom: clamp(calc(var(--space-unit) * 0.5), 1.5vh, calc(var(--space-unit) * 1.5));
+}
+
+.s5__block-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.82rem, 1.1vw, 1rem);
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ============================================================
+   SECTION 6 — CTA
+   ============================================================ */
+.s6 {
+  background: transparent;
+  color: var(--white);
+  padding: clamp(4rem, 10vh, 10rem) clamp(2rem, 6vw, 6rem) clamp(3rem, 6vh, 6rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 60dvh;
+}
+
+.s6__top {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* clamp: min=4rem (readable on 375px), preferred=9vw,
+   max=11rem (caps before overflowing 1440px containers) */
+.s6__title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 9vw, 11rem);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  color: var(--white) !important;
+  max-width: 90vw;
+}
+
+.s6__rule {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: clamp(3rem, 6vh, 6rem) 0 clamp(2rem, 4vh, 4rem);
+}
+
+.s6__colophon {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(calc(var(--space-unit) * 0.5), 1vh, var(--space-unit));
+}
+
+.s6__colophon p {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ============================================================
+   HOME SCROLL ANIMATIONS — cinematic scroll (performance hints)
+   ============================================================ */
+.s2,
+.s2__content,
+.s3,
+.s3__item,
+.s4,
+.s4__cloud-wrap,
+.s4__cloud-video,
+.s5,
+.s5__block,
+.s6,
+.s6__title {
+  will-change: transform, opacity;
+}
+
+/* ============================================================
+   RESPONSIVE — 900px
+   ============================================================ */
+@media (max-width: 900px) {
+  /* S2 — tighter padding on mobile, title scaled down for narrow viewports */
+  .s2 {
+    padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 2.5rem);
+  }
+  .s2__title {
+    font-size: clamp(3rem, 10vw, 7rem);
+  }
+
+  /* S3 — already flex-column on desktop, just restore horizontal padding
+     on items from the container (overrides the 0 desktop padding). */
+  .s3 {
+    padding: 0 clamp(1.5rem, 5vw, 2.5rem);
+  }
+  .s3__item {
+    padding-top: clamp(0.75rem, 2vh, 1.5rem);
+    padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
+  }
+
+  /* S4 — shorter height on mobile */
+  .s4 { height: 70dvh; }
+
+  /* S5 — single column, remove vertical offsets */
+  .s5 {
+    padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 5vw, 2.5rem);
+  }
+  .s5__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 5vw, 3rem);
+  }
+  .s5__block--2,
+  .s5__block--3 { margin-top: 0; }
+}
+
+/* ============================================================
+   RESPONSIVE — 768px
+   ============================================================ */
+@media (max-width: 768px) {
+  /* ── HOME: S1 video ──────────────────────────────────────── */
+  .s1__media {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── HOME: S2 hero text ──────────────────────────────────── */
+  .s2 {
+    padding: clamp(3rem, 8vh, 5rem) 20px;
+  }
+
+  .s2__title {
+    font-size: clamp(2.8rem, 15vw, 5rem);
+    max-width: 90vw;
+  }
+
+  .s2__sub,
+  .s2__cred {
+    max-width: 90vw;
+  }
+
+  /* ── HOME: S3 services — stack vertically ────────────────── */
+  .s3 {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+  }
+
+  .s3__item {
+    padding: 24px 0;
+    width: 100%;
+  }
+
+  .s3__item-title {
+    font-size: clamp(1.6rem, 7vw, 2.5rem);
+  }
+
+  /* ── HOME: S4 cloud video ────────────────────────────────── */
+  .s4 {
+    height: 60dvh;
+  }
+
+  .s4__cloud-wrap {
+    width: 90vw;
+    height: 60vw;
+  }
+
+  /* ── HOME: S5 Why section — stack vertically ─────────────── */
+  .s5 {
+    padding: clamp(3rem, 8vw, 5rem) 20px;
+  }
+
+  .s5__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .s5__block--2,
+  .s5__block--3 {
+    margin-top: 0;
+  }
+
+  .s5__block-title {
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+  }
+}

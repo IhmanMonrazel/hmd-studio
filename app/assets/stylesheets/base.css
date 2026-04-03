@@ -1,0 +1,217 @@
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:  #000000;
+  --white:  #ffffff;
+  --red:    #CC0000;
+  --gray:   #f2f2f2;
+  --muted:  rgba(0,0,0,0.38);
+  --border: rgba(0,0,0,0.1);
+  --nav-h:  72px;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --space-unit:   1rem;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  background: var(--black);
+  color: var(--black);
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+  background-color: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* Turbo Drive progress bar — masqué (la ligne rouge parasite sous la navbar) */
+.turbo-progress-bar { display: none; }
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+.main {
+  padding-top: var(--nav-h);
+}
+
+/* Hero video débute sous la navbar — compense le padding sur la home. */
+.main--fullbleed {
+  padding-top: 0;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 16px 36px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+  border: 1px solid transparent;
+}
+.btn--primary {
+  background: var(--red);
+  color: var(--white);
+  border-color: var(--red);
+}
+.btn--primary:hover {
+  background: transparent;
+  color: var(--red);
+}
+.btn--outline {
+  background: transparent;
+  color: var(--black);
+  border-color: var(--black);
+}
+.btn--outline:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* ============================================================
+   SECTION UTILITY
+   ============================================================ */
+.section {
+  padding: 120px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.section__header { margin-bottom: 64px; }
+.section__title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  letter-spacing: 0.06em;
+  color: var(--black);
+}
+
+/* GSAP initial hide */
+.js-reveal { opacity: 0; }
+.js-stagger > * { opacity: 0; }
+
+/* Accessible visually-hidden utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   PAGE HERO
+   ============================================================ */
+.page-hero {
+  padding: 100px 40px 80px;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+}
+.page-hero__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.page-hero__label {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.32em;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+.page-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 12rem);
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+  color: var(--black);
+}
+
+/* ============================================================
+   FEATURED GRID
+   ============================================================ */
+.featured__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.featured__thumb {
+  aspect-ratio: 3/4;
+  background: var(--gray);
+  transition: transform 0.4s ease;
+}
+.featured__thumb--accent { background: var(--red); opacity: 0.85; }
+.featured__item:hover .featured__thumb { transform: scale(0.98); }
+.featured__meta {
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+.featured__meta h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.06em;
+  color: var(--black);
+}
+.featured__meta span {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================================
+   STUDIO INTRO
+   ============================================================ */
+.studio-intro__inner {
+  max-width: 800px;
+}
+.studio-intro__label {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 24px;
+}
+.studio-intro__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  margin-bottom: 32px;
+  color: var(--black);
+}
+.studio-intro__body {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.9;
+  margin-bottom: 48px;
+}
+
+/* ============================================================
+   RESPONSIVE — 900px
+   ============================================================ */
+@media (max-width: 900px) {
+  .section { padding: 80px 24px; }
+  .page-hero { padding: 80px 24px 60px; }
+  .navbar__inner { padding: 0 24px; }
+  .featured__grid { grid-template-columns: 1fr; }
+  .work-grid__inner { grid-template-columns: 1fr; }
+  .about-story__inner { grid-template-columns: 1fr; gap: 40px; }
+  .values__grid { grid-template-columns: 1fr; }
+  .contact-section__inner { grid-template-columns: 1fr; gap: 48px; }
+}

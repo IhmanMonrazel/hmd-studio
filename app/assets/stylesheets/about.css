@@ -1,0 +1,399 @@
+/* ============================================================
+   ABOUT PAGE
+   ============================================================ */
+body.pages.about {
+  background-color: #000000;
+}
+
+body.pages.about .ab-hero,
+body.pages.about .ab-scan,
+body.pages.about .ab-approach {
+  color: var(--white);
+}
+
+body.pages.about .navbar__logo,
+body.pages.about .navbar__logo-name,
+body.pages.about .navbar__logo-sub,
+body.pages.about .navbar__links a {
+  color: var(--white) !important;
+}
+
+body.pages.about .navbar:not(.navbar--frosted) {
+  background: transparent;
+}
+
+/* ── Section 1 : Hero Magazine ───────────────────────── */
+.ab-hero {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  min-height: 85vh;
+  height: 85vh;
+  background: transparent;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+
+.ab-hero__left {
+  padding: 40px 80px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.ab-hero__issue {
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin: 0;
+}
+
+.ab-hero__rule {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  margin: 0;
+}
+
+.ab-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  margin: 0;
+}
+
+.ab-hero__manifesto {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+}
+
+.ab-hero__manifesto p {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+.ab-hero__right {
+  background: #0a0a0a;
+  height: 100%;
+  min-height: 0;
+  max-height: 90vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ab-hero__portrait {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: top center;
+  display: block;
+  opacity: 0.88;
+}
+
+/* ── Section 2 : The Scan ────────────────────────────── */
+.ab-scan {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  background: transparent;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.ab-scan__left {
+  background: transparent;
+  position: relative;
+  border-right: 1px solid rgba(0,0,0,0.1);
+}
+
+.ab-scan__video-wrap {
+  position: relative;
+  overflow: hidden;
+  height: 600px;
+  background: transparent;
+}
+
+
+.ab-scan__video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+}
+
+.ab-scan__right {
+  padding: 80px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 32px;
+  background: transparent;
+}
+
+/* Header : label + barre de progression */
+.ab-scan__header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ab-scan__label {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin: 0;
+}
+
+/* Barre de progression */
+.ab-scan__progress-track {
+  width: 100%;
+  height: 2px;
+  background: rgba(204,0,0,0.15);
+}
+
+.ab-scan__progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--red);
+  transition: width 0.05s linear;
+}
+
+.ab-scan__data {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ab-scan__row {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  color: #111111;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.ab-scan__row--indent {
+  padding-left: 6.5rem;
+  color: rgba(0,0,0,0.4);
+}
+
+.ab-scan__key {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* ── Section 3 : The Approach ────────────────────────── */
+.ab-approach {
+  background: transparent;
+  padding: 120px 80px 100px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+
+.ab-approach__tribal-wrap {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  width: 360px;
+  height: 360px;
+  pointer-events: none;
+  opacity: 0.75;
+  overflow: hidden;
+}
+
+.ab-approach__tribal-wrap canvas {
+  display: block;
+  width: 360px !important;
+  height: 360px !important;
+}
+
+.ab-approach__label {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin: 0 0 72px;
+}
+
+.ab-approach__blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  max-width: 900px;
+}
+
+.ab-approach__block {
+  max-width: 440px;
+  border-top: 2px solid var(--red);
+  padding-top: 24px;
+}
+
+.ab-approach__block--1 { margin-left: 0; }
+.ab-approach__block--2 { margin-left: 30%; }
+.ab-approach__block--3 { margin-left: 10%; }
+
+.ab-approach__num {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--red);
+  letter-spacing: 0.12em;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.ab-approach__title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--white);
+  margin: 0 0 14px;
+}
+
+.ab-approach__text {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.4);
+  margin: 0;
+}
+
+/* ── Responsive About — 900px ────────────────────────── */
+@media (max-width: 900px) {
+  .ab-hero { grid-template-columns: 1fr; min-height: auto; }
+  .ab-hero__left { padding: 60px 24px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .ab-hero__right { height: 400px; }
+  .ab-scan { grid-template-columns: 1fr; }
+  .ab-scan__left { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .ab-scan__video-wrap { height: 320px; }
+  .ab-scan__right { padding: 48px 24px; }
+  .ab-approach { padding: 60px 24px; }
+  .ab-approach__block--2 { margin-left: 0; }
+  .ab-approach__block--3 { margin-left: 0; }
+}
+
+/* ── Responsive About — 768px ────────────────────────── */
+@media (max-width: 768px) {
+  /* ── ABOUT: Hero ─────────────────────────────────────────── */
+  .ab-hero {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .ab-hero__left {
+    padding: 40px 20px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .ab-hero__title {
+    font-size: clamp(3rem, 14vw, 6rem);
+  }
+
+  .ab-hero__issue {
+    font-size: 0.6rem;
+  }
+
+  .ab-hero__right {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
+    overflow: visible !important;
+    display: block !important;
+    padding: 0 !important;
+  }
+
+  .ab-hero__portrait {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+
+  /* ── ABOUT: Scan section ─────────────────────────────────── */
+  .ab-scan {
+    grid-template-columns: 1fr;
+  }
+
+  .ab-scan__left {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .ab-scan__video-wrap {
+    height: 240px;
+  }
+
+  .ab-scan__right {
+    padding: 40px 20px;
+  }
+
+  .ab-scan__row {
+    font-size: 0.75rem;
+  }
+
+  /* ── ABOUT: Approach section — stack vertically ──────────── */
+  .ab-approach {
+    padding: 60px 20px;
+  }
+
+  .ab-approach__blocks {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .ab-approach__block--2,
+  .ab-approach__block--3 {
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .ab-approach__title {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .ab-hero {
+    background-color: #000000 !important;
+  }
+  .ab-hero__right {
+    background-color: #000000 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    display: block !important;
+    padding: 0 !important;
+    min-height: unset !important;
+  }
+  .ab-hero__portrait {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+}

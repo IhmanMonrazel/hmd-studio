@@ -1,0 +1,406 @@
+/* ============================================================
+   PERSONAL PORTFOLIO PAGE
+   ============================================================ */
+
+/* ── Project page navbar ── */
+body.pages.personal_portfolio .navbar__logo,
+body.pages.personal_portfolio .navbar__logo-name,
+body.pages.personal_portfolio .navbar__logo-sub,
+body.pages.personal_portfolio .navbar__links a {
+  color: #ffffff;
+}
+
+body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
+  background: rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Image de fond plein écran partagée par tous les blocs */
+/* ── PP Scene — Portfolio Hero Background ────────────── */
+.pp-scene {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 clamp(2rem, 6vw, 8rem) 0 0;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.pp-scene__bg {
+  position: absolute;
+  inset: 0;
+}
+
+.pp-scene__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.45);
+}
+
+.pp-scene__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.1) 0%,
+    rgba(0,0,0,0.6) 70%
+  );
+}
+
+.pp-scene__ui {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(2rem, 4vh, 3rem) clamp(2rem, 4vw, 4rem);
+  max-width: 65%;
+}
+
+.pp-scene__ui-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  margin-bottom: auto;
+}
+
+.pp-scene__ui-brand {
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #ffffff;
+}
+
+.pp-scene__ui-links {
+  display: flex;
+  gap: 1.5rem;
+  font-family: system-ui, sans-serif;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.55);
+}
+
+.pp-scene__ui-lang {
+  margin-left: auto;
+  font-family: system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 4px 10px;
+}
+
+.pp-scene__ui-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  gap: 1rem;
+}
+
+.pp-scene__ui-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.08em;
+}
+
+.pp-scene__ui-line {
+  width: 50px;
+  height: 2px;
+  background: #ffffff;
+  opacity: 0.6;
+}
+
+.pp-scene__ui-role {
+  font-family: system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+
+.pp-scene__ui-skills {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
+.pp-scene__ui-skill-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: system-ui, sans-serif;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.5);
+  backdrop-filter: blur(4px);
+}
+
+.pp-scene__ui-skill-title {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.3);
+}
+
+.pp-scene__card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 340px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: clamp(4rem, 8vh, 6rem) 0;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+
+.pp-scene__card-top {
+  padding: 24px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pp-scene__lang-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.pp-scene__lang {
+  font-family: monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #30363d;
+  color: #484f58;
+  cursor: pointer;
+}
+
+.pp-scene__lang--active {
+  background: #238636;
+  border-color: #238636;
+  color: #ffffff;
+}
+
+.pp-scene__card-title {
+  font-family: system-ui, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #c9d1d9;
+  margin: 0;
+}
+
+.pp-scene__card-role {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #7ee787;
+  margin: 0;
+}
+
+.pp-scene__card-divider {
+  height: 1px;
+  background: #21262d;
+}
+
+.pp-scene__card-features {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pp-scene__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.pp-scene__feature-icon {
+  font-size: 1rem;
+  color: #58a6ff;
+  margin-top: 1px;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.pp-scene__feature-title {
+  font-family: system-ui, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #c9d1d9;
+  margin: 0 0 3px;
+}
+
+.pp-scene__feature-desc {
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: #484f58;
+  margin: 0;
+}
+
+.pp-scene__card-cta {
+  display: block;
+  margin: 0 24px 24px;
+  background: #238636;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-family: system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.pp-scene__card-cta:hover { background: #2ea043; }
+
+/* ============================================================
+   RESPONSIVE — 768px
+   ============================================================ */
+@media (max-width: 768px) {
+  /* ── PERSONAL PORTFOLIO — mobile responsive ──────────────── */
+  .pp-scene {
+    justify-content: center;
+    padding: 60px 16px;
+    min-height: auto;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pp-scene__ui {
+    max-width: 100%;
+    padding: 16px;
+  }
+
+  .pp-scene__ui-nav {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .pp-scene__ui-links span {
+    font-size: 10px;
+  }
+
+  .pp-scene__ui-skills {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pp-scene__ui-skill-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pp-scene__card {
+    position: relative;
+    z-index: 2;
+    max-width: 100%;
+    width: 100%;
+    margin: 2rem 0 0;
+  }
+
+  .pp-scene__card-cta {
+    margin: 0 16px 24px;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  /* Nuclear overflow fix */
+  .pp-scene {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  .pp-scene__card,
+  .pp-scene__card * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .pp-scene__ui {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .pp-scene {
+    justify-content: flex-start !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 80px 16px 40px !important;
+    min-height: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .pp-scene__bg {
+    position: relative !important;
+    min-height: 250px !important;
+  }
+
+  .pp-scene__ui {
+    position: relative !important;
+    inset: auto !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+    min-height: 220px !important;
+  }
+
+  .pp-scene__card {
+    position: relative !important;
+    z-index: 2 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 1rem 0 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .pp-scene__card-cta {
+    display: block !important;
+    width: calc(100% - 32px) !important;
+    margin: 0 16px 24px !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+
+  .pp-scene__ui-skills {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .pp-scene__ui-skill-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .pp-scene__ui-links span {
+    font-size: 10px !important;
+  }
+}
