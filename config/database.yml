@@ -79,6 +79,4 @@ test:
 #
 production:
   <<: *default
-  database: hmd_studio_production
-  username: hmd_studio
-  password: <%= ENV["HMD_STUDIO_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
