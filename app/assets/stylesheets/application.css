@@ -2549,8 +2549,10 @@ body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
 
   /* ── ABOUT: Hero ─────────────────────────────────────────── */
   .ab-hero {
-    grid-template-columns: 1fr;
-    min-height: auto;
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   .ab-hero__left {
@@ -2843,4 +2845,77 @@ body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
     text-align: center;
   }
 
+  /* ── PROJECT PAGES: nuclear overflow fix ─────────────────── */
+  .bc-scene,
+  .bc-showcase,
+  .sm-showcase,
+  .pp-scene {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  .bc-scene__card,
+  .bc-scene__card * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .sm-cards-wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .sm-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .pp-scene__card,
+  .pp-scene__card * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .pp-scene__ui {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* SafeMoov mini card — replaces sm-card--overlay */
+  .incident-card--mini {
+    display: block !important;
+    position: absolute !important;
+    top: 70px !important;
+    right: -10px !important;
+    width: 380px !important;
+    transform: scale(0.38) !important;
+    transform-origin: top right !important;
+    opacity: 0.65 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+  }
+
+  .incident-card-mini,
+  .sm-card.incident-card-mini {
+    display: block !important;
+    position: absolute !important;
+    top: 70px !important;
+    right: -10px !important;
+    width: 380px !important;
+    transform: scale(0.38) !important;
+    transform-origin: top right !important;
+    opacity: 0.65 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+  }
+
+}
+
+/* ── LAST-RESORT: burger always white (highest specificity, after all rules) ── */
+.navbar__burger span,
+.navbar--open .navbar__burger span,
+.navbar--frosted .navbar__burger span {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
 }
