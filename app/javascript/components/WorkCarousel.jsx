@@ -4,7 +4,7 @@ const PROJECTS = [
   {
     num: "01",
     title: "BOOKING CLUB",
-    description: "Full-stack booking system for sports clubs",
+    description: "Booking infrastructure designed around the rhythm of sports clubs — clean, fast, frictionless.",
     stack: "Rails / PostgreSQL / Stripe / Heroku",
     link: "/work/booking-club",
     image: "https://res.cloudinary.com/dtlybacjm/image/upload/v1775130737/Image_02-04-2026_a%CC%80_13.49_grer8m.png",
@@ -12,7 +12,7 @@ const PROJECTS = [
   {
     num: "02",
     title: "SAFEMOOV",
-    description: "Real-time incident reporting app",
+    description: "A civic tool for reporting safety incidents in real time — built for speed, clarity, and trust.",
     stack: "Rails / JS / Cloudinary",
     link: "/work/safemoov",
     image: "https://res.cloudinary.com/dtlybacjm/image/upload/v1775130738/Image_02-04-2026_a%CC%80_13.50_wf7kpl.png",
@@ -20,7 +20,7 @@ const PROJECTS = [
   {
     num: "03",
     title: "PERSONAL PORTFOLIO",
-    description: "Multilingual dev portfolio with auto-email",
+    description: "A developer's identity, built to make an impression — multilingual, automated, and fully custom.",
     stack: "Rails / Google API / PostgreSQL",
     link: "/work/personal-portfolio",
     image: "https://res.cloudinary.com/dtlybacjm/image/upload/v1775130738/Image_02-04-2026_a%CC%80_13.51_jj39xo.png",
