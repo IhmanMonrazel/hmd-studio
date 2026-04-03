@@ -2541,7 +2541,15 @@ body.pages.contact .navbar:not(.navbar--frosted) {
   }
 
   .ab-hero__right {
-    height: 260px;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .ab-hero__portrait {
+    object-fit: contain;
+    height: auto;
+    max-height: none;
   }
 
   /* ── ABOUT: Scan section ─────────────────────────────────── */
