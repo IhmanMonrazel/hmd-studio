@@ -30,6 +30,20 @@ export default class extends Controller {
         cloudVideo.setAttribute("loop", "")
         cloudVideo.muted = true
         cloudVideo.play().catch(() => {})
+
+        // CSS fade-in via IntersectionObserver — ensures S4 is visible even
+        // if GSAP ScrollTrigger sets opacity:0 and doesn't fire on iOS Safari.
+        const s4Section = document.querySelector(".s4")
+        if (s4Section) {
+          s4Section.style.transition = "opacity 0.8s ease"
+          const io = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+              s4Section.style.opacity = "1"
+              io.disconnect()
+            }
+          }, { threshold: 0.1 })
+          io.observe(s4Section)
+        }
       } else {
       cloudVideo.pause()
       cloudVideo.currentTime = 0
@@ -110,7 +124,7 @@ export default class extends Controller {
 
   // ── Init all transitions ───────────────────────────────────
   _init() {
-    this._bodyBgTriggers()
+    // _bodyBgTriggers disabled — body stays #000000 on all pages/devices
     this._s2toS3()
     this._s3toS4()
     this._s4toS5()

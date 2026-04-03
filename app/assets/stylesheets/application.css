@@ -151,7 +151,7 @@ img { display: block; max-width: 100%; }
   display: block;
   width: 24px;
   height: 1px;
-  background: var(--black);
+  background: #ffffff;
   transition: transform 0.3s, opacity 0.3s;
 }
 
@@ -187,7 +187,11 @@ img { display: block; max-width: 100%; }
 }
 .navbar__overlay-link:hover { color: var(--red); }
 
-/* Burger open state */
+/* Burger open state — navbar always solid black when menu is open */
+.navbar--open {
+  background: #000000 !important;
+}
+
 .navbar--open .navbar__burger span:nth-child(1) {
   transform: translateY(6px) rotate(45deg);
 }
@@ -2660,6 +2664,12 @@ body.pages.contact .navbar:not(.navbar--frosted) {
 
   .legal-page__title {
     font-size: clamp(2rem, 10vw, 5rem);
+  }
+
+  /* ── WORK PAGE — prevent navbar overlap ──────────────────── */
+  /* body.pages.work sets padding-top:0 on .main globally; restore on mobile */
+  body.pages.work .work-carousel-section {
+    padding-top: var(--nav-h);
   }
 
 }
