@@ -2427,3 +2427,239 @@ body.pages.contact .navbar:not(.navbar--frosted) {
 .site-footer__legal-link:hover {
   color: rgba(255,255,255,0.7);
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE — 768px and below
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* ── NAVBAR ─────────────────────────────────────────────── */
+  .navbar__inner {
+    padding: 0 20px;
+  }
+
+  .navbar__overlay-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    width: 100%;
+    text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  /* ── HOME: S1 video ──────────────────────────────────────── */
+  .s1__media {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── HOME: S2 hero text ──────────────────────────────────── */
+  .s2 {
+    padding: clamp(3rem, 8vh, 5rem) 20px;
+  }
+
+  .s2__title {
+    font-size: clamp(2.8rem, 15vw, 5rem);
+    max-width: 90vw;
+  }
+
+  .s2__sub,
+  .s2__cred {
+    max-width: 90vw;
+  }
+
+  /* ── HOME: S3 services — stack vertically ────────────────── */
+  .s3 {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+  }
+
+  .s3__item {
+    padding: 24px 0;
+    width: 100%;
+  }
+
+  .s3__item-title {
+    font-size: clamp(1.6rem, 7vw, 2.5rem);
+  }
+
+  /* ── HOME: S4 cloud video ────────────────────────────────── */
+  .s4 {
+    height: 60dvh;
+  }
+
+  .s4__cloud-wrap {
+    width: 90vw;
+    height: 60vw;
+  }
+
+  /* ── HOME: S5 Why section — stack vertically ─────────────── */
+  .s5 {
+    padding: clamp(3rem, 8vw, 5rem) 20px;
+  }
+
+  .s5__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .s5__block--2,
+  .s5__block--3 {
+    margin-top: 0;
+  }
+
+  .s5__block-title {
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+  }
+
+  /* ── ABOUT: Hero ─────────────────────────────────────────── */
+  .ab-hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .ab-hero__left {
+    padding: 40px 20px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .ab-hero__title {
+    font-size: clamp(3rem, 14vw, 6rem);
+  }
+
+  .ab-hero__issue {
+    font-size: 0.6rem;
+  }
+
+  .ab-hero__right {
+    height: 260px;
+  }
+
+  /* ── ABOUT: Scan section ─────────────────────────────────── */
+  .ab-scan {
+    grid-template-columns: 1fr;
+  }
+
+  .ab-scan__left {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .ab-scan__video-wrap {
+    height: 240px;
+  }
+
+  .ab-scan__right {
+    padding: 40px 20px;
+  }
+
+  .ab-scan__row {
+    font-size: 0.75rem;
+  }
+
+  /* ── ABOUT: Approach section — stack vertically ──────────── */
+  .ab-approach {
+    padding: 60px 20px;
+  }
+
+  .ab-approach__blocks {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .ab-approach__block--2,
+  .ab-approach__block--3 {
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .ab-approach__title {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+
+  /* ── CASE STUDY HERO (bc-hero) ───────────────────────────── */
+  .bc-hero {
+    padding: calc(var(--nav-h) + 2rem) 20px 2.5rem;
+  }
+
+  .bc-hero__title {
+    font-size: clamp(2.5rem, 12vw, 5rem);
+  }
+
+  /* ── CONTACT: Ticket ─────────────────────────────────────── */
+  .receipt-page {
+    padding: calc(var(--nav-h) + 2rem) 20px 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+  }
+
+  .ticket {
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+  }
+
+  .ticket__body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* 16px minimum on inputs — prevents iOS Safari auto-zoom on focus */
+  .ticket-form__input,
+  .ticket-form__textarea {
+    font-size: 16px;
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ticket-form__submit {
+    width: 100%;
+    min-height: 52px;
+    font-size: 16px;
+  }
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  .site-footer {
+    padding: clamp(3rem, 8vh, 6rem) 20px clamp(2rem, 5vh, 4rem);
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Scale down the CTA to fit 2 lines max on 375px */
+  .site-footer__title {
+    font-size: clamp(2rem, 10vw, 11rem);
+    text-align: center;
+  }
+
+  .site-footer__top {
+    justify-content: center;
+  }
+
+  .site-footer__colophon {
+    align-items: center;
+  }
+
+  .site-footer__legal {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  /* ── LEGAL PAGES ─────────────────────────────────────────── */
+  .legal-page {
+    padding: calc(var(--nav-h) + 2rem) 20px 4rem;
+  }
+
+  .legal-page__title {
+    font-size: clamp(2rem, 10vw, 5rem);
+  }
+
+}

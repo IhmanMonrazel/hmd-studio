@@ -23,6 +23,14 @@ export default class extends Controller {
     console.log("[debug] cloudVideo readyState:", cloudVideo?.readyState)
     console.log("[debug] cloudVideo src:", cloudVideo?.currentSrc)
     if (cloudVideo) {
+      // On mobile (≤768px), iOS Safari blocks currentTime scrubbing without
+      // user interaction. Fall back to autoplay loop — still cinematic.
+      if (window.innerWidth <= 768) {
+        cloudVideo.setAttribute("autoplay", "")
+        cloudVideo.setAttribute("loop", "")
+        cloudVideo.muted = true
+        cloudVideo.play().catch(() => {})
+      } else {
       cloudVideo.pause()
       cloudVideo.currentTime = 0
 
@@ -65,6 +73,7 @@ export default class extends Controller {
       } else {
         cloudVideo.addEventListener("loadedmetadata", initCloudScrub, { once: true })
       }
+      } // end desktop-only block
     }
 
     console.log("[home-scroll] initialized", {

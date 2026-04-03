@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const PROJECTS = [
   {
@@ -30,7 +30,118 @@ const PROJECTS = [
 export const WorkCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ── MOBILE LAYOUT ─────────────────────────────────────────
+  // Hover preview doesn't exist on touch — each project is a full
+  // self-contained row: number → title → description → thumbnail → arrow.
+  if (isMobile) {
+    return (
+      <div style={{
+        background: "#000000",
+        color: "#ffffff",
+        padding: "clamp(2rem, 6vh, 4rem) 20px clamp(3rem, 8vh, 6rem)",
+      }}>
+        <p style={{
+          fontSize: "0.7rem",
+          letterSpacing: "0.25em",
+          textTransform: "uppercase",
+          color: "rgba(255,255,255,0.25)",
+          marginBottom: "clamp(2rem, 5vh, 3rem)",
+          fontFamily: "Inter, sans-serif",
+        }}>
+          Selected Projects — 2024/2025
+        </p>
+
+        {PROJECTS.map((project, i) => (
+          <a
+            key={i}
+            href={project.link}
+            data-turbo="true"
+            style={{
+              display: "block",
+              borderTop: "1px solid rgba(255,255,255,0.08)",
+              paddingTop: "24px",
+              paddingBottom: "32px",
+              textDecoration: "none",
+              color: "#ffffff",
+            }}
+          >
+            {/* Number */}
+            <span style={{
+              display: "block",
+              fontSize: "0.65rem",
+              letterSpacing: "0.2em",
+              color: "#CC0000",
+              fontFamily: "Inter, sans-serif",
+              marginBottom: "0.5rem",
+            }}>
+              {project.num}
+            </span>
+
+            {/* Title */}
+            <h2 style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "clamp(2.2rem, 10vw, 3.5rem)",
+              letterSpacing: "0.04em",
+              margin: "0 0 0.6rem",
+              lineHeight: 1,
+              color: "#ffffff",
+            }}>
+              {project.title}
+            </h2>
+
+            {/* Description */}
+            <p style={{
+              fontSize: "0.85rem",
+              color: "rgba(255,255,255,0.5)",
+              margin: "0 0 1.5rem",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 300,
+              lineHeight: 1.7,
+            }}>
+              {project.description}
+            </p>
+
+            {/* Static thumbnail */}
+            <div style={{
+              width: "100%",
+              height: "200px",
+              background: "#111111",
+              overflow: "hidden",
+              marginBottom: "1.2rem",
+            }}>
+              <img
+                src={project.image}
+                alt={project.title}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+
+            {/* Arrow */}
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <span style={{ fontSize: "1.2rem", color: "#ffffff" }}>→</span>
+            </div>
+          </a>
+        ))}
+
+        {/* Closing separator */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }} />
+      </div>
+    );
+  }
+
+  // ── DESKTOP LAYOUT ────────────────────────────────────────
   return (
     <div style={{
       display: "grid",
