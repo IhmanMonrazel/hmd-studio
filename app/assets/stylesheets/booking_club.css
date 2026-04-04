@@ -84,294 +84,47 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
   border-color: var(--white);
 }
 
-/* Showcase GSAP */
-.bc-showcase {
-  background: #0d1520;
-  padding: 100px 40px;
-}
-
-.bc-showcase__inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.bc-showcase__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas:
-    "resource form"
-    "seats    total";
-  gap: 16px;
-}
-
-/* ── Bloc 1 : Ressource ───────────────────────────────── */
-.bcs-resource {
-  grid-area: resource;
-  background: #111c2d;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 40px 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.bcs-resource__badge {
-  display: inline-block;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #4dba7f;
-  background: rgba(26,122,60,0.2);
-  border: 1px solid rgba(26,122,60,0.4);
-  border-radius: 20px;
-  padding: 5px 12px;
-  width: fit-content;
-}
-
-.bcs-resource__title {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 1.7rem;
-  font-weight: 700;
-  line-height: 1.2;
-  color: #ffffff;
-  margin: 0;
-}
-
-.bcs-resource__price {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #7a9fd4;
-}
-
-.bcs-resource__hours {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.4);
-}
-
-/* ── Bloc 2 : Formulaire ─────────────────────────────── */
-.bcs-form {
-  grid-area: form;
-  background: #111c2d;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.bcs-form__row {
-  display: flex;
-  gap: 16px;
-}
-
-.bcs-form__field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-}
-
-.bcs-form__field--full { flex: 1 1 100%; }
-
-.bcs-form__label {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-}
-
-.bcs-form__input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 12px 14px;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #ffffff;
-  background: #0d1520;
-}
-
-.bcs-form__avail {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.75rem;
-  color: #4dba7f;
-  margin: 0;
-}
-
-.bcs-form__avail-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #4dba7f;
-  flex-shrink: 0;
-}
-
-/* ── Bloc 3 : Grille de places ───────────────────────── */
-.bcs-seats {
-  grid-area: seats;
-  background: #111c2d;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.bcs-seats__grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-}
-
-.bcs-seat {
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 14px 8px;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
-  color: rgba(255,255,255,0.3);
-}
-
-.bcs-seat--free {
-  color: rgba(255,255,255,0.25);
-}
-
-.bcs-seat--free:hover {
-  border-color: #7a9fd4;
-  color: #7a9fd4;
-}
-
-.bcs-seat--selected {
-  background: rgba(74,111,165,0.2);
-  border-color: #7a9fd4;
-  color: #7a9fd4;
-}
-
-.bcs-seat__plus {
-  font-size: 1.1rem;
-  font-weight: 300;
-  line-height: 1;
-  color: rgba(255,255,255,0.2);
-}
-
-.bcs-seats__counter {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
+/* ── Mobile-only rowing illustration ─────────────────────── */
+.bc-scene-mobile {
+  display: none;
+  position: relative;
+  width: 100%;
   overflow: hidden;
-  width: fit-content;
+  background: #1a2535;
 }
 
-.bcs-seats__btn {
-  background: none;
-  border: none;
-  border-right: 1px solid rgba(255,255,255,0.1);
-  width: 40px;
-  height: 40px;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 1.1rem;
-  cursor: pointer;
-  color: #7a9fd4;
-  transition: background 0.15s;
-}
-
-.bcs-seats__btn:last-child {
-  border-right: none;
-  border-left: 1px solid rgba(255,255,255,0.1);
-}
-
-.bcs-seats__btn:hover { background: rgba(74,111,165,0.2); }
-
-.bcs-seats__count {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0 20px;
-  color: #ffffff;
-}
-
-/* ── Bloc 4 : Total ──────────────────────────────────── */
-.bcs-total {
-  grid-area: total;
-  background: #111c2d;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  justify-content: flex-end;
-}
-
-.bcs-total__line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.4);
-}
-
-.bcs-total__line--bold {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.bcs-total__divider {
-  height: 1px;
-  background: rgba(255,255,255,0.08);
-}
-
-.bcs-total__cta {
-  margin-top: 8px;
+.bc-scene-mobile__svg {
   display: block;
   width: 100%;
-  background: #4a6fa5;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 18px 24px;
-  cursor: pointer;
-  transition: background 0.2s;
+  height: 480px;
 }
 
-.bcs-total__cta:hover { background: #3a5a8a; }
+.bc-scene-mobile__caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 48px 20px 24px;
+  background: linear-gradient(to top, rgba(13,21,32,0.95) 0%, transparent 100%);
+}
+
+.bc-scene-mobile__name {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0 0 6px;
+  line-height: 1;
+}
+
+.bc-scene-mobile__desc {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+}
 
 /* ============================================================
    BOOKING CLUB — SCENE (rowing visual)
@@ -561,12 +314,7 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
    RESPONSIVE — 900px
    ============================================================ */
 @media (max-width: 900px) {
-  .bc-showcase { padding: 60px 24px; }
   .bc-hero { padding: 80px 24px 70px; }
-  .bc-showcase__grid {
-    grid-template-columns: 1fr;
-    grid-template-areas: "resource" "form" "seats" "total";
-  }
 }
 
 /* ============================================================
@@ -578,6 +326,8 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
     padding: calc(var(--nav-h) + 2rem) 20px 2.5rem;
     box-sizing: border-box;
     width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   .bc-hero__inner {
@@ -596,105 +346,13 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
     text-align: center;
   }
 
-  /* ── SCENE — SVG banner stacked above booking card ─────────── */
+  /* ── DESKTOP SCENE — hidden, replaced by bc-scene-mobile ──── */
   .bc-scene {
-    width: 100%;
-    box-sizing: border-box;
-    height: auto;
-    min-height: unset;
-    padding: 16px;
-    overflow: hidden;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 20px;
+    display: none !important;
   }
 
-  /* Map leaves absolute positioning — flows in document above card */
-  .bc-scene__map {
-    position: relative !important;
-    inset: auto !important;
-    width: 100% !important;
-    height: 400px !important;
-    overflow: hidden;
-    flex-shrink: 0;
-    border-radius: 10px;
-  }
-
-  .bc-scene__svg {
-    width: 100% !important;
-    height: 100% !important;
+  /* ── MOBILE SCENE — show ─────────────────────────────────── */
+  .bc-scene-mobile {
     display: block;
-  }
-
-  /* Card: full width, flows below the map */
-  .bc-scene__card {
-    display: block !important;
-    position: relative !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
-  }
-
-  .bc-scene__card * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  /* ── SHOWCASE ─────────────────────────────────────────────── */
-  .bc-showcase {
-    transform: none !important;
-    padding: 40px 16px !important;
-    box-sizing: border-box !important;
-    width: 100% !important;
-  }
-
-  .bc-showcase__inner {
-    max-width: 100% !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  .bc-showcase__grid {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "resource"
-      "form"
-      "seats"
-      "total";
-  }
-
-  .bcs-resource,
-  .bcs-form,
-  .bcs-seats,
-  .bcs-total {
-    padding: 24px 16px;
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .bcs-resource__title {
-    font-size: 1.2rem;
-  }
-
-  .bcs-form__row {
-    flex-direction: column;
-  }
-
-  /* Seat cells: border-box so 5-col grid doesn't overflow */
-  .bcs-seat {
-    box-sizing: border-box;
-    padding: 10px 4px;
-    min-width: 0;
-  }
-
-  /* ── GLOBAL OVERFLOW CONTAINMENT ─────────────────────────── */
-  .bc-hero,
-  .bc-scene,
-  .bc-showcase {
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
   }
 }

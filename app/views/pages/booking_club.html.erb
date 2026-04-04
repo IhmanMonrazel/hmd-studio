@@ -12,6 +12,109 @@
   </div>
 </section>
 
+<%# ─── MOBILE SCENE ─────────────────────────────────────── %>
+<section class="bc-scene-mobile" aria-hidden="true">
+  <svg class="bc-scene-mobile__svg" viewBox="0 0 400 500"
+       xmlns="http://www.w3.org/2000/svg"
+       preserveAspectRatio="xMidYMid slice">
+
+    <!-- Sky -->
+    <rect width="400" height="500" fill="#1a2535"/>
+
+    <!-- Mist -->
+    <ellipse cx="200" cy="295" rx="300" ry="35" fill="#b8c8d8" opacity="0.05"/>
+
+    <!-- Water -->
+    <rect x="0" y="302" width="400" height="198" fill="#1e3048"/>
+
+    <!-- Water shimmer -->
+    <line x1="0" y1="320" x2="400" y2="318" stroke="#4a6fa5" stroke-width="0.5" opacity="0.3"/>
+    <line x1="0" y1="340" x2="400" y2="342" stroke="#4a6fa5" stroke-width="0.3" opacity="0.2"/>
+    <line x1="0" y1="362" x2="400" y2="360" stroke="#4a6fa5" stroke-width="0.2" opacity="0.15"/>
+    <line x1="0" y1="390" x2="400" y2="392" stroke="#4a6fa5" stroke-width="0.2" opacity="0.08"/>
+
+    <!-- Dock -->
+    <rect x="16" y="293" width="368" height="14" rx="2" fill="#2a3f5a"/>
+    <rect x="16" y="293" width="368" height="3" rx="1" fill="#3a5470" opacity="0.8"/>
+    <rect x="36"  y="307" width="5" height="32" fill="#243448"/>
+    <rect x="136" y="307" width="5" height="32" fill="#243448"/>
+    <rect x="236" y="307" width="5" height="32" fill="#243448"/>
+    <rect x="356" y="307" width="5" height="28" fill="#243448"/>
+
+    <!-- Boat — Huit+ Compétition (centered, full width) -->
+    <g transform="translate(12, 280)">
+      <path d="M0,8 Q40,-2 350,6 Q370,8 382,12 Q370,16 350,14 Q40,18 0,12 Z"
+            fill="#2a4a7a" stroke="#4a7ab5" stroke-width="0.8"/>
+      <rect x="45"  y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+      <rect x="90"  y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+      <rect x="135" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+      <rect x="180" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+      <rect x="225" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+      <rect x="270" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+      <rect x="315" y="7" width="8" height="4" rx="1" fill="#3a5a8a" opacity="0.8"/>
+      <line x1="60"  y1="10" x2="30"  y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.6"/>
+      <line x1="120" y1="10" x2="90"  y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.6"/>
+      <line x1="180" y1="10" x2="150" y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.55"/>
+      <line x1="80"  y1="10" x2="110" y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.6"/>
+      <line x1="140" y1="10" x2="170" y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.55"/>
+      <line x1="200" y1="10" x2="230" y2="28" stroke="#5a8abf" stroke-width="1.5" opacity="0.5"/>
+      <text x="191" y="4" text-anchor="middle" font-family="system-ui" font-size="7"
+            fill="#8ab4d4" opacity="0.65">HUIT+ COMPÉTITION</text>
+    </g>
+
+    <!-- Water reflection -->
+    <ellipse cx="200" cy="322" rx="185" ry="8" fill="#2a4a7a" opacity="0.28"/>
+    <ellipse cx="200" cy="332" rx="120" ry="5" fill="#2a4a7a" opacity="0.14"/>
+
+    <!-- Time display — centered -->
+    <text x="200" y="88" text-anchor="middle"
+          font-family="'Helvetica Neue', Arial, sans-serif"
+          font-size="68" font-weight="700" fill="#ffffff" opacity="0.13"
+          letter-spacing="4">06:00</text>
+    <text x="200" y="116" text-anchor="middle"
+          font-family="'Helvetica Neue', Arial, sans-serif"
+          font-size="10" fill="#8ab4d4" opacity="0.55" letter-spacing="3">
+      OUVERTURE DU CLUB
+    </text>
+
+    <!-- Slots UI — centered -->
+    <g transform="translate(120, 144)">
+      <text x="80" text-anchor="middle" font-family="system-ui" font-size="8"
+            fill="#6a94b4" opacity="0.7" letter-spacing="2">PROCHAINS CRÉNEAUX</text>
+      <rect y="14" width="160" height="26" rx="4" fill="#2a4a6a" opacity="0.75"/>
+      <rect y="14" width="4"   height="26" rx="1" fill="#4dba7f" opacity="0.9"/>
+      <text x="12" y="25" font-family="system-ui" font-size="9"
+            font-weight="600" fill="#ffffff" opacity="0.9">06:00</text>
+      <text x="12" y="35" font-family="system-ui" font-size="7"
+            fill="#8ab4d4" opacity="0.7">Huit+ Compétition</text>
+      <rect y="46" width="160" height="26" rx="4" fill="#2a4a6a" opacity="0.6"/>
+      <rect y="46" width="4"   height="26" rx="1" fill="#4dba7f" opacity="0.8"/>
+      <text x="12" y="57" font-family="system-ui" font-size="9"
+            font-weight="600" fill="#ffffff" opacity="0.85">07:00</text>
+      <text x="12" y="67" font-family="system-ui" font-size="7"
+            fill="#8ab4d4" opacity="0.6">Quatre+ Découverte</text>
+    </g>
+
+    <!-- Stripe badge -->
+    <g transform="translate(20, 242)">
+      <rect width="112" height="26" rx="4" fill="#1e3048" stroke="#3a5470" stroke-width="0.8"/>
+      <text x="10" y="17" font-family="system-ui" font-size="8"
+            fill="#8ab4d4" opacity="0.7" letter-spacing="1">STRIPE · SÉCURISÉ</text>
+    </g>
+
+    <!-- Gradient overlay for caption readability -->
+    <rect x="0" y="360" width="400" height="140" fill="#0d1520" opacity="0.65"/>
+
+    <!-- Overall subtle vignette -->
+    <rect width="400" height="500" fill="#000000" opacity="0.12"/>
+  </svg>
+
+  <div class="bc-scene-mobile__caption">
+    <p class="bc-scene-mobile__name">BOOKING CLUB</p>
+    <p class="bc-scene-mobile__desc">Réservation en ligne &middot; Paiement Stripe sécurisé</p>
+  </div>
+</section>
+
 <%# ─── SCENE ───────────────────────────────────────────── %>
 <section class="bc-scene">
   <div class="bc-scene__map">
@@ -222,91 +325,4 @@
   </div>
 </section>
 
-<%# ─── SHOWCASE GSAP ───────────────────────────────────── %>
-<section class="bc-showcase" data-controller="gsap-showcase">
-  <div class="bc-showcase__inner">
-
-    <div class="bc-showcase__grid">
-
-      <%# Bloc 1 — Carte ressource (slide depuis gauche) %>
-      <div class="bcs-resource" data-gsap-showcase-target="resource">
-        <span class="bcs-resource__badge">DISPONIBLE</span>
-        <h2 class="bcs-resource__title">Huit+ Compétition</h2>
-        <div class="bcs-resource__price">30.00 &euro; / heure</div>
-        <div class="bcs-resource__hours">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
-            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-          </svg>
-          06h &ndash; 21h
-        </div>
-      </div>
-
-      <%# Bloc 2 — Formulaire réservation (fade in depuis le bas) %>
-      <div class="bcs-form" data-gsap-showcase-target="form">
-        <div class="bcs-form__row">
-          <div class="bcs-form__field bcs-form__field--full">
-            <label class="bcs-form__label">DATE</label>
-            <div class="bcs-form__input">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
-                <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-              </svg>
-              26/03/2026
-            </div>
-          </div>
-        </div>
-        <div class="bcs-form__row">
-          <div class="bcs-form__field">
-            <label class="bcs-form__label">DÉBUT</label>
-            <div class="bcs-form__input">06:00</div>
-          </div>
-          <div class="bcs-form__field">
-            <label class="bcs-form__label">FIN</label>
-            <div class="bcs-form__input">07:00</div>
-          </div>
-        </div>
-        <p class="bcs-form__avail">
-          <span class="bcs-form__avail-dot"></span>
-          Tous les cr&eacute;neaux sont disponibles
-        </p>
-      </div>
-
-      <%# Bloc 3 — Grille de places (stagger pop avec rebond) %>
-      <div class="bcs-seats">
-        <div class="bcs-seats__grid">
-          <div class="bcs-seat bcs-seat--selected" data-gsap-showcase-target="seat">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
-              <path d="M5 13l4 4L19 7"/>
-            </svg>
-          </div>
-          <% 8.times do %>
-            <div class="bcs-seat bcs-seat--free" data-gsap-showcase-target="seat">
-              <span class="bcs-seat__plus">+</span>
-              <span>Libre</span>
-            </div>
-          <% end %>
-        </div>
-        <div class="bcs-seats__counter">
-          <button class="bcs-seats__btn">&#8722;</button>
-          <span class="bcs-seats__count">1 personne</span>
-          <button class="bcs-seats__btn">+</button>
-        </div>
-      </div>
-
-      <%# Bloc 4 — Total et validation (slide depuis droite) %>
-      <div class="bcs-total" data-gsap-showcase-target="total">
-        <div class="bcs-total__line">
-          <span>Tarif</span>
-          <span>60.00 &euro;</span>
-        </div>
-        <div class="bcs-total__divider"></div>
-        <div class="bcs-total__line bcs-total__line--bold">
-          <span>Total</span>
-          <span>60.00 &euro;</span>
-        </div>
-        <button class="bcs-total__cta">VALIDER LA R&Eacute;SERVATION</button>
-      </div>
-
-    </div>
-  </div>
-</section>
 
