@@ -573,9 +573,16 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
    RESPONSIVE — 768px
    ============================================================ */
 @media (max-width: 768px) {
-  /* ── CASE STUDY HERO (bc-hero) ───────────────────────────── */
+  /* ── HERO ─────────────────────────────────────────────────── */
   .bc-hero {
     padding: calc(var(--nav-h) + 2rem) 20px 2.5rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .bc-hero__inner {
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .bc-hero__title {
@@ -589,35 +596,63 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
     text-align: center;
   }
 
-  /* Scene becomes a pure cinematic SVG banner — card hidden, no duplication */
+  /* ── SCENE — SVG banner stacked above booking card ─────────── */
   .bc-scene {
-    height: 300px;
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
     min-height: unset;
-    padding: 0;
+    padding: 16px;
     overflow: hidden;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
   }
 
-  /* Issue 2: hide the booking card — bc-showcase has the same info */
-  .bc-scene__card {
-    display: none !important;
-  }
-
-  /* Issue 1: map fills the cinematic band at full height */
+  /* Map leaves absolute positioning — flows in document above card */
   .bc-scene__map {
-    position: absolute !important;
-    inset: 0 !important;
+    position: relative !important;
+    inset: auto !important;
     width: 100% !important;
-    height: 100% !important;
-    border-radius: 0;
-    margin-bottom: 0;
+    height: 260px !important;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: 10px;
   }
 
   .bc-scene__svg {
     width: 100% !important;
     height: 100% !important;
+  }
+
+  /* Card: full width, flows below the map */
+  .bc-scene__card {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+
+  .bc-scene__card * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ── SHOWCASE ─────────────────────────────────────────────── */
+  .bc-showcase {
+    transform: none !important;
+    padding: 40px 16px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+
+  .bc-showcase__inner {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .bc-showcase__grid {
@@ -630,8 +665,13 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
   }
 
   .bcs-resource,
-  .bcs-form {
+  .bcs-form,
+  .bcs-seats,
+  .bcs-total {
     padding: 24px 16px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
   }
 
   .bcs-resource__title {
@@ -642,21 +682,18 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
     flex-direction: column;
   }
 
-  .bc-showcase {
-    transform: none !important;
-    padding: 40px 16px !important;
+  /* Seat cells: border-box so 5-col grid doesn't overflow */
+  .bcs-seat {
+    box-sizing: border-box;
+    padding: 10px 4px;
+    min-width: 0;
   }
 
-  /* Overflow containment */
+  /* ── GLOBAL OVERFLOW CONTAINMENT ─────────────────────────── */
+  .bc-hero,
   .bc-scene,
   .bc-showcase {
-    overflow-x: hidden !important;
     max-width: 100vw !important;
-  }
-
-  .bc-scene__card,
-  .bc-scene__card * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+    overflow-x: hidden !important;
   }
 }
