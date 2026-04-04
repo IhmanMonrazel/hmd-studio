@@ -589,33 +589,35 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
     text-align: center;
   }
 
+  /* Scene becomes a pure cinematic SVG banner — card hidden, no duplication */
   .bc-scene {
-    justify-content: center;
-    padding: 40px 16px 0;
-    min-height: auto;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .bc-scene__card {
-    max-width: 100%;
-    width: 100%;
-    margin: 0;
-  }
-
-  .bc-scene__map {
-    position: relative !important;
-    width: 100% !important;
-    height: 220px !important;
-    border-radius: 12px;
+    height: 300px;
+    min-height: unset;
+    padding: 0;
     overflow: hidden;
-    margin-bottom: 20px;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-end;
+  }
+
+  /* Issue 2: hide the booking card — bc-showcase has the same info */
+  .bc-scene__card {
+    display: none !important;
+  }
+
+  /* Issue 1: map fills the cinematic band at full height */
+  .bc-scene__map {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0;
+    margin-bottom: 0;
   }
 
   .bc-scene__svg {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover;
   }
 
   .bc-showcase__grid {
