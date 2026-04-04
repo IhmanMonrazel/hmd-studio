@@ -23,13 +23,15 @@ export default class extends Controller {
     document.body.style.overflow = isOpen ? "hidden" : ""
 
     if (isOpen) {
-      // Inline style wins over any CSS rule (including .navbar--scrolled)
-      this.element.style.background = '#000000'
-      this.element.style.backgroundColor = '#000000'
+      // Freeze the scroll controller — remove all scroll-based classes
+      this.element.classList.remove("navbar--frosted", "navbar--hidden", "navbar--scrolled")
+      // Force black background via inline style so nothing can override it
+      this.element.style.background = "#000000"
+      this.element.style.backgroundColor = "#000000"
     } else {
-      // Remove inline styles — CSS scroll-based rules take back control
-      this.element.style.background = ''
-      this.element.style.backgroundColor = ''
+      // Restore scroll controller when menu closes
+      this.element.style.background = ""
+      this.element.style.backgroundColor = ""
     }
   }
 
@@ -37,8 +39,7 @@ export default class extends Controller {
     this.element.classList.remove("navbar--open")
     this.overlayTarget.classList.remove("is-open")
     document.body.style.overflow = ""
-    // Remove inline styles — CSS scroll-based rules take back control
-    this.element.style.background = ''
-    this.element.style.backgroundColor = ''
+    this.element.style.background = ""
+    this.element.style.backgroundColor = ""
   }
 }

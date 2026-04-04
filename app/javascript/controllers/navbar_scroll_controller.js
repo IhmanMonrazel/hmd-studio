@@ -16,6 +16,9 @@ export default class extends Controller {
   }
 
   _handleScroll() {
+    // Do not run scroll logic while burger menu is open
+    if (this.element.classList.contains("navbar--open")) return
+
     const y  = window.scrollY
     const el = this.element
 
