@@ -615,7 +615,7 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
     position: relative !important;
     inset: auto !important;
     width: 100% !important;
-    height: 260px !important;
+    height: 400px !important;
     overflow: hidden;
     flex-shrink: 0;
     border-radius: 10px;
@@ -624,6 +624,7 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
   .bc-scene__svg {
     width: 100% !important;
     height: 100% !important;
+    display: block;
   }
 
   /* Card: full width, flows below the map */
