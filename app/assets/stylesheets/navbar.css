@@ -142,10 +142,7 @@
 }
 .navbar__overlay-link:hover { color: var(--red); }
 
-/* Burger open state — navbar always solid black when menu is open */
-.navbar--open {
-  background: #000000 !important;
-}
+/* Burger open state — handled unconditionally at end of file */
 
 .navbar--open .navbar__burger span:nth-child(1) {
   transform: translateY(6px) rotate(45deg);
@@ -193,14 +190,6 @@
   }
 }
 
-@media (max-width: 768px) {
-  .navbar.navbar--open,
-  .navbar.navbar--open.navbar--scrolled,
-  .navbar.navbar--open.navbar--hidden {
-    background: #000000 !important;
-    opacity: 1 !important;
-  }
-}
 
 /* LAST-RESORT: burger always white */
 .navbar__burger span,
@@ -209,5 +198,17 @@
 .navbar--open .navbar__burger span,
 .navbar--frosted .navbar__burger span {
   background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+/* UNCONDITIONAL: navbar open state — black background all screen sizes */
+.navbar.navbar--open {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.navbar.navbar--open .navbar__burger span {
   background-color: #ffffff !important;
 }
