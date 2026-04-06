@@ -387,7 +387,7 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
 .bc-scene-mobile__svg {
   display: block;
   width: 100%;
-  height: 480px;
+  height: auto;
 }
 
 .bc-scene-mobile__caption {
