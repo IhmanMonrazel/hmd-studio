@@ -652,8 +652,5 @@ body.pages.booking_club .navbar:not(.navbar--frosted) {
     display: block;
   }
 
-  /* ── SHOWCASE — hidden on mobile (booking info shown via mobile scene) ── */
-  .bc-showcase {
-    display: none !important;
-  }
+
 }
