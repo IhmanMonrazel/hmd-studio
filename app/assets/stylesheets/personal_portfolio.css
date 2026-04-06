@@ -413,21 +413,20 @@ body.pages.personal_portfolio .navbar:not(.navbar--frosted) {
 
   /* ── SCENE — vertical stack, wraps content naturally ── */
   .pp-scene {
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    min-height: auto;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    min-height: auto !important;
     padding: 0 0 48px !important;       /* overrides 80px 16px 40px !important */
     overflow: visible !important;        /* overrides overflow-x: hidden !important */
     overflow-x: visible !important;
   }
 
-  /* ── BG ZONE — full-width photo band, overflow visible so
-     skills can escape below it into normal document flow ── */
+  /* ── BG ZONE — full-width photo band, explicit height so image never collapses ── */
   .pp-scene__bg {
-    position: relative;
+    position: relative !important;       /* beats block-2 position: relative !important */
     width: 100%;
-    height: 300px;
+    height: 420px !important;            /* explicit — image height: 100% needs this */
     min-height: unset !important;        /* overrides min-height: 250px !important */
     overflow: visible;
   }
