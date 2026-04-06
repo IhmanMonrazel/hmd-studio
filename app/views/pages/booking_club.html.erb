@@ -325,4 +325,90 @@
   </div>
 </section>
 
+<%# ─── SHOWCASE ─────────────────────────────────────── %>
+<section class="bc-showcase" data-controller="gsap-showcase">
+  <div class="bc-showcase__inner">
 
+    <div class="bc-showcase__grid">
+
+      <%# Bloc 1 — Carte ressource (slide depuis gauche) %>
+      <div class="bcs-resource" data-gsap-showcase-target="resource">
+        <span class="bcs-resource__badge">DISPONIBLE</span>
+        <h2 class="bcs-resource__title">Huit+ Compétition</h2>
+        <div class="bcs-resource__price">30.00 &euro; / heure</div>
+        <div class="bcs-resource__hours">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+          06h &ndash; 21h
+        </div>
+      </div>
+
+      <%# Bloc 2 — Formulaire réservation (fade in depuis le bas) %>
+      <div class="bcs-form" data-gsap-showcase-target="form">
+        <div class="bcs-form__row">
+          <div class="bcs-form__field bcs-form__field--full">
+            <label class="bcs-form__label">DATE</label>
+            <div class="bcs-form__input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+              </svg>
+              26/03/2026
+            </div>
+          </div>
+        </div>
+        <div class="bcs-form__row">
+          <div class="bcs-form__field">
+            <label class="bcs-form__label">DÉBUT</label>
+            <div class="bcs-form__input">06:00</div>
+          </div>
+          <div class="bcs-form__field">
+            <label class="bcs-form__label">FIN</label>
+            <div class="bcs-form__input">07:00</div>
+          </div>
+        </div>
+        <p class="bcs-form__avail">
+          <span class="bcs-form__avail-dot"></span>
+          Tous les cr&eacute;neaux sont disponibles
+        </p>
+      </div>
+
+      <%# Bloc 3 — Grille de places (stagger pop avec rebond) %>
+      <div class="bcs-seats">
+        <div class="bcs-seats__grid">
+          <div class="bcs-seat bcs-seat--selected" data-gsap-showcase-target="seat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+              <path d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <% 8.times do %>
+            <div class="bcs-seat bcs-seat--free" data-gsap-showcase-target="seat">
+              <span class="bcs-seat__plus">+</span>
+              <span>Libre</span>
+            </div>
+          <% end %>
+        </div>
+        <div class="bcs-seats__counter">
+          <button class="bcs-seats__btn">&#8722;</button>
+          <span class="bcs-seats__count">1 personne</span>
+          <button class="bcs-seats__btn">+</button>
+        </div>
+      </div>
+
+      <%# Bloc 4 — Total et validation (slide depuis droite) %>
+      <div class="bcs-total" data-gsap-showcase-target="total">
+        <div class="bcs-total__line">
+          <span>Tarif</span>
+          <span>60.00 &euro;</span>
+        </div>
+        <div class="bcs-total__divider"></div>
+        <div class="bcs-total__line bcs-total__line--bold">
+          <span>Total</span>
+          <span>60.00 &euro;</span>
+        </div>
+        <button class="bcs-total__cta">VALIDER LA R&Eacute;SERVATION</button>
+      </div>
+
+    </div>
+  </div>
+</section>
