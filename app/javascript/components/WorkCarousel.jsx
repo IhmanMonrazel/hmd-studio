@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const PROJECTS = [
   {
@@ -31,6 +31,8 @@ export const WorkCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
+  const scrollRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -38,105 +40,130 @@ export const WorkCarousel = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ── MOBILE LAYOUT ─────────────────────────────────────────
-  // Hover preview doesn't exist on touch — each project is a full
-  // self-contained row: number → title → description → thumbnail → arrow.
+  // ── MOBILE LAYOUT — onScroll depth carousel ──────────────
+  // scrollRef attaches to the overflow:scroll container — onScroll
+  // fires on the element itself, not window, so it works on mobile.
+  // sticky inner + absolute panels = same depth effect as S3.
   if (isMobile) {
+    const totalPanels = PROJECTS.length;
+
+    const handleScroll = () => {
+      const el = scrollRef.current;
+      if (!el) return;
+      const progress = el.scrollTop / (el.scrollHeight - el.clientHeight);
+      setScrollProgress(Math.min(1, Math.max(0, progress)));
+    };
+
     return (
-      <div style={{
-        background: "#000000",
-        color: "#ffffff",
-        padding: "clamp(2rem, 6vh, 4rem) 20px clamp(3rem, 8vh, 6rem)",
-      }}>
-        <p style={{
-          fontSize: "0.7rem",
-          letterSpacing: "0.25em",
-          textTransform: "uppercase",
-          color: "rgba(255,255,255,0.25)",
-          marginBottom: "clamp(2rem, 5vh, 3rem)",
-          fontFamily: "Inter, sans-serif",
-        }}>
-          Selected Projects — 2024/2025
-        </p>
+      <div style={{ width: '100%', height: '100vh', background: '#000', overflow: 'hidden' }}>
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          style={{
+            width: '100%',
+            height: '100vh',
+            overflowY: 'scroll',
+            scrollSnapType: 'y mandatory',
+            WebkitOverflowScrolling: 'touch',
+            position: 'relative',
+          }}
+        >
+          {/* Scroll track — gives the snap container its scrollable height */}
+          <div style={{ height: `${totalPanels * 100}vh`, position: 'relative' }}>
 
-        {PROJECTS.map((project, i) => (
-          <a
-            key={i}
-            href={project.link}
-            data-turbo="true"
-            style={{
-              display: "block",
-              borderTop: "1px solid rgba(255,255,255,0.08)",
-              paddingTop: "24px",
-              paddingBottom: "32px",
-              textDecoration: "none",
-              color: "#ffffff",
-            }}
-          >
-            {/* Number */}
-            <span style={{
-              display: "block",
-              fontSize: "0.65rem",
-              letterSpacing: "0.2em",
-              color: "#CC0000",
-              fontFamily: "Inter, sans-serif",
-              marginBottom: "0.5rem",
-            }}>
-              {project.num}
-            </span>
-
-            {/* Title */}
-            <h2 style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(2.2rem, 10vw, 3.5rem)",
-              letterSpacing: "0.04em",
-              margin: "0 0 0.6rem",
-              lineHeight: 1,
-              color: "#ffffff",
-            }}>
-              {project.title}
-            </h2>
-
-            {/* Description */}
-            <p style={{
-              fontSize: "0.85rem",
-              color: "rgba(255,255,255,0.5)",
-              margin: "0 0 1.5rem",
-              fontFamily: "Inter, sans-serif",
-              fontWeight: 300,
-              lineHeight: 1.7,
-            }}>
-              {project.description}
-            </p>
-
-            {/* Static thumbnail */}
+            {/* Sticky viewport */}
             <div style={{
-              width: "100%",
-              height: "200px",
-              background: "#111111",
-              overflow: "hidden",
-              marginBottom: "1.2rem",
+              position: 'sticky',
+              top: 0,
+              height: '100vh',
+              overflow: 'hidden',
+              clipPath: 'inset(0)',
             }}>
-              <img
-                src={project.image}
-                alt={project.title}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                }}
-              />
-            </div>
+              {PROJECTS.map((project, i) => {
+                const floatIndex = scrollProgress * totalPanels;
+                const distance = floatIndex - i - 0.5;
+                const absDistance = Math.abs(distance);
 
-            {/* Arrow */}
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <span style={{ fontSize: "1.2rem", color: "#ffffff" }}>→</span>
-            </div>
-          </a>
-        ))}
+                const opacity = absDistance > 1.0 ? 0 : Math.max(0, Math.min(1, 1 - absDistance * 1.2));
+                const scale = Math.max(0.92, Math.min(1, 1 - absDistance * 0.06));
+                const y = absDistance > 1.4 ? (distance < 0 ? -120 : 120) : distance * 120;
 
-        {/* Closing separator */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }} />
+                return (
+                  <div key={project.num} style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    padding: '0 2rem',
+                    opacity,
+                    transform: `translateY(${y}px) scale(${scale})`,
+                    transformOrigin: 'center center',
+                    pointerEvents: absDistance < 0.3 ? 'auto' : 'none',
+                    overflow: 'hidden',
+                    transition: 'transform 0.05s linear, opacity 0.05s linear',
+                  }}>
+                    {/* Background image */}
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      backgroundImage: `url(${project.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      opacity: 0.15,
+                      zIndex: 0,
+                    }} />
+
+                    {/* Content */}
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                      <div style={{ width: '100%', height: '1.5px', background: '#CC0000', marginBottom: '1.5rem' }} />
+
+                      <span style={{
+                        fontFamily: 'Bebas Neue, sans-serif',
+                        fontSize: '0.85rem',
+                        color: '#CC0000',
+                        letterSpacing: '0.2em',
+                        display: 'block',
+                        marginBottom: '0.4rem',
+                      }}>{project.num}</span>
+
+                      <h2 style={{
+                        fontFamily: 'Bebas Neue, sans-serif',
+                        fontSize: 'clamp(2.8rem, 12vw, 5rem)',
+                        color: '#FFFFFF',
+                        letterSpacing: '0.02em',
+                        lineHeight: 1,
+                        margin: '0 0 1rem 0',
+                      }}>{project.title}</h2>
+
+                      <p style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '0.9rem',
+                        fontWeight: 300,
+                        color: 'rgba(255,255,255,0.6)',
+                        lineHeight: 1.7,
+                        margin: '0 0 1.5rem 0',
+                      }}>{project.description}</p>
+
+                      <a href={project.link} style={{
+                        fontFamily: 'Bebas Neue, sans-serif',
+                        fontSize: '1rem',
+                        color: '#CC0000',
+                        letterSpacing: '0.15em',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                      }}>VIEW PROJECT →</a>
+
+                      <div style={{ width: '100%', height: '1.5px', background: '#CC0000', marginTop: '1.5rem' }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

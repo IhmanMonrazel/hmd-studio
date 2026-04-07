@@ -36,3 +36,21 @@ application.register("cta-reveal", CtaRevealController)
 
 import Tribal3dController from "./tribal3d_controller"
 application.register("tribal3d", Tribal3dController)
+
+import CursorController from "./cursor_controller"
+application.register("cursor", CursorController)
+
+import PageTransitionController from "./page_transition_controller"
+application.register("page-transition", PageTransitionController)
+
+import ScrambleController from "./scramble_controller"
+application.register("scramble", ScrambleController)
+
+import GrainController from "./grain_controller"
+application.register("grain", GrainController)
+
+import MagneticController from "./magnetic_controller"
+application.register("magnetic", MagneticController)
+
+import ServicesScrollController from "./services_scroll_controller"
+application.register("services-scroll", ServicesScrollController)

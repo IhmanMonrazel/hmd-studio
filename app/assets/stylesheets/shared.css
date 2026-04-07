@@ -164,6 +164,105 @@
 }
 
 /* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+
+/* Hide the OS cursor on pointer devices only */
+@media (hover: hover) and (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+
+#hmd-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  transition: opacity 0.3s ease;
+}
+
+body.cursor--hidden #hmd-cursor {
+  opacity: 0;
+}
+
+#hmd-cursor-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #CC0000;
+  border-radius: 50%;
+  /* transform handles centering + scale hover; left/top set by JS */
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1),
+              background 0.15s ease;
+  will-change: transform;
+}
+
+#hmd-cursor-ring {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid #FFFFFF;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
+              border-color 0.2s ease,
+              opacity 0.2s ease;
+  will-change: transform;
+}
+
+/* Hover states — scale instead of width/height: GPU-only, no paint */
+@media (hover: hover) and (pointer: fine) {
+  body.cursor--hover #hmd-cursor-dot {
+    transform: translate(-50%, -50%) scale(1.67); /* 6px → ~10px */
+    background: #FFFFFF;
+  }
+
+  body.cursor--hover #hmd-cursor-ring {
+    transform: translate(-50%, -50%) scale(1.5); /* 32px → 48px */
+    border-color: #CC0000;
+  }
+}
+
+/* Touch devices — cursor hidden, OS cursor restored */
+@media (hover: none) {
+  #hmd-cursor { display: none; }
+}
+
+/* Reduced motion — kill CSS transitions (JS already sets lerp=1) */
+@media (prefers-reduced-motion: reduce) {
+  #hmd-cursor-dot,
+  #hmd-cursor-ring {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   PAGE TRANSITION OVERLAY
+   ============================================================ */
+
+#hmd-transition {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* Off-screen above — GSAP controls all movement from here */
+  transform: translateY(-100%);
+}
+
+#hmd-transition-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 10vw, 10rem);
+  color: #CC0000;
+  letter-spacing: 0.15em;
+  /* Opacity managed entirely by GSAP via gsap.set() — not set here */
+}
+
+/* ============================================================
    RESPONSIVE — 768px
    ============================================================ */
 @media (max-width: 768px) {

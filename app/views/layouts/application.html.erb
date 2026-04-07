@@ -31,7 +31,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body class="<%= controller_name %> <%= action_name %>">
+  <body class="<%= controller_name %> <%= action_name %>" data-controller="cursor page-transition grain">
     <nav class="navbar" data-controller="navbar navbar-scroll">
       <div class="navbar__inner">
         <%= link_to root_path, class: "navbar__logo" do %>
@@ -40,9 +40,9 @@
         <% end %>
 
         <div class="navbar__links">
-          <%= link_to "01—WORK",    work_path,    class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'work'}" %>
-          <%= link_to "02—ABOUT",   about_path,   class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'about'}" %>
-          <%= link_to "03—CONTACT", contact_path, class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'contact'}" %>
+          <%= link_to "01—WORK",    work_path,    class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'work'}",    data: { controller: "magnetic" } %>
+          <%= link_to "02—ABOUT",   about_path,   class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'about'}",   data: { controller: "magnetic" } %>
+          <%= link_to "03—CONTACT", contact_path, class: "navbar__link #{'navbar__link--active' if controller_name == 'pages' && action_name == 'contact'}", data: { controller: "magnetic" } %>
         </div>
 
         <button class="navbar__burger" data-navbar-target="burger" data-action="click->navbar#toggle" aria-label="Menu">
@@ -65,5 +65,14 @@
       <%= yield %>
       <%= render 'shared/footer' %>
     </main>
+
+    <div id="hmd-transition">
+      <span id="hmd-transition-label">HMD</span>
+    </div>
+
+    <div id="hmd-cursor">
+      <div id="hmd-cursor-dot"></div>
+      <div id="hmd-cursor-ring"></div>
+    </div>
   </body>
 </html>
