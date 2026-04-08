@@ -51,15 +51,15 @@
           <span></span>
         </button>
       </div>
-
-      <div class="navbar__overlay" data-navbar-target="overlay" data-action="click->navbar#toggle">
-        <div class="navbar__overlay-links">
-          <%= link_to "01—WORK",    work_path,    class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
-          <%= link_to "02—ABOUT",   about_path,   class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
-          <%= link_to "03—CONTACT", contact_path, class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
-        </div>
-      </div>
     </nav>
+
+    <div class="navbar__overlay" data-action="click->navbar#toggle">
+      <div class="navbar__overlay-links">
+        <%= link_to "01—WORK",    work_path,    class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
+        <%= link_to "02—ABOUT",   about_path,   class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
+        <%= link_to "03—CONTACT", contact_path, class: "navbar__overlay-link", data: { action: "click->navbar#toggle" } %>
+      </div>
+    </div>
 
     <main class="main <%= 'main--fullbleed' if controller_name == 'pages' && action_name == 'home' %>">
       <%= yield %>

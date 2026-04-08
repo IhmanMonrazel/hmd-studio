@@ -161,6 +161,11 @@
   .navbar__links { display: none; }
   .navbar__burger { display: flex; }
   .navbar__inner { padding: 0 24px; }
+
+  /* Keep burger visible as X when menu is open */
+  .navbar--open .navbar__burger {
+    display: flex;
+  }
 }
 
 /* ============================================================
@@ -201,10 +206,8 @@
   background-color: #ffffff !important;
 }
 
-/* UNCONDITIONAL: navbar open state — black background all screen sizes */
+/* UNCONDITIONAL: navbar open state */
 .navbar.navbar--open {
-  background-color: #000000 !important;
-  background: #000000 !important;
   opacity: 1 !important;
   visibility: visible !important;
 }

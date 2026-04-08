@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Rails server",
+      "runtimeExecutable": "bin/rails",
+      "runtimeArgs": ["server"],
+      "port": 3000
+    },
+    {
+      "name": "JS build (watch)",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["build", "--watch"],
+      "port": null
+    }
+  ]
+}

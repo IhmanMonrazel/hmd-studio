@@ -1,9 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["burger", "overlay"]
+  static targets = ["burger"]
 
   connect() {
+    this.overlay = document.querySelector('.navbar__overlay')
     document.addEventListener("turbo:before-visit", this.close.bind(this))
 
     // Burger spans always white — bypasses any CSS cascade issues
@@ -19,7 +20,7 @@ export default class extends Controller {
 
   toggle() {
     const isOpen = this.element.classList.toggle("navbar--open")
-    this.overlayTarget.classList.toggle("is-open", isOpen)
+    this.overlay.classList.toggle("is-open", isOpen)
     document.body.style.overflow = isOpen ? "hidden" : ""
 
     if (isOpen) {
@@ -32,12 +33,14 @@ export default class extends Controller {
       // Restore scroll controller when menu closes
       this.element.style.background = ""
       this.element.style.backgroundColor = ""
+      this.element.style.removeProperty('background')
+      this.element.style.removeProperty('background-color')
     }
   }
 
   close() {
     this.element.classList.remove("navbar--open")
-    this.overlayTarget.classList.remove("is-open")
+    this.overlay.classList.remove("is-open")
     document.body.style.overflow = ""
     this.element.style.background = ""
     this.element.style.backgroundColor = ""
