@@ -61,6 +61,12 @@
   line-height: 1;
 }
 
+/* Homepage — logo text white when burger menu is open */
+body.pages.home .navbar--open .navbar__logo-name,
+body.pages.home .navbar--open .navbar__logo-sub {
+  color: #ffffff !important;
+}
+
 .navbar__links {
   display: flex;
   gap: 40px;
