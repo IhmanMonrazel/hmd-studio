@@ -97,84 +97,148 @@
 }
 
 /* ============================================================
-   S3 — SERVICES SCROLL STORYTELLING
+   S3 — SERVICES LIST
    ============================================================ */
 .s3 {
+  background: #000;
+  border-top: 1px solid #1a1a1a;
+}
+
+.s3__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.s3__item {
   position: relative;
-  height: 300vh;
-  background: #1a1a1a;
-}
-
-.s3__sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 52px 80px 48px;
   overflow: hidden;
-  clip-path: inset(0);
+  cursor: none;
 }
 
-.s3__panel {
+.s3__item::before {
+  content: '';
   position: absolute;
   inset: 0;
+  background: #CC0000;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+.s3__item:hover::before {
+  transform: scaleX(1);
+}
+
+.s3__inner {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.s3__left {
+  flex: 1;
+}
+
+.s3__num {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: #444;
+  letter-spacing: 0.25em;
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+  clip-path: inset(0 100% 0 0);
+}
+
+.s3__item:hover .s3__num {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.s3__name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(56px, 7vw, 100px);
+  line-height: 0.9;
+  color: #fff;
+  letter-spacing: -0.01em;
+  clip-path: inset(0 0 100% 0);
+  will-change: transform;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.s3__item:hover .s3__name {
+  color: #fff;
+}
+
+.s3__right {
+  text-align: right;
+  max-width: 280px;
+  flex-shrink: 0;
+}
+
+.s3__desc {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: transparent;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  transition: color 0.35s ease 0.1s;
+}
+
+.s3__item:hover .s3__desc {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.s3__arrow {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #222;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 0 clamp(2rem, 8vw, 8rem);
-  opacity: 0;
-  transform: translateY(40px);
-  transform-origin: center center;
+  margin-top: 14px;
+  margin-left: auto;
+  transition: border-color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #444;
+}
+
+.s3__arrow svg {
+  width: 13px;
+  height: 13px;
+  transition: color 0.3s ease;
+}
+
+.s3__item:hover .s3__arrow {
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: rotate(45deg);
+  color: #fff;
+}
+
+#s3-cursor {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: #CC0000;
+  border-radius: 50%;
   pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  opacity: 0;
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease;
 }
 
-.s3__panel.is-active {
-  pointer-events: auto;
-}
-
-.s3__panel-content {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(1rem, 2vh, 2rem);
-  margin: clamp(1.5rem, 3vh, 3rem) 0;
-}
-
-.s3__item-title {
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 10vw, 10rem);
-  letter-spacing: 0.02em;
-  line-height: 1;
-  color: var(--white);
-  margin: 0;
-}
-
-.s3__item-desc {
-  font-family: var(--font-body);
-  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-  font-weight: 300;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.6);
-  max-width: 520px;
-}
-
-.s3__rule {
-  display: block;
-  border: none;
-  border-bottom: 1.5px solid var(--red);
-  margin: 0;
-  width: 100%;
-}
-
-.s3__rule--top {
-  margin-bottom: 0;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .s3 {
-    height: 250vh;
-  }
-  .s3__item-title {
-    font-size: clamp(2.5rem, 14vw, 5rem);
-  }
+#s3-cursor.expanded {
+  width: 56px;
+  height: 56px;
+  background: transparent;
+  border: 1px solid rgba(204, 0, 0, 0.5);
 }
 
 /* ============================================================
