@@ -32,201 +32,11 @@
 }
 
 /* ============================================================
-   SECTION 2 — HOOK / POSITIONING
-   ============================================================ */
-/* min-height removed — was 100dvh, forcing a full viewport of empty
-   black space after the subtitle. Height is now:
-     title (clamp(4rem,12vw,14rem) × 0.88 line-height)
-   + gap (clamp(1rem,2vw,2rem))
-   + subtitle (clamp(0.9rem,1.5vw,1.25rem) × 1.7 line-height)
-   + 2× var(--space-unit) base breathing
-   + 2× vertical padding clamp(2rem,8vh,8rem)
-   ≈ 26–28rem at desktop, ~16rem at 375px — premium, not wasteful. */
-.s2 {
-  background: transparent;
-  display: grid;
-  grid-template-columns: 1fr;
-  padding: clamp(2rem, 8vh, 8rem) clamp(2rem, 6vw, 6rem);
-  position: relative;
-  overflow: hidden;
-}
-
-.s2__content {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(calc(var(--space-unit) * 1), 2vw, calc(var(--space-unit) * 2));
-}
-
-/* Full-viewport-width title.
-   At 768px+ padding is 6vw each side → available = vw × (1 - 0.12) = 0.88vw.
-   "HMD STUDIO" (10 chars Bebas Neue) ≈ 5.53em wide → font = 0.88vw / 5.53 = 15.9vw.
-   min 7rem keeps it readable on narrow single-column views; max 14rem caps at ~1400px. */
-.s2__title {
-  font-family: var(--font-display);
-  font-size: clamp(7rem, 15.9vw, 14rem);
-  line-height: 0.88;
-  letter-spacing: 0.02em;
-  color: var(--white);
-}
-
-.s2__sub {
-  font-family: var(--font-body);
-  font-size: clamp(0.9rem, 1.5vw, 1.25rem);
-  font-weight: 300;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.65);
-  max-width: 36ch;
-}
-
-/* Credibility line — informational, not a headline.
-   font-size = base scale × 0.7 = 0.7rem (11.2px).
-   letter-spacing 0.22em matches the colophon cadence. */
-.s2__cred {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
-  line-height: 1;
-}
-
-/* Sphere placeholder — hidden until a 3D asset is ready */
-.s2__sphere-mount {
-  display: none;
-}
-
-/* ============================================================
-   S3 — SERVICES LIST
-   ============================================================ */
-.s3 {
-  background: #000;
-  border-top: 1px solid #1a1a1a;
-}
-
-.s3__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.s3__item {
-  position: relative;
-  border-bottom: 1px solid #1a1a1a;
-  padding: 52px 80px 48px;
-  overflow: hidden;
-  cursor: default;
-}
-
-.s3__item::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #CC0000;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 0;
-}
-
-.s3__item:hover::before {
-  transform: scaleX(1);
-}
-
-.s3__inner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-}
-
-.s3__left {
-  flex: 1;
-}
-
-.s3__num {
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  color: #444;
-  letter-spacing: 0.25em;
-  margin-bottom: 10px;
-  transition: color 0.3s ease;
-}
-
-.s3__item:hover .s3__num {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.s3__name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(56px, 7vw, 100px);
-  line-height: 0.9;
-  color: #fff;
-  letter-spacing: -0.01em;
-  will-change: transform;
-  transition: color 0.3s ease;
-  display: inline-block;
-}
-
-.s3__item:hover .s3__name {
-  color: #fff;
-}
-
-.s3__right {
-  text-align: right;
-  max-width: 280px;
-  flex-shrink: 0;
-}
-
-.s3__desc {
-  font-family: 'DM Serif Display', serif;
-  font-style: italic;
-  font-size: 14px;
-  color: transparent;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-  transition: color 0.35s ease 0.1s;
-}
-
-.s3__item:hover .s3__desc {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.s3__arrow {
-  width: 38px;
-  height: 38px;
-  border: 1px solid #222;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 14px;
-  margin-left: auto;
-  transition: border-color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  color: #444;
-}
-
-.s3__arrow svg {
-  width: 13px;
-  height: 13px;
-  transition: color 0.3s ease;
-}
-
-.s3__item:hover .s3__arrow {
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: rotate(45deg);
-  color: #fff;
-}
-
-
-/* ============================================================
-   PARTICLE WORLD — S2 + S3 + S4 unified canvas
+   PARTICLE WORLD — full canvas S2→S3→S4
    ============================================================ */
 .particle-world {
   position: relative;
-  height: 900vh;
-  pointer-events: none;
+  height: 1000vh;
 }
 
 .particle-world__canvas {
@@ -241,43 +51,6 @@
 
 .particle-world__scroll-space {
   height: 0;
-}
-
-/* Overlays: sticky panels that sit on top of the canvas */
-.particle-world__overlay {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  margin-top: -100vh;
-  display: flex;
-  align-items: center;
-  z-index: 10;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-}
-
-.particle-world__overlay.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* S2 overlay layout */
-#pw-s2 {
-  padding: clamp(2rem, 8vh, 8rem) clamp(2rem, 6vw, 6rem);
-  align-items: flex-end;
-  padding-bottom: clamp(4rem, 10vh, 8rem);
-}
-
-/* S3 overlay layout — full width for services list */
-#pw-s3 {
-  align-items: stretch;
-  padding: 0;
-}
-#pw-s3 .s3 {
-  width: 100%;
-  border-top: none;
 }
 
 /* ============================================================
@@ -398,10 +171,8 @@
 }
 
 /* ============================================================
-   HOME SCROLL ANIMATIONS — cinematic scroll (performance hints)
+   HOME SCROLL ANIMATIONS — performance hints
    ============================================================ */
-.s2,
-.s2__content,
 .s5,
 .s5__block,
 .s6,
@@ -409,20 +180,10 @@
   will-change: transform, opacity;
 }
 
-
 /* ============================================================
    RESPONSIVE — 900px
    ============================================================ */
 @media (max-width: 900px) {
-  /* S2 — tighter padding on mobile, title scaled down for narrow viewports */
-  .s2 {
-    padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 2.5rem);
-  }
-  .s2__title {
-    font-size: clamp(3rem, 10vw, 7rem);
-  }
-
-  /* S5 — single column, remove vertical offsets */
   .s5 {
     padding: clamp(3rem, 8vw, 5rem) clamp(1.5rem, 5vw, 2.5rem);
   }
@@ -445,21 +206,6 @@
     height: 100%;
   }
 
-  /* ── HOME: S2 hero text ──────────────────────────────────── */
-  .s2 {
-    padding: clamp(3rem, 8vh, 5rem) 20px;
-  }
-
-  .s2__title {
-    font-size: clamp(2.8rem, 15vw, 5rem);
-    max-width: 90vw;
-  }
-
-  .s2__sub,
-  .s2__cred {
-    max-width: 90vw;
-  }
-
   /* ── HOME: S5 Why section — stack vertically ─────────────── */
   .s5 {
     padding: clamp(3rem, 8vw, 5rem) 20px;
@@ -477,40 +223,5 @@
 
   .s5__block-title {
     font-size: clamp(1.2rem, 5vw, 1.8rem);
-  }
-
-  /* ── HOME: S3 services ───────────────────────────────────── */
-  .s3__item {
-    padding: 36px 24px 32px;
-    cursor: auto;
-  }
-
-  .s3__inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .s3__name {
-    font-size: clamp(48px, 13vw, 72px);
-  }
-
-  .s3__right {
-    text-align: left;
-    max-width: 100%;
-  }
-
-  .s3__desc {
-    color: rgba(255, 255, 255, 0.45);
-    transition: none;
-  }
-
-  .s3__arrow {
-    margin-left: 0;
-    margin-top: 20px;
-  }
-
-  .s3__item::before {
-    display: none;
   }
 }

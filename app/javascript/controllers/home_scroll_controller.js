@@ -25,7 +25,7 @@ export default class extends Controller {
           trigger:  worldEl,
           start:    'top top',
           end:      'bottom top',
-          scrub:    0.8,
+          scrub:    0.6,
           onUpdate: self => {
             if (this._particles) this._particles.updateScroll(self.progress)
           },
