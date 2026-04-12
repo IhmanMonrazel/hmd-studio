@@ -30,32 +30,9 @@ export default class extends Controller {
           trigger:  sceneEl,
           start:    'top top',
           end:      'bottom top',
-          scrub:    1.2,
+          scrub:    0.3,
           onUpdate: self => {
             if (this._particles) this._particles.updateScroll(self.progress)
-          },
-          onLeave: () => {
-            const btn = document.getElementById('s4-btn')
-            if (btn) {
-              btn.classList.remove('s4-btn--visible')
-              btn.style.opacity = '0'
-              btn.style.pointerEvents = 'none'
-            }
-          },
-          onLeaveBack: () => {
-            const btn = document.getElementById('s4-btn')
-            if (btn) {
-              btn.classList.remove('s4-btn--visible')
-              btn.style.opacity = '0'
-              btn.style.pointerEvents = 'none'
-            }
-          },
-          onEnterBack: () => {
-            const btn = document.getElementById('s4-btn')
-            if (btn) {
-              btn.style.opacity = ''
-              btn.style.pointerEvents = ''
-            }
           },
         })
       })

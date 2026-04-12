@@ -219,15 +219,6 @@ export async function initParticleTextScene(canvas) {
       camera.position.z = 4.2
     }
 
-    // Button visibility — show when text is fully formed
-    const ctaEl = document.getElementById('s4-btn')
-    if (ctaEl) {
-      if (progress >= 0.75 && progress < 0.997) {
-        ctaEl.classList.add('s4-btn--visible')
-      } else {
-        ctaEl.classList.remove('s4-btn--visible')
-      }
-    }
   }
 
   // ── destroy ───────────────────────────────────────────────────────────────

@@ -239,49 +239,6 @@
   pointer-events: none;
 }
 
-.s4-btn {
-  position: fixed;
-  bottom: clamp(2rem, 6vh, 4rem);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 99999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
-  white-space: nowrap;
-}
-
-.s4-btn--visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.s4-btn__link {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
-  letter-spacing: 0.2em;
-  color: #fff;
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.3);
-  padding: 14px 32px;
-  transition: border-color 0.3s ease, color 0.3s ease;
-}
-
-.s4-btn__link:hover {
-  border-color: #CC0000;
-  color: #CC0000;
-}
-
-.s4-btn__arrow {
-  transition: transform 0.3s ease;
-}
-
-.s4-btn__link:hover .s4-btn__arrow {
-  transform: translateX(4px);
-}
 
 
 /* ============================================================
