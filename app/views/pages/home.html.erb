@@ -13,81 +13,80 @@
     <div class="s1__overlay"></div>
   </section>
 
-  <%# ── S2 · Hook / Positioning ──────────────────────────── %>
-  <section class="s2">
-    <div class="s2__content">
-      <h1 class="s2__title">HMD STUDIO</h1>
-      <p class="s2__sub">Editorial web studio for brands that refuse to be forgettable.</p>
-      <p class="s2__cred">Branding — Web — Art Direction</p>
+  <%# ── PARTICLE WORLD · S2 + S3 + S4 ───────────────────── %>
+  <div class="particle-world" id="particle-world">
+    <canvas class="particle-world__canvas" id="particle-canvas"></canvas>
+
+    <%# S2 overlay — visible during acts 1-2 %>
+    <div class="particle-world__overlay" id="pw-s2">
+      <div class="s2__content">
+        <h1 class="s2__title">HMD STUDIO</h1>
+        <p class="s2__sub">Editorial web studio for brands that refuse to be forgettable.</p>
+        <p class="s2__cred">Branding — Web — Art Direction</p>
+      </div>
     </div>
-    <div class="s2__sphere-mount" aria-hidden="true"></div>
-  </section>
 
-  <%# ── S3 · Services ─────────────────────────────────────── %>
-  <section class="s3" data-controller="services-scroll">
-    <div class="s3__grid">
-
-      <div class="s3__item" data-index="0">
-        <div class="s3__inner">
-          <div class="s3__left">
-            <div class="s3__num">01 — SERVICE</div>
-            <div class="s3__name">ART DIRECTION</div>
+    <%# S3 overlay — visible during acts 3-5 %>
+    <div class="particle-world__overlay" id="pw-s3">
+      <section class="s3" data-controller="services-scroll">
+        <div class="s3__grid">
+          <div class="s3__item" data-index="0">
+            <div class="s3__inner">
+              <div class="s3__left">
+                <div class="s3__num">01 — SERVICE</div>
+                <div class="s3__name">ART DIRECTION</div>
+              </div>
+              <div class="s3__right">
+                <p class="s3__desc">For brands that want a point of view, not a template.</p>
+                <div class="s3__arrow">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="2" y1="12" x2="12" y2="2"/>
+                    <polyline points="5,2 12,2 12,9"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="s3__right">
-            <p class="s3__desc">For brands that want a point of view, not a template.</p>
-            <div class="s3__arrow">
-              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-                <line x1="2" y1="12" x2="12" y2="2"/>
-                <polyline points="5,2 12,2 12,9"/>
-              </svg>
+          <div class="s3__item" data-index="1">
+            <div class="s3__inner">
+              <div class="s3__left">
+                <div class="s3__num">02 — SERVICE</div>
+                <div class="s3__name">WEB DEVELOPMENT</div>
+              </div>
+              <div class="s3__right">
+                <p class="s3__desc">Editorial interfaces built to last and convert.</p>
+                <div class="s3__arrow">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="2" y1="12" x2="12" y2="2"/>
+                    <polyline points="5,2 12,2 12,9"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="s3__item" data-index="2">
+            <div class="s3__inner">
+              <div class="s3__left">
+                <div class="s3__num">03 — SERVICE</div>
+                <div class="s3__name">VISUAL IDENTITY</div>
+              </div>
+              <div class="s3__right">
+                <p class="s3__desc">Systems that hold their ground at any scale.</p>
+                <div class="s3__arrow">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="2" y1="12" x2="12" y2="2"/>
+                    <polyline points="5,2 12,2 12,9"/>
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="s3__item" data-index="1">
-        <div class="s3__inner">
-          <div class="s3__left">
-            <div class="s3__num">02 — SERVICE</div>
-            <div class="s3__name">WEB DEVELOPMENT</div>
-          </div>
-          <div class="s3__right">
-            <p class="s3__desc">Editorial interfaces built to last and convert.</p>
-            <div class="s3__arrow">
-              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-                <line x1="2" y1="12" x2="12" y2="2"/>
-                <polyline points="5,2 12,2 12,9"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="s3__item" data-index="2">
-        <div class="s3__inner">
-          <div class="s3__left">
-            <div class="s3__num">03 — SERVICE</div>
-            <div class="s3__name">VISUAL IDENTITY</div>
-          </div>
-          <div class="s3__right">
-            <p class="s3__desc">Systems that hold their ground at any scale.</p>
-            <div class="s3__arrow">
-              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-                <line x1="2" y1="12" x2="12" y2="2"/>
-                <polyline points="5,2 12,2 12,9"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      </section>
     </div>
-  </section>
 
-  <%# ── S4 · Work teaser — particle text scene ──────────── %>
-  <div class="s4-scene">
-    <canvas class="s4-scene__canvas" id="particle-canvas"></canvas>
-    <div class="s4-scene__scroll-space"></div>
+    <%# Scroll space — 900vh total %>
+    <div class="particle-world__scroll-space"></div>
   </div>
 
   <%# ── S5 · Differentiator (red) ─────────────────────────── %>
