@@ -6,11 +6,10 @@ export default class extends Controller {
     this.overlay = document.getElementById('hmd-transition')
     this.label = document.getElementById('hmd-transition-label')
 
-    // Animate out on every page load — overlay starts visible, then exits
-    gsap.set(this.overlay, { y: '0vh', pointerEvents: 'all' })
-    gsap.set(this.label, { opacity: 1 })
-
-    this.animateOut()
+    // Overlay starts off-screen and non-blocking on every page load.
+    // animateOut() is NOT called here — the overlay is already hidden.
+    gsap.set(this.overlay, { y: '-100vh', pointerEvents: 'none' })
+    gsap.set(this.label, { opacity: 0 })
 
     // Intercept all internal link clicks
     this.onLinkClick = this.handleLinkClick.bind(this)

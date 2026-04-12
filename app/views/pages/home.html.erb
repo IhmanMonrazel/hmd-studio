@@ -84,91 +84,30 @@
     </div>
   </section>
 
-  <%# ── S4 · Work teaser — cloud morphing video ──────────── %>
-  <section class="s4">
-    <h2 class="visually-hidden">Our Work</h2>
-    <a href="/work" class="s4__cloud-link">
-      <div class="s4__cloud-wrap">
-        <video class="s4__cloud-video"
-               preload="auto"
-               muted
-               playsinline
-               crossorigin="anonymous">
-          <source src="https://res.cloudinary.com/dtlybacjm/video/upload/v1775127289/cloud_seekable_bvna1d.webm" type="video/webm">
-        </video>
-      </div>
-    </a>
-  </section>
+  <%# ── S4 · Work teaser — particle text scene ──────────── %>
+  <div class="s4-scene">
+    <canvas class="s4-scene__canvas" id="particle-canvas"></canvas>
+    <div class="s4-scene__scroll-space"></div>
+  </div>
 
   <%# ── S5 · Differentiator (red) ─────────────────────────── %>
   <section class="s5">
-    <h2 class="visually-hidden">Why HMD Studio</h2>
-    <div class="s5__grid">
-      <div class="s5__block s5__block--1">
-        <strong class="s5__block-title">Contact-based only.</strong>
-        <p class="s5__block-desc">No pricing page. No packages. We qualify before we commit.</p>
-      </div>
-      <div class="s5__block s5__block--2">
-        <strong class="s5__block-title">Editorial point of view.</strong>
-        <p class="s5__block-desc">Every project starts with a creative direction, not a brief template.</p>
-      </div>
-      <div class="s5__block s5__block--3">
-        <strong class="s5__block-title">Built to last.</strong>
-        <p class="s5__block-desc">No shortcuts. No workarounds. Code written to perform and endure.</p>
-      </div>
+    <div class="s5__item">
+      <span class="s5__num">01</span>
+      <h2 class="s5__title">CONTACT-BASED<br>ONLY.</h2>
+      <p class="s5__desc">No pricing page. No packages.<br>We qualify before we commit.</p>
+    </div>
+    <div class="s5__item">
+      <span class="s5__num">02</span>
+      <h2 class="s5__title">EDITORIAL<br>POINT OF VIEW.</h2>
+      <p class="s5__desc">Every project starts with a creative direction,<br>not a brief template.</p>
+    </div>
+    <div class="s5__item">
+      <span class="s5__num">03</span>
+      <h2 class="s5__title">BUILT<br>TO LAST.</h2>
+      <p class="s5__desc">No shortcuts. No workarounds.<br>Code written to perform and endure.</p>
     </div>
   </section>
 
-
 </div><%# /home-scroll %>
 
-<%# ── Diagnostic: s2 spacing + all-section background audit ── %>
-<script type="module">
-  document.addEventListener("turbo:load", () => {
-    // S2 — detailed spacing audit for s2 and its direct children
-    const s2 = document.querySelector(".s2")
-    if (s2) {
-      const cs = getComputedStyle(s2)
-      console.group("[home-scroll] s2 spacing audit")
-      console.log("s2:", {
-        height:    cs.height,
-        minHeight: cs.minHeight,
-        padTop:    cs.paddingTop,
-        padBot:    cs.paddingBottom,
-        bg:        cs.backgroundColor,
-      })
-      Array.from(s2.children).forEach(child => {
-        const cc = getComputedStyle(child)
-        console.log(`  .${child.className.split(" ")[0]}:`, {
-          height:    cc.height,
-          minHeight: cc.minHeight,
-          padTop:    cc.paddingTop,
-          padBot:    cc.paddingBottom,
-          marginTop: cc.marginTop,
-          marginBot: cc.marginBottom,
-        })
-      })
-      console.groupEnd()
-    }
-
-    // All sections — background audit (no rgb(255,255,255) expected)
-    const targets = [
-      { id: "main--fullbleed", el: document.querySelector(".main--fullbleed") },
-      { id: "s1-s2-sequence",  el: document.querySelector(".s1-s2-sequence") },
-      { id: "S1", el: document.querySelector(".s1") },
-      { id: "S2", el: document.querySelector(".s2") },
-      { id: "S3", el: document.querySelector(".s3") },
-      { id: "S4", el: document.querySelector(".s4") },
-      { id: "S5", el: document.querySelector(".s5") },
-      { id: "S6", el: document.querySelector(".s6") },
-    ]
-    console.group("[home-scroll] background audit")
-    targets.forEach(({ id, el }) => {
-      if (!el) return
-      const bg = getComputedStyle(el).backgroundColor
-      const isWhite = bg === "rgb(255, 255, 255)"
-      console[isWhite ? "warn" : "log"](`${id}: ${bg}${isWhite ? " ← UNEXPECTED WHITE" : ""}`)
-    })
-    console.groupEnd()
-  })
-</script>
