@@ -36,7 +36,7 @@
    ============================================================ */
 .particle-world {
   position: relative;
-  height: 2500vh;
+  height: 3500vh;
 }
 
 .particle-world__canvas {
