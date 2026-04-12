@@ -215,3 +215,9 @@
 .navbar.navbar--open .navbar__burger span {
   background-color: #ffffff !important;
 }
+
+/* Homepage — logo text white when burger menu is open */
+body.pages.home .navbar--open .navbar__logo-name,
+body.pages.home .navbar--open .navbar__logo-sub {
+  color: #ffffff !important;
+}
