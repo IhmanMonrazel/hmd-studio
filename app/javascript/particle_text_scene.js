@@ -164,19 +164,6 @@ export async function initParticleTextScene(canvas) {
   })
   if (canvas.parentElement) resizeObserver.observe(canvas.parentElement)
 
-  // ── Canvas click — navigate to /work when particles are fully formed ────────
-  let _navigable = false
-
-  canvas.addEventListener('click', () => {
-    if (!_navigable) return
-    const link = document.createElement('a')
-    link.href = '/work'
-    link.style.display = 'none'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  })
-
   // ── Animation loop ─────────────────────────────────────────────────────────
   let rafId = null
   let _dirty = true
@@ -232,12 +219,14 @@ export async function initParticleTextScene(canvas) {
       camera.position.z = 4.2
     }
 
-    // Canvas navigability — clickable only when text is fully formed
-    _navigable = (progress >= 0.75 && progress < 0.997)
-    if (_navigable) {
-      canvas.classList.add('is-navigable')
-    } else {
-      canvas.classList.remove('is-navigable')
+    // Button visibility — show when text is fully formed
+    const ctaEl = document.getElementById('s4-btn')
+    if (ctaEl) {
+      if (progress >= 0.75 && progress < 0.997) {
+        ctaEl.classList.add('s4-btn--visible')
+      } else {
+        ctaEl.classList.remove('s4-btn--visible')
+      }
     }
   }
 
