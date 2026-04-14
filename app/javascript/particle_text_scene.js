@@ -38,19 +38,23 @@ function sampleText(text, count, fontSize, scaleX, scaleY, canvasW, canvasH, tex
   return out
 }
 
-function sampleTextMultiline(lines, count) {
-  const W = 1400, H = 580
+function sampleTextMultiline(lines, count, mobile = false) {
+  const W        = mobile ? 900  : 1400
+  const H        = mobile ? 380  : 580
+  const fontSize = mobile ? 58   : 95
+  const scaleX   = mobile ? 4.8  : 9.0
+  const scaleY   = mobile ? 2.8  : 4.2
+  const titleYPositions = mobile ? [55, 185, 315] : [80, 250, 420]
+
   const c = document.createElement('canvas')
   c.width = W; c.height = H
   const ctx = c.getContext('2d')
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H)
   ctx.fillStyle = '#fff'
-  ctx.font = "bold 95px 'Bebas Neue', sans-serif"
+  ctx.font = `bold ${fontSize}px 'Bebas Neue', sans-serif`
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-  // Match EXACTLY the Y positions used in makeTextPlane for planeServices
-  const titleYPositions = [80, 250, 420]
-  lines.forEach((line, i) => {
-    ctx.fillText(line, W / 2, titleYPositions[i])
+  titleYPositions.forEach((y, i) => {
+    ctx.fillText(lines[i], W / 2, y)
   })
   const px = ctx.getImageData(0, 0, W, H).data
   const bright = []
@@ -60,8 +64,8 @@ function sampleTextMultiline(lines, count) {
   const out = new Float32Array(count * 3)
   for (let i = 0; i < count; i++) {
     const [bx, by] = bright[Math.floor(Math.random() * bright.length)]
-    out[i*3+0] = (bx / W - 0.5) * 9.0
-    out[i*3+1] = -(by / H - 0.5) * 4.2
+    out[i*3+0] = (bx / W - 0.5) * scaleX
+    out[i*3+1] = -(by / H - 0.5) * scaleY
     out[i*3+2] = 0
   }
   return out
@@ -201,6 +205,8 @@ const fragmentShader = /* glsl */`
 export async function initParticleTextScene(canvas) {
   const THREE = await import('three')
 
+  const isMobile = window.innerWidth <= 768
+
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.setClearColor(0x000000, 0)
@@ -208,26 +214,40 @@ export async function initParticleTextScene(canvas) {
   const h = window.innerHeight
   renderer.setSize(w, h, false)
 
-  const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 1000)
+  const fov = isMobile ? 80 : 60
+  const camera = new THREE.PerspectiveCamera(fov, w / h, 0.1, 1000)
   camera.position.set(0, 0, 5)
 
   const scene = new THREE.Scene()
 
+  const count = isMobile ? 2000 : PARTICLE_COUNT
+
   // ── Particle states ──────────────────────────────────────
   // Text states computed first so chaos buffers can be derived from them
-  const posHmd      = sampleText('HMD STUDIO', PARTICLE_COUNT, 120, 7.5, 1.9, 1400, 320, 110)
-  const posServices = sampleTextMultiline(
-    ['01 — ART DIRECTION', '02 — WEB DEVELOPMENT', '03 — VISUAL IDENTITY'],
-    PARTICLE_COUNT
-  )
-  const posSee      = sampleText('SEE OUR WORK', PARTICLE_COUNT, 110, 8.5, 1.7, 1400, 280, 110)
+  const posHmd = isMobile
+    ? sampleText('HMD STUDIO', count, 80, 4.5, 1.2, 900, 200, 70)
+    : sampleText('HMD STUDIO', count, 120, 7.5, 1.9, 1400, 320, 110)
+
+  const posServices = isMobile
+    ? sampleTextMultiline(
+        ['01 — ART DIRECTION', '02 — WEB DEVELOPMENT', '03 — VISUAL IDENTITY'],
+        count, true
+      )
+    : sampleTextMultiline(
+        ['01 — ART DIRECTION', '02 — WEB DEVELOPMENT', '03 — VISUAL IDENTITY'],
+        count, false
+      )
+
+  const posSee = isMobile
+    ? sampleText('SEE OUR WORK', count, 75, 4.5, 1.2, 900, 180, 65)
+    : sampleText('SEE OUR WORK', count, 110, 8.5, 1.7, 1400, 280, 110)
 
   const states = {
-    chaos1:   randomSphere(PARTICLE_COUNT, 4.5),          // initial chaos — no source text
+    chaos1:   randomSphere(count, 4.5),                   // initial chaos — no source text
     hmd:      posHmd,
-    chaos2:   explodeFrom(posHmd,      PARTICLE_COUNT, 2.5), // explodes from HMD STUDIO
+    chaos2:   explodeFrom(posHmd,      count, 2.5),       // explodes from HMD STUDIO
     services: posServices,
-    chaos3:   explodeFrom(posServices, PARTICLE_COUNT, 2.5), // explodes from services
+    chaos3:   explodeFrom(posServices, count, 2.5),       // explodes from services
     see:      posSee,
   }
 
@@ -255,54 +275,78 @@ export async function initParticleTextScene(canvas) {
 
   // ── Text planes ──────────────────────────────────────────
   // scaleX/scaleY must match sampleText/sampleTextMultiline exactly
-  const planeHmd = makeTextPlane(THREE, {
-    canvasW: 1400, canvasH: 320,
-    scaleX: 7.5, scaleY: 1.9,
-    lines: [
-      { text: 'HMD STUDIO', fontSize: 120, color: '#CC0000', y: 110 },
-      {
-        text: 'Editorial web studio for brands that refuse to be forgettable.',
-        fontSize: 22,
-        color: 'rgba(204,0,0,0.6)',
-        font: "300 22px 'DM Serif Display', serif",
-        y: 210
-      },
-      {
-        text: 'Branding — Web — Art Direction',
-        fontSize: 14,
-        color: 'rgba(204,0,0,0.4)',
-        font: "400 14px 'Courier New', monospace",
-        y: 270
-      },
-    ]
-  })
+  const planeHmd = isMobile
+    ? makeTextPlane(THREE, {
+        canvasW: 900, canvasH: 200, scaleX: 4.5, scaleY: 1.2,
+        lines: [
+          { text: 'HMD STUDIO', fontSize: 80, color: '#CC0000', y: 70 },
+          { text: 'Editorial web studio for brands that refuse to be forgettable.',
+            fontSize: 16, color: 'rgba(204,0,0,0.6)',
+            font: "300 16px 'DM Serif Display', serif", y: 140 },
+        ]
+      })
+    : makeTextPlane(THREE, {
+        canvasW: 1400, canvasH: 320, scaleX: 7.5, scaleY: 1.9,
+        lines: [
+          { text: 'HMD STUDIO', fontSize: 120, color: '#CC0000', y: 110 },
+          { text: 'Editorial web studio for brands that refuse to be forgettable.',
+            fontSize: 22, color: 'rgba(204,0,0,0.6)',
+            font: "300 22px 'DM Serif Display', serif", y: 210 },
+          { text: 'Branding — Web — Art Direction',
+            fontSize: 14, color: 'rgba(204,0,0,0.4)',
+            font: "400 14px 'Courier New', monospace", y: 270 },
+        ]
+      })
 
-  const planeServices = makeTextPlane(THREE, {
-    canvasW: 1400, canvasH: 580,
-    scaleX: 9.0, scaleY: 4.2,
-    lines: [
-      { text: '01 — ART DIRECTION',    fontSize: 95, color: '#CC0000', y: 80  },
-      { text: 'For brands that want a point of view, not a template.',
-        fontSize: 20, color: 'rgba(204,0,0,0.55)',
-        font: "italic 20px 'DM Serif Display', serif", y: 140 },
-      { text: '02 — WEB DEVELOPMENT',  fontSize: 95, color: '#CC0000', y: 250 },
-      { text: 'Editorial interfaces built to last and convert.',
-        fontSize: 20, color: 'rgba(204,0,0,0.55)',
-        font: "italic 20px 'DM Serif Display', serif", y: 310 },
-      { text: '03 — VISUAL IDENTITY',  fontSize: 95, color: '#CC0000', y: 420 },
-      { text: 'Systems that hold their ground at any scale.',
-        fontSize: 20, color: 'rgba(204,0,0,0.55)',
-        font: "italic 20px 'DM Serif Display', serif", y: 480 },
-    ]
-  })
+  const planeServices = isMobile
+    ? makeTextPlane(THREE, {
+        canvasW: 900, canvasH: 380, scaleX: 4.8, scaleY: 2.8,
+        lines: [
+          { text: '01 — ART DIRECTION',   fontSize: 58, color: '#CC0000', y: 55 },
+          { text: 'For brands that want a point of view, not a template.',
+            fontSize: 14, color: 'rgba(204,0,0,0.55)',
+            font: "italic 14px 'DM Serif Display', serif", y: 100 },
+          { text: '02 — WEB DEVELOPMENT', fontSize: 58, color: '#CC0000', y: 185 },
+          { text: 'Editorial interfaces built to last and convert.',
+            fontSize: 14, color: 'rgba(204,0,0,0.55)',
+            font: "italic 14px 'DM Serif Display', serif", y: 230 },
+          { text: '03 — VISUAL IDENTITY', fontSize: 58, color: '#CC0000', y: 315 },
+          { text: 'Systems that hold their ground at any scale.',
+            fontSize: 14, color: 'rgba(204,0,0,0.55)',
+            font: "italic 14px 'DM Serif Display', serif", y: 360 },
+        ]
+      })
+    : makeTextPlane(THREE, {
+        canvasW: 1400, canvasH: 580, scaleX: 9.0, scaleY: 4.2,
+        lines: [
+          { text: '01 — ART DIRECTION',   fontSize: 95, color: '#CC0000', y: 80  },
+          { text: 'For brands that want a point of view, not a template.',
+            fontSize: 20, color: 'rgba(204,0,0,0.55)',
+            font: "italic 20px 'DM Serif Display', serif", y: 140 },
+          { text: '02 — WEB DEVELOPMENT', fontSize: 95, color: '#CC0000', y: 250 },
+          { text: 'Editorial interfaces built to last and convert.',
+            fontSize: 20, color: 'rgba(204,0,0,0.55)',
+            font: "italic 20px 'DM Serif Display', serif", y: 310 },
+          { text: '03 — VISUAL IDENTITY', fontSize: 95, color: '#CC0000', y: 420 },
+          { text: 'Systems that hold their ground at any scale.',
+            fontSize: 20, color: 'rgba(204,0,0,0.55)',
+            font: "italic 20px 'DM Serif Display', serif", y: 480 },
+        ]
+      })
 
-  const planeSee = makeTextPlane(THREE, {
-    canvasW: 1400, canvasH: 280,
-    scaleX: 8.5, scaleY: 1.7,
-    lines: [
-      { text: 'SEE OUR WORK', fontSize: 110, color: '#ffffff', y: 110 },
-    ]
-  })
+  const planeSee = isMobile
+    ? makeTextPlane(THREE, {
+        canvasW: 900, canvasH: 180, scaleX: 4.5, scaleY: 1.2,
+        lines: [
+          { text: 'SEE OUR WORK', fontSize: 75, color: '#ffffff', y: 65 },
+        ]
+      })
+    : makeTextPlane(THREE, {
+        canvasW: 1400, canvasH: 280, scaleX: 8.5, scaleY: 1.7,
+        lines: [
+          { text: 'SEE OUR WORK', fontSize: 110, color: '#ffffff', y: 110 },
+        ]
+      })
 
   scene.add(planeHmd)
   scene.add(planeServices)
@@ -345,7 +389,7 @@ export async function initParticleTextScene(canvas) {
 
   // ── Helpers ──────────────────────────────────────────────
   function lerp(from, to, t) {
-    for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
+    for (let i = 0; i < count * 3; i++) {
       posCurrent[i] = from[i] + (to[i] - from[i]) * t
     }
     posAttr.needsUpdate = true

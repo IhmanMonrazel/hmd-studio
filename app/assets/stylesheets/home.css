@@ -200,6 +200,10 @@
    RESPONSIVE — 768px
    ============================================================ */
 @media (max-width: 768px) {
+  .particle-world {
+    height: 1400vh;
+  }
+
   /* ── HOME: S1 video ──────────────────────────────────────── */
   .s1__media {
     object-fit: cover;
