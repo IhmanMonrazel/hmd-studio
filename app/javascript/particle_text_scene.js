@@ -102,6 +102,38 @@ function randomSphere(count, radius = 4.5) {
   return out
 }
 
+function explodeFrom(sourcePositions, count, spread = 5.0) {
+  const out = new Float32Array(count * 3)
+  for (let i = 0; i < count; i++) {
+    // Start from the source text position
+    const sx = sourcePositions[i*3+0]
+    const sy = sourcePositions[i*3+1]
+    const sz = sourcePositions[i*3+2]
+
+    // Add large random offset — particles fly away from text
+    const rand = Math.random()
+    if (rand < 0.60) {
+      const r = spread * (0.5 + Math.random())
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.acos(2 * Math.random() - 1)
+      out[i*3+0] = sx + r * Math.sin(phi) * Math.cos(theta)
+      out[i*3+1] = sy + r * Math.sin(phi) * Math.sin(theta)
+      out[i*3+2] = sz + r * Math.cos(phi) * 0.6
+    } else if (rand < 0.85) {
+      out[i*3+0] = sx + (Math.random() - 0.5) * spread * 0.5
+      out[i*3+1] = sy + (Math.random() - 0.5) * spread * 0.5
+      out[i*3+2] = sz + (Math.random() - 0.5) * spread * 0.3
+    } else {
+      const r = spread * (0.8 + Math.random() * 0.8)
+      const theta = Math.random() * Math.PI * 2
+      out[i*3+0] = sx + r * Math.cos(theta)
+      out[i*3+1] = sy + (Math.random() - 0.5) * 1.2
+      out[i*3+2] = sz + r * Math.sin(theta) * 0.3
+    }
+  }
+  return out
+}
+
 /**
  * Create a Three.js texture plane from a config object.
  * Each line is positioned manually by its y value on the canvas.
@@ -182,16 +214,21 @@ export async function initParticleTextScene(canvas) {
   const scene = new THREE.Scene()
 
   // ── Particle states ──────────────────────────────────────
+  // Text states computed first so chaos buffers can be derived from them
+  const posHmd      = sampleText('HMD STUDIO', PARTICLE_COUNT, 120, 7.5, 1.9, 1400, 320, 110)
+  const posServices = sampleTextMultiline(
+    ['01 — ART DIRECTION', '02 — WEB DEVELOPMENT', '03 — VISUAL IDENTITY'],
+    PARTICLE_COUNT
+  )
+  const posSee      = sampleText('SEE OUR WORK', PARTICLE_COUNT, 110, 8.5, 1.7, 1400, 280, 110)
+
   const states = {
-    chaos1:   randomSphere(PARTICLE_COUNT, 4.5),
-    hmd:      sampleText('HMD STUDIO', PARTICLE_COUNT, 120, 7.5, 1.9, 1400, 320, 110),
-    chaos2:   randomSphere(PARTICLE_COUNT, 4.5),
-    services: sampleTextMultiline(
-      ['01 — ART DIRECTION', '02 — WEB DEVELOPMENT', '03 — VISUAL IDENTITY'],
-      PARTICLE_COUNT
-    ),
-    chaos3:   randomSphere(PARTICLE_COUNT, 4.5),
-    see:      sampleText('SEE OUR WORK', PARTICLE_COUNT, 110, 8.5, 1.7, 1400, 280, 110),
+    chaos1:   randomSphere(PARTICLE_COUNT, 4.5),          // initial chaos — no source text
+    hmd:      posHmd,
+    chaos2:   explodeFrom(posHmd,      PARTICLE_COUNT, 5.0), // explodes from HMD STUDIO
+    services: posServices,
+    chaos3:   explodeFrom(posServices, PARTICLE_COUNT, 5.0), // explodes from services
+    see:      posSee,
   }
 
   const posCurrent = new Float32Array(states.chaos1)
