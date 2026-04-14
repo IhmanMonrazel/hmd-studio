@@ -1,19 +1,7 @@
 /**
  * particle_text_scene.js
- * Particle narrative: chaos → HMD STUDIO → services (3 lines) → SEE OUR WORK
- *
- * Progress 0→1 across 1800vh
- *
- * Acts:
- *   0.00 → 0.08  fade in chaos
- *   0.08 → 0.22  chaos → HMD STUDIO (white→red)
- *   0.22 → 0.32  hold HMD STUDIO (red)
- *   0.32 → 0.42  HMD STUDIO → chaos (red→white)
- *   0.42 → 0.58  chaos → services 3 lines (white→red)
- *   0.58 → 0.70  hold services (red)
- *   0.70 → 0.80  services → chaos (red→white)
- *   0.80 → 0.93  chaos → SEE OUR WORK (white, dolly in)
- *   0.93 → 1.00  hold SEE OUR WORK
+ * Particles + Three.js texture planes for pixel-perfect text overlay.
+ * The text plane is positioned in the same 3D space as particles.
  */
 
 const PARTICLE_COUNT = 3500
@@ -89,32 +77,56 @@ function randomSphere(count, radius = 4.5) {
   return out
 }
 
-// Returns world-space bounding box of a particle buffer
-function computeBBox(buffer) {
-  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    const x = buffer[i * 3]
-    const y = buffer[i * 3 + 1]
-    if (x < minX) minX = x
-    if (x > maxX) maxX = x
-    if (y < minY) minY = y
-    if (y > maxY) maxY = y
-  }
-  return {
-    minX, maxX, minY, maxY,
-    cx: (minX + maxX) / 2,
-    cy: (minY + maxY) / 2,
-    w: maxX - minX,
-    h: maxY - minY,
-  }
-}
+/**
+ * Create a Three.js texture plane that renders text in red Bebas Neue.
+ * The plane dimensions match exactly the world-space bounds of the
+ * corresponding particle text state.
+ * scaleX and scaleY must match the values used in sampleText/sampleTextMultiline.
+ */
+function makeTextPlane(THREE, text, scaleX, scaleY, fontSize, isMultiline, lines) {
+  const W = 1400
+  const H = isMultiline ? 420 : 220
 
-// Measures rendered pixel width of text at a given font-size using an offscreen canvas
-function measureTextPx(text, fontSize) {
   const c = document.createElement('canvas')
+  c.width = W; c.height = H
   const ctx = c.getContext('2d')
+
+  // Transparent background
+  ctx.clearRect(0, 0, W, H)
+
+  // Red text
+  ctx.fillStyle = '#CC0000'
   ctx.font = `bold ${fontSize}px 'Bebas Neue', sans-serif`
-  return ctx.measureText(text).width
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+
+  if (isMultiline && lines) {
+    const lineH = H / lines.length
+    lines.forEach((line, i) => {
+      ctx.fillText(line, W / 2, lineH * i + lineH / 2)
+    })
+  } else {
+    ctx.fillText(text, W / 2, H / 2)
+  }
+
+  const texture = new THREE.CanvasTexture(c)
+  texture.needsUpdate = true
+
+  // Plane dimensions match world-space particle bounds exactly
+  const planeW = scaleX
+  const planeH = scaleY
+
+  const geometry = new THREE.PlaneGeometry(planeW, planeH)
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+  })
+
+  const mesh = new THREE.Mesh(geometry, material)
+  mesh.position.set(0, 0, 0.01) // slightly in front of particles
+  return mesh
 }
 
 const vertexShader = /* glsl */`
@@ -151,19 +163,9 @@ export async function initParticleTextScene(canvas) {
   const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 1000)
   camera.position.set(0, 0, 5)
 
-  // Projects a world-space point to CSS pixel coordinates
-  function worldToScreen(x, y, z) {
-    const vec = new THREE.Vector3(x, y, z)
-    vec.project(camera)
-    return {
-      x: (vec.x * 0.5 + 0.5) * window.innerWidth,
-      y: (-vec.y * 0.5 + 0.5) * window.innerHeight,
-    }
-  }
-
   const scene = new THREE.Scene()
 
-  // ── Text states ──────────────────────────────────────────
+  // ── Particle states ──────────────────────────────────────
   const states = {
     chaos1:   randomSphere(PARTICLE_COUNT, 4.5),
     hmd:      sampleText('HMD STUDIO', PARTICLE_COUNT, 120, 7.5, 1.3),
@@ -174,13 +176,6 @@ export async function initParticleTextScene(canvas) {
     ),
     chaos3:   randomSphere(PARTICLE_COUNT, 4.5),
     see:      sampleText('SEE OUR WORK', PARTICLE_COUNT, 110, 8.5, 1.4),
-  }
-
-  // World-space bounding boxes — computed once from particle positions
-  const bboxes = {
-    hmd:      computeBBox(states.hmd),
-    services: computeBBox(states.services),
-    see:      computeBBox(states.see),
   }
 
   const posCurrent = new Float32Array(states.chaos1)
@@ -205,85 +200,34 @@ export async function initParticleTextScene(canvas) {
 
   scene.add(new THREE.Points(geometry, material))
 
-  const overlayHmd      = document.getElementById('pw-hmd')
-  const overlayServices = document.getElementById('pw-services')
-  const overlaySee      = document.getElementById('pw-see')
+  // ── Text planes ──────────────────────────────────────────
+  // Each plane uses EXACTLY the same scaleX/scaleY as sampleText
+  const planeHmd = makeTextPlane(
+    THREE, 'HMD STUDIO', 7.5, 1.3, 120, false, null
+  )
+  const planeServices = makeTextPlane(
+    THREE, null, 9.0, 3.5, 95, true,
+    ['01 — ART DIRECTION', '02 — WEB DEVELOPMENT', '03 — VISUAL IDENTITY']
+  )
+  const planeSee = makeTextPlane(
+    THREE, 'SEE OUR WORK', 8.5, 1.4, 110, false, null
+  )
 
-  function setOverlay(el, opacity) {
-    if (el) el.style.opacity = opacity
-  }
+  scene.add(planeHmd)
+  scene.add(planeServices)
+  scene.add(planeSee)
 
-  // ── Overlay positioning ───────────────────────────────────
-  // Positions a single-line overlay (HMD STUDIO / SEE OUR WORK) by
-  // projecting the particle bounding box into screen space, then
-  // calculating the font-size that makes the HTML text fill the same width.
-  function positionSingleLine(el, bbox, text) {
-    if (!el) return
-    const content = el.querySelector('.pw-overlay__text')
-    if (!content) return
-    const center = worldToScreen(bbox.cx, bbox.cy, 0)
-    const left   = worldToScreen(bbox.minX, bbox.cy, 0)
-    const right  = worldToScreen(bbox.maxX, bbox.cy, 0)
-    const pixelW = Math.abs(right.x - left.x)
-    // Scale font-size so text fills the projected particle width exactly
-    const refSize = 200
-    const refPx   = measureTextPx(text, refSize)
-    const fontSize = refSize * pixelW / refPx
-    content.style.position  = 'absolute'
-    content.style.left      = center.x + 'px'
-    content.style.top       = center.y + 'px'
-    content.style.transform = 'translate(-50%, -50%)'
-    content.style.fontSize  = fontSize + 'px'
-    content.style.whiteSpace = 'nowrap'
-  }
-
-  // Positions the services overlay (3-line layout) using the full particle
-  // bounding box. Font-size is derived from the longest particle line width.
-  function positionServices(el, bbox) {
-    if (!el) return
-    const container = el.querySelector('.pw-overlay__services')
-    if (!container) return
-    const center = worldToScreen(bbox.cx, bbox.cy, 0)
-    const left   = worldToScreen(bbox.minX, bbox.cy, 0)
-    const right  = worldToScreen(bbox.maxX, bbox.cy, 0)
-    const pixelW = Math.abs(right.x - left.x)
-    // Longest particle line determines the reference width
-    const refSize    = 200
-    const longestPx  = measureTextPx('02 — WEB DEVELOPMENT', refSize)
-    const fontSize   = refSize * pixelW / longestPx
-    const numSize    = Math.max(9, fontSize * 0.1)
-    container.style.position  = 'absolute'
-    container.style.left      = center.x + 'px'
-    container.style.top       = center.y + 'px'
-    container.style.transform = 'translate(-50%, -50%)'
-    container.style.width     = pixelW + 'px'
-    container.style.padding   = '0'
-    el.querySelectorAll('.pw-overlay__service-name').forEach(n => {
-      n.style.fontSize = fontSize + 'px'
-    })
-    el.querySelectorAll('.pw-overlay__num').forEach(n => {
-      n.style.fontSize = numSize + 'px'
-    })
-  }
-
-  function applyOverlayPositions() {
-    positionSingleLine(overlayHmd, bboxes.hmd, 'HMD STUDIO')
-    positionServices(overlayServices, bboxes.services)
-    positionSingleLine(overlaySee, bboxes.see, 'SEE OUR WORK')
-  }
-
-  applyOverlayPositions()
-
+  // ── Resize ───────────────────────────────────────────────
   const resizeObserver = new ResizeObserver(() => {
     const rw = canvas.parentElement?.clientWidth || window.innerWidth
     const rh = window.innerHeight
     renderer.setSize(rw, rh, false)
     camera.aspect = rw / rh
     camera.updateProjectionMatrix()
-    applyOverlayPositions()
   })
   if (canvas.parentElement) resizeObserver.observe(canvas.parentElement)
 
+  // ── RAF ──────────────────────────────────────────────────
   let rafId = null, _dirty = true
   const tick = () => {
     rafId = requestAnimationFrame(tick)
@@ -291,6 +235,7 @@ export async function initParticleTextScene(canvas) {
   }
   tick()
 
+  // ── Helpers ──────────────────────────────────────────────
   function lerp(from, to, t) {
     for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
       posCurrent[i] = from[i] + (to[i] - from[i]) * t
@@ -302,93 +247,94 @@ export async function initParticleTextScene(canvas) {
     material.uniforms.uColor.value.lerpVectors(from, to, t)
   }
 
+  function setPlaneOpacity(plane, opacity) {
+    plane.material.opacity = Math.max(0, Math.min(1, opacity))
+  }
+
+  // Crossfade: ramps 0→1 at [start, start+window], holds, ramps 1→0 at [end-window, end]
+  function crossfade(start, end, p, window = 0.04) {
+    if (p <= start) return 0
+    if (p <= start + window) return smoothstep(start, start + window, p)
+    if (p <= end - window) return 1
+    if (p <= end) return 1 - smoothstep(end - window, end, p)
+    return 0
+  }
+
+  // ── updateScroll ─────────────────────────────────────────
   function updateScroll(progress) {
     _dirty = true
     const p = progress
     camera.position.z = 5.0
 
-    // Helper: crossfade opacity — ramps 0→1 over [start, start+0.04]
-    // and 1→0 over [end-0.04, end]
-    function overlayOpacity(start, end) {
-      if (p < start) return 0
-      if (p < start + 0.04) return smoothstep(start, start + 0.04, p)
-      if (p < end - 0.04) return 1
-      if (p < end) return 1 - smoothstep(end - 0.04, end, p)
-      return 0
-    }
-
-    // Particle phases (unchanged logic)
+    // Particle phases
     if (p < 0.08) {
       material.uniforms.uOpacity.value = smoothstep(0, 0.08, p)
       setColor(WHITE, WHITE, 0)
       lerp(states.chaos1, states.chaos1, 0)
-    }
-    else if (p < 0.22) {
+    } else if (p < 0.22) {
       material.uniforms.uOpacity.value = 1.0
       const t = smoothstep(0.08, 0.22, p)
       setColor(WHITE, RED, t)
       lerp(states.chaos1, states.hmd, t)
-    }
-    else if (p < 0.32) {
+    } else if (p < 0.32) {
       material.uniforms.uOpacity.value = 1.0
       setColor(RED, RED, 0)
       lerp(states.hmd, states.hmd, 1)
-    }
-    else if (p < 0.42) {
+    } else if (p < 0.42) {
       material.uniforms.uOpacity.value = 1.0
       const t = smoothstep(0.32, 0.42, p)
       setColor(RED, WHITE, t)
       lerp(states.hmd, states.chaos2, t)
-    }
-    else if (p < 0.58) {
+    } else if (p < 0.58) {
       material.uniforms.uOpacity.value = 1.0
       const t = smoothstep(0.42, 0.58, p)
       setColor(WHITE, RED, t)
       lerp(states.chaos2, states.services, t)
-    }
-    else if (p < 0.70) {
+    } else if (p < 0.70) {
       material.uniforms.uOpacity.value = 1.0
       setColor(RED, RED, 0)
       lerp(states.services, states.services, 1)
-    }
-    else if (p < 0.80) {
+    } else if (p < 0.80) {
       material.uniforms.uOpacity.value = 1.0
       const t = smoothstep(0.70, 0.80, p)
       setColor(RED, WHITE, t)
       lerp(states.services, states.chaos3, t)
-    }
-    else if (p < 0.93) {
+    } else if (p < 0.93) {
       material.uniforms.uOpacity.value = 1.0
       const t = smoothstep(0.80, 0.93, p)
       setColor(WHITE, WHITE, 0)
       lerp(states.chaos3, states.see, t)
       camera.position.z = 5.0 - t * 0.8
-    }
-    else {
+    } else {
       material.uniforms.uOpacity.value = 1.0
       setColor(WHITE, WHITE, 0)
       lerp(states.see, states.see, 1)
       camera.position.z = 4.2
     }
 
-    // Overlay crossfades
-    // HMD STUDIO: particles form 0.08→0.22, hold 0.22→0.32, disperse 0.32→0.42
-    // Overlay visible during hold: 0.20 → 0.38
-    setOverlay(overlayHmd, overlayOpacity(0.20, 0.38))
+    // Text plane crossfades
+    // HMD: particles fully formed at 0.22, hold until 0.32, disperse by 0.42
+    // Plane visible: 0.24 → 0.40 (after particles settle, before they scatter)
+    setPlaneOpacity(planeHmd, crossfade(0.24, 0.40, p))
 
-    // SERVICES: particles form 0.42→0.58, hold 0.58→0.70, disperse 0.70→0.80
-    // Overlay visible during hold: 0.56 → 0.74
-    setOverlay(overlayServices, overlayOpacity(0.56, 0.74))
+    // Services: particles fully formed at 0.58, hold until 0.70, disperse by 0.80
+    // Plane visible: 0.60 → 0.78
+    setPlaneOpacity(planeServices, crossfade(0.60, 0.78, p))
 
-    // SEE OUR WORK: particles form 0.80→0.93, hold 0.93→1.00
-    // Overlay visible from 0.91 onwards
-    setOverlay(overlaySee, overlayOpacity(0.91, 1.04))
+    // SEE OUR WORK: particles forming 0.80→0.93, hold 0.93→1.00
+    // Plane visible: 0.91 → 1.04 (stays visible at end)
+    setPlaneOpacity(planeSee, crossfade(0.91, 1.04, p))
   }
 
   function destroy() {
     if (rafId) cancelAnimationFrame(rafId)
     resizeObserver.disconnect()
-    geometry.dispose(); material.dispose(); renderer.dispose()
+    geometry.dispose()
+    material.dispose()
+    planeHmd.geometry.dispose(); planeHmd.material.dispose()
+    planeServices.geometry.dispose(); planeServices.material.dispose()
+    planeSee.geometry.dispose(); planeSee.material.dispose()
+    renderer.dispose()
   }
 
   return { updateScroll, destroy }
