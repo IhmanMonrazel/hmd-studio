@@ -70,12 +70,34 @@ function sampleTextMultiline(lines, count) {
 function randomSphere(count, radius = 4.5) {
   const out = new Float32Array(count * 3)
   for (let i = 0; i < count; i++) {
-    const r = radius * Math.cbrt(Math.random())
-    const theta = Math.random() * Math.PI * 2
-    const phi = Math.acos(2 * Math.random() - 1)
-    out[i*3+0] = r * Math.sin(phi) * Math.cos(theta)
-    out[i*3+1] = r * Math.sin(phi) * Math.sin(theta)
-    out[i*3+2] = r * Math.cos(phi)
+    // Mix of three distributions for more organic chaos:
+    // 60% wide sphere, 25% tight cluster, 15% flat disc
+    const rand = Math.random()
+
+    if (rand < 0.60) {
+      // Wide sphere — particles fly far
+      const r = (radius + Math.random() * 2.5) * Math.cbrt(Math.random())
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.acos(2 * Math.random() - 1)
+      out[i*3+0] = r * Math.sin(phi) * Math.cos(theta)
+      out[i*3+1] = r * Math.sin(phi) * Math.sin(theta)
+      out[i*3+2] = r * Math.cos(phi) * 0.6 // flatten Z slightly
+    } else if (rand < 0.85) {
+      // Tight cluster near center — gives density variation
+      const r = Math.random() * 1.5
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.acos(2 * Math.random() - 1)
+      out[i*3+0] = r * Math.sin(phi) * Math.cos(theta)
+      out[i*3+1] = r * Math.sin(phi) * Math.sin(theta)
+      out[i*3+2] = r * Math.cos(phi)
+    } else {
+      // Flat horizontal disc — particles streak sideways
+      const r = radius * (0.5 + Math.random() * 1.5)
+      const theta = Math.random() * Math.PI * 2
+      out[i*3+0] = r * Math.cos(theta)
+      out[i*3+1] = (Math.random() - 0.5) * 1.2
+      out[i*3+2] = r * Math.sin(theta) * 0.3
+    }
   }
   return out
 }
