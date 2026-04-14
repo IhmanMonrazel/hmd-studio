@@ -89,6 +89,34 @@ function randomSphere(count, radius = 4.5) {
   return out
 }
 
+// Returns world-space bounding box of a particle buffer
+function computeBBox(buffer) {
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const x = buffer[i * 3]
+    const y = buffer[i * 3 + 1]
+    if (x < minX) minX = x
+    if (x > maxX) maxX = x
+    if (y < minY) minY = y
+    if (y > maxY) maxY = y
+  }
+  return {
+    minX, maxX, minY, maxY,
+    cx: (minX + maxX) / 2,
+    cy: (minY + maxY) / 2,
+    w: maxX - minX,
+    h: maxY - minY,
+  }
+}
+
+// Measures rendered pixel width of text at a given font-size using an offscreen canvas
+function measureTextPx(text, fontSize) {
+  const c = document.createElement('canvas')
+  const ctx = c.getContext('2d')
+  ctx.font = `bold ${fontSize}px 'Bebas Neue', sans-serif`
+  return ctx.measureText(text).width
+}
+
 const vertexShader = /* glsl */`
   uniform float uOpacity;
   varying float vOpacity;
@@ -123,6 +151,16 @@ export async function initParticleTextScene(canvas) {
   const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 1000)
   camera.position.set(0, 0, 5)
 
+  // Projects a world-space point to CSS pixel coordinates
+  function worldToScreen(x, y, z) {
+    const vec = new THREE.Vector3(x, y, z)
+    vec.project(camera)
+    return {
+      x: (vec.x * 0.5 + 0.5) * window.innerWidth,
+      y: (-vec.y * 0.5 + 0.5) * window.innerHeight,
+    }
+  }
+
   const scene = new THREE.Scene()
 
   // ── Text states ──────────────────────────────────────────
@@ -136,6 +174,13 @@ export async function initParticleTextScene(canvas) {
     ),
     chaos3:   randomSphere(PARTICLE_COUNT, 4.5),
     see:      sampleText('SEE OUR WORK', PARTICLE_COUNT, 110, 8.5, 1.4),
+  }
+
+  // World-space bounding boxes — computed once from particle positions
+  const bboxes = {
+    hmd:      computeBBox(states.hmd),
+    services: computeBBox(states.services),
+    see:      computeBBox(states.see),
   }
 
   const posCurrent = new Float32Array(states.chaos1)
@@ -160,15 +205,6 @@ export async function initParticleTextScene(canvas) {
 
   scene.add(new THREE.Points(geometry, material))
 
-  const resizeObserver = new ResizeObserver(() => {
-    const rw = canvas.parentElement?.clientWidth || window.innerWidth
-    const rh = window.innerHeight
-    renderer.setSize(rw, rh, false)
-    camera.aspect = rw / rh
-    camera.updateProjectionMatrix()
-  })
-  if (canvas.parentElement) resizeObserver.observe(canvas.parentElement)
-
   const overlayHmd      = document.getElementById('pw-hmd')
   const overlayServices = document.getElementById('pw-services')
   const overlaySee      = document.getElementById('pw-see')
@@ -176,6 +212,77 @@ export async function initParticleTextScene(canvas) {
   function setOverlay(el, opacity) {
     if (el) el.style.opacity = opacity
   }
+
+  // ── Overlay positioning ───────────────────────────────────
+  // Positions a single-line overlay (HMD STUDIO / SEE OUR WORK) by
+  // projecting the particle bounding box into screen space, then
+  // calculating the font-size that makes the HTML text fill the same width.
+  function positionSingleLine(el, bbox, text) {
+    if (!el) return
+    const content = el.querySelector('.pw-overlay__text')
+    if (!content) return
+    const center = worldToScreen(bbox.cx, bbox.cy, 0)
+    const left   = worldToScreen(bbox.minX, bbox.cy, 0)
+    const right  = worldToScreen(bbox.maxX, bbox.cy, 0)
+    const pixelW = Math.abs(right.x - left.x)
+    // Scale font-size so text fills the projected particle width exactly
+    const refSize = 200
+    const refPx   = measureTextPx(text, refSize)
+    const fontSize = refSize * pixelW / refPx
+    content.style.position  = 'absolute'
+    content.style.left      = center.x + 'px'
+    content.style.top       = center.y + 'px'
+    content.style.transform = 'translate(-50%, -50%)'
+    content.style.fontSize  = fontSize + 'px'
+    content.style.whiteSpace = 'nowrap'
+  }
+
+  // Positions the services overlay (3-line layout) using the full particle
+  // bounding box. Font-size is derived from the longest particle line width.
+  function positionServices(el, bbox) {
+    if (!el) return
+    const container = el.querySelector('.pw-overlay__services')
+    if (!container) return
+    const center = worldToScreen(bbox.cx, bbox.cy, 0)
+    const left   = worldToScreen(bbox.minX, bbox.cy, 0)
+    const right  = worldToScreen(bbox.maxX, bbox.cy, 0)
+    const pixelW = Math.abs(right.x - left.x)
+    // Longest particle line determines the reference width
+    const refSize    = 200
+    const longestPx  = measureTextPx('02 — WEB DEVELOPMENT', refSize)
+    const fontSize   = refSize * pixelW / longestPx
+    const numSize    = Math.max(9, fontSize * 0.1)
+    container.style.position  = 'absolute'
+    container.style.left      = center.x + 'px'
+    container.style.top       = center.y + 'px'
+    container.style.transform = 'translate(-50%, -50%)'
+    container.style.width     = pixelW + 'px'
+    container.style.padding   = '0'
+    el.querySelectorAll('.pw-overlay__service-name').forEach(n => {
+      n.style.fontSize = fontSize + 'px'
+    })
+    el.querySelectorAll('.pw-overlay__num').forEach(n => {
+      n.style.fontSize = numSize + 'px'
+    })
+  }
+
+  function applyOverlayPositions() {
+    positionSingleLine(overlayHmd, bboxes.hmd, 'HMD STUDIO')
+    positionServices(overlayServices, bboxes.services)
+    positionSingleLine(overlaySee, bboxes.see, 'SEE OUR WORK')
+  }
+
+  applyOverlayPositions()
+
+  const resizeObserver = new ResizeObserver(() => {
+    const rw = canvas.parentElement?.clientWidth || window.innerWidth
+    const rh = window.innerHeight
+    renderer.setSize(rw, rh, false)
+    camera.aspect = rw / rh
+    camera.updateProjectionMatrix()
+    applyOverlayPositions()
+  })
+  if (canvas.parentElement) resizeObserver.observe(canvas.parentElement)
 
   let rafId = null, _dirty = true
   const tick = () => {
