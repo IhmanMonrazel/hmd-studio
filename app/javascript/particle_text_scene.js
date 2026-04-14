@@ -351,31 +351,21 @@ export async function initParticleTextScene(canvas) {
     }
 
     // Text plane crossfades
-    // HMD: particles fully formed at 0.22, hold until 0.32, disperse by 0.42
-    // Plane visible: 0.24 → 0.40 (after particles settle, before they scatter)
-
-    // HMD plane — particles fade out as plane fades in, return as plane fades out
-    const hmdPlaneOpacity = crossfade(0.24, 0.40, p)
-    setPlaneOpacity(planeHmd, hmdPlaneOpacity)
-
-    // Services plane
+    const hmdPlaneOpacity      = crossfade(0.24, 0.40, p)
     const servicesPlaneOpacity = crossfade(0.60, 0.78, p)
+    const seePlaneOpacity      = crossfade(0.91, 1.04, p)
+
+    setPlaneOpacity(planeHmd,      hmdPlaneOpacity)
     setPlaneOpacity(planeServices, servicesPlaneOpacity)
+    setPlaneOpacity(planeSee,      seePlaneOpacity)
 
-    // SEE OUR WORK plane
-    const seePlaneOpacity = crossfade(0.91, 1.04, p)
-    setPlaneOpacity(planeSee, seePlaneOpacity)
-
-    // Particle opacity: reduce when any plane is visible
-    // Max plane opacity drives particle fade — particles disappear as text appears
-    const maxPlaneOpacity = Math.max(hmdPlaneOpacity, servicesPlaneOpacity, seePlaneOpacity)
-    material.uniforms.uOpacity.value = Math.max(
-      material.uniforms.uOpacity.value * (1 - maxPlaneOpacity),
-      p < 0.08 ? smoothstep(0, 0.08, p) : 0
-    )
-
-    // When a plane is fully visible (opacity = 1), particles are invisible
-    // When plane fades out, particles fade back in naturally via the phase logic above
+    // Particle opacity: inverse of whichever plane is currently visible
+    // When plane is fully visible → particles fully hidden
+    // When no plane visible → particles at full opacity (driven by phase logic above)
+    const dominantPlane = Math.max(hmdPlaneOpacity, servicesPlaneOpacity, seePlaneOpacity)
+    if (dominantPlane > 0) {
+      material.uniforms.uOpacity.value = Math.max(0, 1.0 - dominantPlane)
+    }
   }
 
   function destroy() {
