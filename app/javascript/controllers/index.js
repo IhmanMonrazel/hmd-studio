@@ -52,5 +52,8 @@ application.register("grain", GrainController)
 import MagneticController from "./magnetic_controller"
 application.register("magnetic", MagneticController)
 
+import Portrait3dController from "./portrait3d_controller"
+application.register("portrait3d", Portrait3dController)
+
 import ServicesScrollController from "./services_scroll_controller"
 application.register("services-scroll", ServicesScrollController)
