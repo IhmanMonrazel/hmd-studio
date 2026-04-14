@@ -11,26 +11,28 @@ function smoothstep(e0, e1, x) {
   return t * t * (3 - 2 * t)
 }
 
-function sampleText(text, count, fontSize = 110, scaleX = 8.0, scaleY = 1.4) {
-  const W = 1400, H = 220
+function sampleText(text, count, fontSize, scaleX, scaleY, canvasW, canvasH, textY) {
+  canvasW = canvasW || 1400
+  canvasH = canvasH || 220
+  textY   = textY   || canvasH / 2
   const c = document.createElement('canvas')
-  c.width = W; c.height = H
+  c.width = canvasW; c.height = canvasH
   const ctx = c.getContext('2d')
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H)
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvasW, canvasH)
   ctx.fillStyle = '#fff'
   ctx.font = `bold ${fontSize}px 'Bebas Neue', sans-serif`
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-  ctx.fillText(text, W / 2, H / 2)
-  const px = ctx.getImageData(0, 0, W, H).data
+  ctx.fillText(text, canvasW / 2, textY)
+  const px = ctx.getImageData(0, 0, canvasW, canvasH).data
   const bright = []
-  for (let i = 0; i < W * H; i++) {
-    if (px[i * 4] > 128) bright.push([i % W, Math.floor(i / W)])
+  for (let i = 0; i < canvasW * canvasH; i++) {
+    if (px[i * 4] > 128) bright.push([i % canvasW, Math.floor(i / canvasW)])
   }
   const out = new Float32Array(count * 3)
   for (let i = 0; i < count; i++) {
     const [bx, by] = bright[Math.floor(Math.random() * bright.length)]
-    out[i*3+0] = (bx / W - 0.5) * scaleX
-    out[i*3+1] = -(by / H - 0.5) * scaleY
+    out[i*3+0] = (bx / canvasW - 0.5) * scaleX
+    out[i*3+1] = -(by / canvasH - 0.5) * scaleY
     out[i*3+2] = 0
   }
   return out
@@ -45,11 +47,10 @@ function sampleTextMultiline(lines, count) {
   ctx.fillStyle = '#fff'
   ctx.font = "bold 95px 'Bebas Neue', sans-serif"
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-  // Only sample the title lines — descriptions are too small for particles
-  const titleLines = lines.filter((_, i) => i % 2 === 0)
-  const lineH = H / titleLines.length
-  titleLines.forEach((line, i) => {
-    ctx.fillText(line, W / 2, lineH * i + lineH / 2)
+  // Match EXACTLY the Y positions used in makeTextPlane for planeServices
+  const titleYPositions = [80, 250, 420]
+  lines.forEach((line, i) => {
+    ctx.fillText(line, W / 2, titleYPositions[i])
   })
   const px = ctx.getImageData(0, 0, W, H).data
   const bright = []
@@ -161,14 +162,14 @@ export async function initParticleTextScene(canvas) {
   // ── Particle states ──────────────────────────────────────
   const states = {
     chaos1:   randomSphere(PARTICLE_COUNT, 4.5),
-    hmd:      sampleText('HMD STUDIO', PARTICLE_COUNT, 120, 7.5, 1.9),
+    hmd:      sampleText('HMD STUDIO', PARTICLE_COUNT, 120, 7.5, 1.9, 1400, 320, 110),
     chaos2:   randomSphere(PARTICLE_COUNT, 4.5),
     services: sampleTextMultiline(
       ['01 — ART DIRECTION', '02 — WEB DEVELOPMENT', '03 — VISUAL IDENTITY'],
       PARTICLE_COUNT
     ),
     chaos3:   randomSphere(PARTICLE_COUNT, 4.5),
-    see:      sampleText('SEE OUR WORK', PARTICLE_COUNT, 110, 8.5, 1.7),
+    see:      sampleText('SEE OUR WORK', PARTICLE_COUNT, 110, 8.5, 1.7, 1400, 280, 110),
   }
 
   const posCurrent = new Float32Array(states.chaos1)
