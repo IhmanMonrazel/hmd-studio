@@ -264,13 +264,6 @@ export async function initParticleTextScene(canvas) {
     scaleX: 8.5, scaleY: 1.7,
     lines: [
       { text: 'SEE OUR WORK', fontSize: 110, color: '#ffffff', y: 110 },
-      {
-        text: '→  Click to explore our projects',
-        fontSize: 18,
-        color: 'rgba(255,255,255,0.45)',
-        font: "300 18px 'DM Serif Display', serif",
-        y: 200
-      },
     ]
   })
 
@@ -287,6 +280,23 @@ export async function initParticleTextScene(canvas) {
     camera.updateProjectionMatrix()
   })
   if (canvas.parentElement) resizeObserver.observe(canvas.parentElement)
+
+  // ── Click overlay for SEE OUR WORK ───────────────────────
+  const clickOverlay = document.createElement('a')
+  clickOverlay.href = '/work'
+  clickOverlay.style.cssText = `
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+  `
+  if (canvas.parentElement) {
+    canvas.parentElement.style.position = 'relative'
+    canvas.parentElement.appendChild(clickOverlay)
+  }
 
   // ── RAF ──────────────────────────────────────────────────
   let rafId = null, _dirty = true
@@ -382,6 +392,14 @@ export async function initParticleTextScene(canvas) {
     setPlaneOpacity(planeServices, servicesPlaneOpacity)
     setPlaneOpacity(planeSee,      seePlaneOpacity)
 
+    // Enable click overlay only when SEE OUR WORK plane is sufficiently visible
+    if (seePlaneOpacity > 0.5) {
+      clickOverlay.style.pointerEvents = 'auto'
+      clickOverlay.style.cursor = 'pointer'
+    } else {
+      clickOverlay.style.pointerEvents = 'none'
+    }
+
     // Particle opacity: inverse of whichever plane is currently visible
     // When plane is fully visible → particles fully hidden
     // When no plane visible → particles at full opacity (driven by phase logic above)
@@ -399,6 +417,7 @@ export async function initParticleTextScene(canvas) {
     planeHmd.geometry.dispose(); planeHmd.material.dispose()
     planeServices.geometry.dispose(); planeServices.material.dispose()
     planeSee.geometry.dispose(); planeSee.material.dispose()
+    if (clickOverlay.parentElement) clickOverlay.parentElement.removeChild(clickOverlay)
     renderer.dispose()
   }
 
