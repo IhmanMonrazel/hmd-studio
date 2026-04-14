@@ -225,9 +225,9 @@ export async function initParticleTextScene(canvas) {
   const states = {
     chaos1:   randomSphere(PARTICLE_COUNT, 4.5),          // initial chaos — no source text
     hmd:      posHmd,
-    chaos2:   explodeFrom(posHmd,      PARTICLE_COUNT, 5.0), // explodes from HMD STUDIO
+    chaos2:   explodeFrom(posHmd,      PARTICLE_COUNT, 2.5), // explodes from HMD STUDIO
     services: posServices,
-    chaos3:   explodeFrom(posServices, PARTICLE_COUNT, 5.0), // explodes from services
+    chaos3:   explodeFrom(posServices, PARTICLE_COUNT, 2.5), // explodes from services
     see:      posSee,
   }
 
@@ -437,13 +437,23 @@ export async function initParticleTextScene(canvas) {
       clickOverlay.style.pointerEvents = 'none'
     }
 
-    // Particle opacity: inverse of whichever plane is currently visible
-    // When plane is fully visible → particles fully hidden
-    // When no plane visible → particles at full opacity (driven by phase logic above)
+    // Particles fade OUT when plane fades IN (formation phase)
+    // Particles fade IN when plane fades OUT (dispersion phase)
+    // During hold phases: plane=1, particles=0
+    // During dispersion: plane fading to 0, particles fading to 1
     const dominantPlane = Math.max(hmdPlaneOpacity, servicesPlaneOpacity, seePlaneOpacity)
-    if (dominantPlane > 0) {
+
+    // Only suppress particles when plane is forming (progress toward hold)
+    // During dispersion (plane decreasing), particles should be visible
+    const isHmdForming      = p >= 0.24 && p < 0.32
+    const isServicesForming = p >= 0.60 && p < 0.69
+    const isSeeForming      = p >= 0.91 && p < 0.97
+
+    if (isHmdForming || isServicesForming || isSeeForming) {
+      // Plane forming — suppress particles
       material.uniforms.uOpacity.value = Math.max(0, 1.0 - dominantPlane)
     }
+    // else: particle opacity is driven by the phase logic above — don't override it
   }
 
   function destroy() {
