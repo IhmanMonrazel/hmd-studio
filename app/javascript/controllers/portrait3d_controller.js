@@ -187,7 +187,7 @@ export default class extends Controller {
         for(int i=0;i<55;i++){
           vec3 p=ro+rd*distTotal;
           float r=length(p);
-          if(r>3.5) break;
+          if(distTotal>7.0) break;
           float sdf=sdfEntity(p,t);
           float fil=filament(p,t);
           float mem=membrane(p,t);
@@ -216,7 +216,7 @@ export default class extends Controller {
         }
         volGlow*=0.4;
 
-        float coreI=depthGlow*(2.5+uProx*1.2);
+        float coreI=depthGlow*(5.5+uProx*2.0);
         vec3 coreCol=mix(vec3(1.0,0.35,0.15),vec3(1.0,0.92,0.85),clamp(coreI*0.8,0.0,1.0));
         float surfI=clamp(density,0.0,1.0);
         vec3 surfCol=mix(vec3(0.5,0.0,0.0),vec3(0.9,0.1,0.05),surfI);
@@ -229,17 +229,17 @@ export default class extends Controller {
         vec3 volCol=vec3(0.6,0.0,0.0)*volGlow*(1.0+uProx*0.5);
 
         vec3 col=vec3(0.0);
-        col+=surfCol*surfI*0.7;
-        col+=filCol*filI*0.9;
-        col+=memCol*memI*0.5;
-        col+=spkCol*spI;
-        col+=coreCol*coreI*0.9;
-        col+=volCol;
+        col+=surfCol*surfI*1.2;
+        col+=filCol*filI*1.6;
+        col+=memCol*memI*0.9;
+        col+=spkCol*spI*1.4;
+        col+=coreCol*coreI*1.4;
+        col+=volCol*1.8;
         col*=(1.0+uProx*0.4);
 
-        float bgGlow=exp(-length(uv)*1.8)*0.08*(1.0+uProx*0.3);
-        col+=vec3(0.3,0.0,0.0)*bgGlow;
-        col=col/(col+0.85);
+        float bgGlow=exp(-length(uv)*1.4)*0.18*(1.0+uProx*0.5);
+        col+=vec3(0.4,0.0,0.0)*bgGlow;
+        col=col/(col+0.55);
         col=pow(col,vec3(0.88));
         float vig=clamp(1.0-length(uv*0.75),0.0,1.0);
         col*=vig;

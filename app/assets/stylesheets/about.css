@@ -88,10 +88,9 @@ body.pages.about .navbar:not(.navbar--frosted) {
   height: 100%;
   min-height: 0;
   max-height: 90vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  display: block;
   overflow: visible;
+  position: relative;
 }
 
 .ab-hero__portrait {
@@ -99,6 +98,9 @@ body.pages.about .navbar:not(.navbar--frosted) {
 }
 
 .ab-hero__right canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100% !important;
   height: 100% !important;
   display: block;
@@ -382,12 +384,13 @@ body.pages.about .navbar:not(.navbar--frosted) {
   }
   .ab-hero__right {
     background-color: #000000 !important;
-    height: auto !important;
+    height: 360px !important;
+    min-height: 360px !important;
     max-height: none !important;
     overflow: visible !important;
     display: block !important;
     padding: 0 !important;
-    min-height: unset !important;
+    position: relative !important;
   }
   .ab-hero__portrait {
     width: 100% !important;
