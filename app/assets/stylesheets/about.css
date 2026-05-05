@@ -84,7 +84,7 @@ body.pages.about .navbar:not(.navbar--frosted) {
 }
 
 .ab-hero__right {
-  background: #0a0a0a;
+  background: #000000;
   height: 100%;
   min-height: 0;
   max-height: 90vh;
@@ -97,13 +97,16 @@ body.pages.about .navbar:not(.navbar--frosted) {
   display: none;
 }
 
-.ab-hero__right canvas {
+.ab-hero__video {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.75);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
+  mix-blend-mode: screen;
 }
 
 /* ── Section 2 : The Scan ────────────────────────────── */
@@ -111,14 +114,14 @@ body.pages.about .navbar:not(.navbar--frosted) {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: stretch;
-  background: transparent;
-  border-top: 1px solid rgba(0,0,0,0.1);
+  background: #000000;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .ab-scan__left {
   background: transparent;
   position: relative;
-  border-right: 1px solid rgba(0,0,0,0.1);
+  border-right: 1px solid rgba(255,255,255,0.1);
 }
 
 .ab-scan__video-wrap {
@@ -135,6 +138,7 @@ body.pages.about .navbar:not(.navbar--frosted) {
   object-fit: contain;
   display: block;
   background: transparent;
+  mix-blend-mode: screen;
 }
 
 .ab-scan__right {
@@ -186,14 +190,14 @@ body.pages.about .navbar:not(.navbar--frosted) {
 .ab-scan__row {
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.82rem;
-  color: #111111;
+  color: #ffffff;
   letter-spacing: 0.04em;
   margin: 0;
 }
 
 .ab-scan__row--indent {
   padding-left: 6.5rem;
-  color: rgba(0,0,0,0.4);
+  color: rgba(255,255,255,0.4);
 }
 
 .ab-scan__key {

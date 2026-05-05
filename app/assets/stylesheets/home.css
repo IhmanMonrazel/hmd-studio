@@ -1,28 +1,38 @@
 /* ============================================================
-   HOME — S1 (no background)
+   HOME — body transparent so fixed video shows through
    ============================================================ */
-/* S1: no background — body color (#000000 default, GSAP-animated) shows through */
-.s1 {
+body.pages.home {
   background: transparent;
 }
 
+body.pages.home::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, var(--overlay-opacity, 0.55));
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* ============================================================
-   SECTION 1 — HERO VIDEO
+   SECTION 1 — HERO VIDEO (fixed full-screen background)
    ============================================================ */
 .s1 {
   position: relative;
   width: 100vw;
   height: 100dvh;
-  overflow: hidden;
+  background: transparent;
 }
 
 .s1__media {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   object-fit: cover;
   display: block;
+  z-index: -2;
 }
 
 .s1__overlay {
@@ -58,7 +68,7 @@
    SECTION 5 — DIFFERENTIATOR (red)
    ============================================================ */
 .s5 {
-  background: #CC0000;
+  background: transparent;
   color: #fff;
   padding: clamp(6rem, 12vh, 10rem) clamp(3rem, 8vw, 8rem);
   display: flex;

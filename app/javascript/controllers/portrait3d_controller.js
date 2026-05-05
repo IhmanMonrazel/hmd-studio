@@ -1,41 +1,42 @@
 import { Controller } from "@hotwired/stimulus"
+import * as THREE from "three"
 
 export default class extends Controller {
   connect() {
-    this.targetProx = 0
-    this.currentProx = 0
     this.rafId = null
-    this.startTime = performance.now()
+    this.clock = new THREE.Clock()
+    this.mouse = { x: 0, y: 0 }
+    this.targetRotY = 0
+    this.currentRotY = 0
 
-    this.canvas = document.createElement('canvas')
-    this.canvas.style.width = '100%'
-    this.canvas.style.height = '100%'
-    this.canvas.style.display = 'block'
-    this.element.appendChild(this.canvas)
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    this.renderer.setClearColor(0x000000, 0)
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
+    this.element.appendChild(this.renderer.domElement)
 
-    this.gl = this.canvas.getContext('webgl', { antialias: true, alpha: false })
-    if (!this.gl) return
+    this.scene = new THREE.Scene()
+    this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100)
+    this.camera.position.set(0, 0, 5.5)
 
-    this.initWebGL()
-    this.initQuad()
+    this.buildBust()
+    this.buildScanLine()
+    this.buildTrackingPoints()
+    this.buildParticles()
+
+    this.onMouseMove = (e) => {
+      const r = this.element.getBoundingClientRect()
+      this.mouse.x = ((e.clientX - r.left) / r.width - 0.5) * 2
+      this.mouse.y = ((e.clientY - r.top) / r.height - 0.5) * 2
+    }
+    this.onMouseLeave = () => { this.mouse.x = 0; this.mouse.y = 0 }
+    this.element.addEventListener('mousemove', this.onMouseMove)
+    this.element.addEventListener('mouseleave', this.onMouseLeave)
 
     this.resizeObserver = new ResizeObserver(() => this.handleResize())
     this.resizeObserver.observe(this.element)
     this.handleResize()
 
-    this.onMouseMove = (e) => {
-      const rect = this.canvas.getBoundingClientRect()
-      const mx = e.clientX - rect.left
-      const my = e.clientY - rect.top
-      const dx = mx - rect.width / 2
-      const dy = my - rect.height / 2
-      this.targetProx = Math.max(0, 1 - Math.sqrt(dx*dx + dy*dy) / 220)
-    }
-    this.onMouseLeave = () => { this.targetProx = 0 }
-    this.element.addEventListener('mousemove', this.onMouseMove)
-    this.element.addEventListener('mouseleave', this.onMouseLeave)
-
-    this.render()
+    this.animate()
   }
 
   disconnect() {
@@ -43,266 +44,276 @@ export default class extends Controller {
     if (this.resizeObserver) this.resizeObserver.disconnect()
     this.element.removeEventListener('mousemove', this.onMouseMove)
     this.element.removeEventListener('mouseleave', this.onMouseLeave)
-    if (this.gl) {
-      const ext = this.gl.getExtension('WEBGL_lose_context')
-      if (ext) ext.loseContext()
-    }
+    this.renderer.dispose()
   }
 
   handleResize() {
     const w = this.element.offsetWidth
     const h = this.element.offsetHeight
-    this.canvas.width = w
-    this.canvas.height = h
-    if (this.gl) this.gl.viewport(0, 0, w, h)
+    this.renderer.setSize(w, h)
+    this.camera.aspect = w / h
+    this.camera.updateProjectionMatrix()
   }
 
-  initWebGL() {
-    const gl = this.gl
+  buildBust() {
+    // --- HEAD: high-res sphere deformed to human skull shape ---
+    const geo = new THREE.SphereGeometry(1, 48, 36)
+    const pos = geo.attributes.position
 
-    const vs = `
-      attribute vec2 aPos;
-      void main() { gl_Position = vec4(aPos, 0.0, 1.0); }
-    `
+    for (let i = 0; i < pos.count; i++) {
+      let x = pos.getX(i)
+      let y = pos.getY(i)
+      let z = pos.getZ(i)
 
-    const fs = `
-      precision highp float;
-      uniform float uTime;
-      uniform vec2 uRes;
-      uniform float uProx;
+      // Normalize to get spherical coords
+      const r = Math.sqrt(x*x + y*y + z*z)
+      const theta = Math.acos(y / r)   // polar angle from top
+      const phi = Math.atan2(z, x)     // azimuthal
 
-      float hash(float n) { return fract(sin(n)*43758.5453); }
+      // Skull shape deformations
+      // 1. Flatten back of head
+      const backFlatten = z < 0 ? 1.0 - Math.abs(z) * 0.18 : 1.0
+      // 2. Widen at cheeks (theta ~= PI*0.55)
+      const cheekBulge = 1.0 + Math.exp(-Math.pow(theta - Math.PI*0.55, 2) * 18) * 0.12
+      // 3. Narrow at temples
+      const templePinch = Math.abs(phi) > Math.PI*0.35 && Math.abs(phi) < Math.PI*0.65
+        ? 1.0 - Math.exp(-Math.pow(Math.abs(x) - 0.85, 2) * 12) * 0.08
+        : 1.0
+      // 4. Jaw narrowing (bottom of head)
+      const jawNarrow = theta > Math.PI*0.72
+        ? 1.0 - (theta - Math.PI*0.72) * 0.55
+        : 1.0
+      // 5. Chin protrusion
+      const chinProtrude = theta > Math.PI*0.78 && Math.abs(phi) < 0.4
+        ? 1.0 + Math.exp(-Math.pow(theta - Math.PI*0.85, 2)*30) * 0.12
+        : 1.0
+      // 6. Forehead slight flattening
+      const foreheadFlat = theta < Math.PI*0.28 && z > 0
+        ? 1.0 - (Math.PI*0.28 - theta) * 0.25
+        : 1.0
+      // 7. Nose area protrusion (front, mid face)
+      const noseProtrude = z > 0.6 && theta > Math.PI*0.4 && theta < Math.PI*0.62
+        && Math.abs(x) < 0.22
+        ? 1.0 + Math.exp(-Math.pow(theta - Math.PI*0.51, 2)*40) * 0.18
+          * Math.exp(-x*x*20) : 1.0
+      // 8. Eye socket indentations
+      const eyeSocketL = Math.exp(-(Math.pow(x+0.32,2)+Math.pow(y-0.12,2))*22
+        +Math.pow(z-0.75,2)*8) * 0.09
+      const eyeSocketR = Math.exp(-(Math.pow(x-0.32,2)+Math.pow(y-0.12,2))*22
+        +Math.pow(z-0.75,2)*8) * 0.09
+      // 9. Brow ridge
+      const browRidge = z > 0.55 && theta > Math.PI*0.32 && theta < Math.PI*0.42
+        && Math.abs(x) < 0.55
+        ? Math.exp(-Math.pow(theta - Math.PI*0.37, 2)*60) * 0.07 : 0.0
+      // 10. Lip area slight protrusion
+      const lipProtrude = z > 0.55 && theta > Math.PI*0.63 && theta < Math.PI*0.73
+        && Math.abs(x) < 0.28
+        ? Math.exp(-Math.pow(theta - Math.PI*0.68, 2)*50) * 0.08 : 0.0
 
-      float noise(vec3 p) {
-        vec3 i = floor(p); vec3 f = fract(p);
-        f = f*f*(3.0-2.0*f);
-        float n = i.x + i.y*57.0 + i.z*113.0;
-        return mix(
-          mix(mix(hash(n),hash(n+1.0),f.x),mix(hash(n+57.0),hash(n+58.0),f.x),f.y),
-          mix(mix(hash(n+113.0),hash(n+114.0),f.x),mix(hash(n+170.0),hash(n+171.0),f.x),f.y),
-          f.z);
-      }
+      const scale = backFlatten * cheekBulge * templePinch * jawNarrow
+        * chinProtrude * foreheadFlat * noseProtrude
+        - eyeSocketL - eyeSocketR + browRidge + lipProtrude
 
-      float fbm(vec3 p, int oct) {
-        float v=0.0, a=0.5;
-        for(int i=0;i<6;i++){
-          if(i>=oct) break;
-          v+=a*noise(p); p=p*2.1+vec3(1.7,9.2,8.3); a*=0.5;
-        }
-        return v;
-      }
+      // Vertical stretch: head taller than wide
+      x *= scale * 0.88
+      y *= scale * 1.12
+      z *= scale
 
-      float sdfEntity(vec3 p, float t) {
-        float r = length(p);
-        float baseR = 1.35 + 0.06*sin(t*0.7) + 0.04*sin(t*1.3+1.2);
-        float d1 = fbm(p*0.9 + vec3(t*0.08,t*0.05,t*0.06), 4);
-        float d2 = fbm(p*1.8 - vec3(t*0.06,t*0.09,t*0.04), 3);
-        float d3 = fbm(p*3.2 + vec3(t*0.12,t*0.07,t*0.11), 2);
-        float distort = d1*0.45 + d2*0.18 + d3*0.07;
-        float pulse = 0.05*sin(t*1.8)*exp(-r*1.2);
-        return r - (baseR + distort + pulse);
-      }
+      pos.setXYZ(i, x, y, z)
+    }
+    geo.computeVertexNormals()
 
-      float filament(vec3 p, float t) {
-        float f = 0.0;
-        for(int i=0;i<8;i++){
-          float fi = float(i);
-          float angle = fi*0.7854 + t*0.04 + sin(t*0.3+fi)*0.15;
-          float tilt  = fi*0.3927 + sin(t*0.25+fi*0.7)*0.2;
-          vec3 dir = vec3(cos(tilt)*cos(angle), sin(tilt), cos(tilt)*sin(angle));
-          float s = clamp(dot(p,dir), 0.0, 1.5);
-          vec3 closest = dir*s;
-          float wx = 0.08*sin(s*4.0+t*0.8+fi)+0.04*sin(s*8.0+t*1.2+fi*0.5);
-          float wy = 0.08*cos(s*3.5+t*0.9+fi*0.8)+0.04*cos(s*7.0+t*1.1+fi*0.3);
-          closest += vec3(wx, wy, wx*0.5);
-          float dist = length(p - closest);
-          float width = 0.025+0.015*sin(t*1.5+fi)+0.01*sin(s*6.0+t);
-          f += (0.7+0.3*sin(t*0.6+fi*1.3)) * exp(-dist*dist/(width*width*2.0));
-        }
-        for(int i=0;i<14;i++){
-          float fi=float(i);
-          float a2=fi*0.449+t*0.06+sin(t*0.4+fi*0.9)*0.3;
-          float t2=fi*0.897+cos(t*0.2+fi)*0.25;
-          vec3 dir2=vec3(cos(t2)*cos(a2),sin(t2)*cos(a2),sin(a2));
-          float s2=clamp(dot(p,dir2),0.0,1.2);
-          vec3 cl2=dir2*s2;
-          cl2+=vec3(0.06*sin(s2*9.0+t*2.0+fi),0.06*cos(s2*7.0+t*1.8+fi*0.7),0.0);
-          float d2=length(p-cl2);
-          float w2=0.012+0.008*sin(t*2.1+fi*0.8);
-          f+=0.35*exp(-d2*d2/(w2*w2*2.0));
-        }
-        return f;
-      }
+    // Wireframe
+    const wireMat = new THREE.LineBasicMaterial({
+      color: 0xCC0000,
+      transparent: true,
+      opacity: 0.55,
+    })
+    const wireGeo = new THREE.WireframeGeometry(geo)
+    this.headWire = new THREE.LineSegments(wireGeo, wireMat)
 
-      float membrane(vec3 p, float t) {
-        float m=0.0;
-        for(int i=0;i<4;i++){
-          float fi=float(i);
-          float r=0.6+fi*0.28+0.05*sin(t*0.5+fi);
-          float n1=fbm(p*1.2+vec3(t*0.07+fi,t*0.05,fi),3);
-          float n2=fbm(p*2.5-vec3(fi,t*0.08,t*0.06+fi),2);
-          float shell=abs(length(p)-r-n1*0.3-n2*0.12);
-          float torn=0.5+0.5*sin(fbm(p*4.0+vec3(t*0.1+fi),2)*6.0);
-          m+=(0.018/(shell+0.01))*torn*(0.4+fi*0.15);
-        }
-        return m;
-      }
+    // Points on surface
+    const pointsMat = new THREE.PointsMaterial({
+      color: 0xFF3300,
+      size: 0.022,
+      transparent: true,
+      opacity: 0.7,
+    })
+    this.headPoints = new THREE.Points(geo, pointsMat)
 
-      float sparks(vec3 p, float t) {
-        float sp=0.0;
-        for(int i=0;i<6;i++){
-          float fi=float(i);
-          float phase=hash(fi+1.0);
-          float active=step(0.7,sin(t*3.0+fi*2.1+phase*6.28));
-          float a=fi*1.047+t*0.15+phase;
-          float tl=fi*0.524+sin(t*0.4+fi)*0.3;
-          vec3 dir=vec3(cos(tl)*cos(a),sin(tl),cos(tl)*sin(a));
-          float s=clamp(dot(p,dir),0.2,1.3);
-          vec3 cl=dir*s;
-          cl+=vec3(hash(fi+s*10.0+floor(t*8.0))-0.5,
-                   hash(fi+s*13.0+floor(t*8.0)+5.0)-0.5,0.0)*0.12*s;
-          float d=length(p-cl);
-          sp+=active*0.6*exp(-d*d*180.0);
-        }
-        return sp;
-      }
+    // Group for head
+    this.headGroup = new THREE.Group()
+    this.headGroup.add(this.headWire)
+    this.headGroup.add(this.headPoints)
+    this.headGroup.position.y = 0.3
 
-      void main() {
-        vec2 uv=(gl_FragCoord.xy - uRes*0.5)/min(uRes.x,uRes.y);
-        float t=uTime;
-        float camDrift=0.06*sin(t*0.23)+0.04*sin(t*0.37+1.2);
-        float camTilt=0.04*cos(t*0.19)+0.03*cos(t*0.31+0.8);
-        float lev=0.12*sin(t*0.55)+0.06*sin(t*0.83+0.5);
-        vec3 ro=vec3(sin(camDrift)*3.8, lev+sin(camTilt)*0.3, cos(camDrift)*3.8);
-        vec3 target=vec3(0.0,lev*0.3,0.0);
-        vec3 fw=normalize(target-ro);
-        vec3 ri=normalize(cross(fw,vec3(0,1,0)));
-        vec3 up2=cross(ri,fw);
-        vec3 rd=normalize(fw+uv.x*ri+uv.y*up2);
+    // --- NECK ---
+    const neckGeo = new THREE.CylinderGeometry(0.18, 0.22, 0.55, 16, 3, true)
+    const neckWireGeo = new THREE.WireframeGeometry(neckGeo)
+    const neckWire = new THREE.LineSegments(neckWireGeo, new THREE.LineBasicMaterial({
+      color: 0xAA0000, transparent: true, opacity: 0.35
+    }))
+    neckWire.position.y = -0.95
+    this.headGroup.add(neckWire)
 
-        float density=0.0, filDensity=0.0, memDensity=0.0;
-        float sparkDensity=0.0, depthGlow=0.0;
-        float distTotal=0.0, dt=0.045;
+    // --- SHOULDERS ---
+    const shoulderPts = []
+    for (let i = 0; i <= 40; i++) {
+      const t = i / 40
+      const x = (t - 0.5) * 3.2
+      const y = -1.25 + Math.sin(t * Math.PI) * 0.3 - Math.abs(x) * 0.05
+      const zOff = Math.cos(t * Math.PI) * 0.3
+      shoulderPts.push(new THREE.Vector3(x, y, zOff))
+    }
+    // Front shoulder curve
+    const shoulderCurve = new THREE.CatmullRomCurve3(shoulderPts)
+    const shoulderGeo = new THREE.BufferGeometry().setFromPoints(
+      shoulderCurve.getPoints(80)
+    )
+    const shoulderMat = new THREE.LineBasicMaterial({
+      color: 0xAA0000, transparent: true, opacity: 0.4
+    })
+    this.headGroup.add(new THREE.Line(shoulderGeo, shoulderMat))
 
-        for(int i=0;i<55;i++){
-          vec3 p=ro+rd*distTotal;
-          float r=length(p);
-          if(distTotal>7.0) break;
-          float sdf=sdfEntity(p,t);
-          float fil=filament(p,t);
-          float mem=membrane(p,t);
-          float sp=sparks(p,t);
-          float surfaceDens=exp(-max(sdf,0.0)*4.5)*step(sdf,0.15);
-          float intDens=exp(-r*1.1)*step(-sdf,0.0);
-          density+=(surfaceDens*0.8+intDens*0.3)*dt;
-          filDensity+=fil*exp(-max(r-0.1,0.0)*0.8)*dt*0.7;
-          memDensity+=mem*dt*0.6;
-          sparkDensity+=sp*dt;
-          depthGlow+=exp(-r*r*0.5)*(1.0+0.3*sin(t*1.5+r*4.0))*dt*0.5;
-          dt=0.038+sdf*0.12;
-          distTotal+=max(dt,0.02);
-        }
-
-        float volGlow=0.0;
-        float vdt=0.04; float vd=0.0;
-        for(int i=0;i<32;i++){
-          vec3 p=ro+rd*vd;
-          float r=length(p);
-          float ig=exp(-r*r*0.8)*(0.8+0.2*sin(t*1.2+r*3.0));
-          float rg=exp(-abs(r-0.4-0.15*sin(t*1.8))*8.0)*0.4;
-          float rg2=exp(-abs(r-0.85-0.1*sin(t*1.4+1.0))*6.0)*0.25;
-          volGlow+=(ig+rg+rg2)*vdt;
-          vd+=vdt;
-        }
-        volGlow*=0.4;
-
-        float coreI=depthGlow*(5.5+uProx*2.0);
-        vec3 coreCol=mix(vec3(1.0,0.35,0.15),vec3(1.0,0.92,0.85),clamp(coreI*0.8,0.0,1.0));
-        float surfI=clamp(density,0.0,1.0);
-        vec3 surfCol=mix(vec3(0.5,0.0,0.0),vec3(0.9,0.1,0.05),surfI);
-        float filI=clamp(filDensity,0.0,1.5);
-        vec3 filCol=mix(vec3(0.8,0.05,0.0),vec3(1.0,0.55,0.1),filI*0.6);
-        float memI=clamp(memDensity*0.6,0.0,0.8);
-        vec3 memCol=vec3(0.45,0.0,0.0);
-        float spI=clamp(sparkDensity*2.0,0.0,1.0);
-        vec3 spkCol=mix(vec3(1.0,0.3,0.1),vec3(1.0,0.85,0.7),spI);
-        vec3 volCol=vec3(0.6,0.0,0.0)*volGlow*(1.0+uProx*0.5);
-
-        vec3 col=vec3(0.0);
-        col+=surfCol*surfI*1.2;
-        col+=filCol*filI*1.6;
-        col+=memCol*memI*0.9;
-        col+=spkCol*spI*1.4;
-        col+=coreCol*coreI*1.4;
-        col+=volCol*1.8;
-        col*=(1.0+uProx*0.4);
-
-        float bgGlow=exp(-length(uv)*1.4)*0.18*(1.0+uProx*0.5);
-        col+=vec3(0.4,0.0,0.0)*bgGlow;
-        col=col/(col+0.55);
-        col=pow(col,vec3(0.88));
-        float vig=clamp(1.0-length(uv*0.75),0.0,1.0);
-        col*=vig;
-
-        gl_FragColor=vec4(col,1.0);
-      }
-    `
-
-    const compile = (type, src) => {
-      const s = gl.createShader(type)
-      gl.shaderSource(s, src)
-      gl.compileShader(s)
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-        console.error('Shader error:', gl.getShaderInfoLog(s))
-        return null
-      }
-      return s
+    // Chest vertical lines
+    for (let i = -3; i <= 3; i++) {
+      const chestGeo = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(i * 0.28, -1.18, 0.1 - Math.abs(i)*0.06),
+        new THREE.Vector3(i * 0.32, -1.55, 0.05 - Math.abs(i)*0.08),
+      ])
+      this.headGroup.add(new THREE.Line(chestGeo,
+        new THREE.LineBasicMaterial({ color: 0x880000, transparent: true, opacity: 0.25 })
+      ))
     }
 
-    const vShader = compile(gl.VERTEX_SHADER, vs)
-    const fShader = compile(gl.FRAGMENT_SHADER, fs)
-    this.program = gl.createProgram()
-    gl.attachShader(this.program, vShader)
-    gl.attachShader(this.program, fShader)
-    gl.linkProgram(this.program)
+    this.bustGroup = new THREE.Group()
+    this.bustGroup.add(this.headGroup)
+    this.scene.add(this.bustGroup)
+  }
 
-    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-      console.error('Program link error:', gl.getProgramInfoLog(this.program))
+  buildScanLine() {
+    // Horizontal scan plane that moves up/down through the head
+    const scanGeo = new THREE.PlaneGeometry(2.2, 0.012)
+    const scanMat = new THREE.MeshBasicMaterial({
+      color: 0xFF2200,
+      transparent: true,
+      opacity: 0.7,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    })
+    this.scanPlane = new THREE.Mesh(scanGeo, scanMat)
+    this.scanPlane.position.z = 0.0
+    this.headGroup.add(this.scanPlane)
+
+    // Scan glow trail
+    const trailGeo = new THREE.PlaneGeometry(2.0, 0.08)
+    const trailMat = new THREE.MeshBasicMaterial({
+      color: 0xCC0000,
+      transparent: true,
+      opacity: 0.12,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    })
+    this.scanTrail = new THREE.Mesh(trailGeo, trailMat)
+    this.headGroup.add(this.scanTrail)
+
+    this.scanY = 1.2
+    this.scanDir = -1
+  }
+
+  buildTrackingPoints() {
+    // Feature tracking markers (cross + bracket overlays via sprites)
+    this.trackMarkers = []
+    const features = [
+      { x: -0.30, y:  0.14, z: 0.72, label: 'EYE_L' },
+      { x:  0.30, y:  0.14, z: 0.72, label: 'EYE_R' },
+      { x:  0.00, y: -0.02, z: 0.82, label: 'NOSE'  },
+      { x:  0.00, y: -0.26, z: 0.72, label: 'MOUTH' },
+      { x: -0.60, y:  0.05, z: 0.52, label: 'CHK_L' },
+      { x:  0.60, y:  0.05, z: 0.52, label: 'CHK_R' },
+      { x:  0.00, y:  0.34, z: 0.70, label: 'BROW'  },
+      { x:  0.00, y: -0.50, z: 0.62, label: 'CHIN'  },
+    ]
+
+    features.forEach((f, idx) => {
+      // Ring marker
+      const ringGeo = new THREE.RingGeometry(0.025, 0.035, 12)
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xFF4400, transparent: true, opacity: 0.0,
+        side: THREE.DoubleSide, depthWrite: false
+      })
+      const ring = new THREE.Mesh(ringGeo, ringMat)
+      ring.position.set(f.x, f.y, f.z + 0.3)
+      ring.userData = { phase: idx * 0.8, label: f.label, baseZ: f.z }
+      this.headGroup.add(ring)
+      this.trackMarkers.push(ring)
+    })
+  }
+
+  buildParticles() {
+    // Floating ambient particles around bust
+    const count = 120
+    const positions = new Float32Array(count * 3)
+    for (let i = 0; i < count; i++) {
+      positions[i*3]   = (Math.random() - 0.5) * 3.5
+      positions[i*3+1] = (Math.random() - 0.5) * 3.0
+      positions[i*3+2] = (Math.random() - 0.5) * 2.0
     }
-
-    this.uTime  = gl.getUniformLocation(this.program, 'uTime')
-    this.uRes   = gl.getUniformLocation(this.program, 'uRes')
-    this.uProx  = gl.getUniformLocation(this.program, 'uProx')
-    this.aPos   = gl.getAttribLocation(this.program, 'aPos')
+    const partGeo = new THREE.BufferGeometry()
+    partGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    const partMat = new THREE.PointsMaterial({
+      color: 0xCC0000, size: 0.015,
+      transparent: true, opacity: 0.35
+    })
+    this.particles = new THREE.Points(partGeo, partMat)
+    this.scene.add(this.particles)
+    this.particlePositions = positions
+    this.particleCount = count
   }
 
-  initQuad() {
-    const gl = this.gl
-    this.quadBuf = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuf)
-    gl.bufferData(gl.ARRAY_BUFFER,
-      new Float32Array([-1,-1, 1,-1, -1,1, 1,1]),
-      gl.STATIC_DRAW)
-  }
+  animate() {
+    this.rafId = requestAnimationFrame(() => this.animate())
+    const t = this.clock.getElapsedTime()
 
-  render() {
-    const gl = this.gl
-    if (!gl || !this.program) return
+    // Levitation
+    this.bustGroup.position.y = Math.sin(t * 0.55) * 0.06
+      + Math.sin(t * 0.83) * 0.03
 
-    const t = (performance.now() - this.startTime) / 1000
-    this.currentProx += (this.targetProx - this.currentProx) * 0.04
+    // Slow auto-rotation + mouse influence
+    this.targetRotY = this.mouse.x * 0.25
+    this.currentRotY += (this.targetRotY - this.currentRotY) * 0.04
+    this.bustGroup.rotation.y = t * 0.012 + this.currentRotY
+    this.bustGroup.rotation.x = this.mouse.y * -0.08
 
-    gl.useProgram(this.program)
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuf)
-    gl.enableVertexAttribArray(this.aPos)
-    gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, 0, 0)
+    // Scan line animation
+    this.scanY += this.scanDir * 0.018
+    if (this.scanY < -1.25) { this.scanDir = 1; this.scanY = -1.25 }
+    if (this.scanY > 1.25)  { this.scanDir = -1; this.scanY = 1.25 }
+    this.scanPlane.position.y = this.scanY
+    this.scanTrail.position.y = this.scanY - this.scanDir * 0.04
+    // Pulse scan opacity
+    this.scanPlane.material.opacity = 0.5 + Math.sin(t * 4) * 0.2
+    this.scanTrail.material.opacity = 0.08 + Math.sin(t * 4) * 0.04
 
-    gl.uniform1f(this.uTime, t)
-    gl.uniform2f(this.uRes, this.canvas.width, this.canvas.height)
-    gl.uniform1f(this.uProx, this.currentProx)
+    // Wireframe pulse
+    this.headWire.material.opacity = 0.4 + Math.sin(t * 1.2) * 0.12
 
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+    // Tracking markers pulse
+    this.trackMarkers.forEach(m => {
+      const pulse = 0.4 + 0.6 * Math.abs(Math.sin(t * 2.0 + m.userData.phase))
+      m.material.opacity = pulse * 0.85
+      const s = 0.85 + pulse * 0.3
+      m.scale.set(s, s, 1)
+    })
 
-    this.rafId = requestAnimationFrame(() => this.render())
+    // Particles drift
+    for (let i = 0; i < this.particleCount; i++) {
+      this.particlePositions[i*3+1] += Math.sin(t * 0.4 + i) * 0.0008
+      this.particlePositions[i*3]   += Math.cos(t * 0.3 + i * 0.7) * 0.0005
+    }
+    this.particles.geometry.attributes.position.needsUpdate = true
+    this.particles.rotation.y = t * 0.02
+
+    this.renderer.render(this.scene, this.camera)
   }
 }

@@ -9,9 +9,10 @@ export default class extends Controller {
     this._setViewportVars()
     window.addEventListener("resize", this._onResize, { passive: true })
 
-    // Set initial body background — home page starts on black.
-    // Restored to CSS default on disconnect so other pages are unaffected.
-    gsap.set(document.body, { backgroundColor: "#000000" })
+    // ── Overlay fade (transparent on load, fades in after S1) ─
+    this._onScroll = this._updateOverlay.bind(this)
+    window.addEventListener("scroll", this._onScroll, { passive: true })
+    this._updateOverlay()
 
     // ── Particle world (S2 + S3 + S4) ────────────────────────
     import('../particle_text_scene').then(({ initParticleTextScene }) => {
@@ -38,6 +39,8 @@ export default class extends Controller {
     if (this._particles) { this._particles.destroy(); this._particles = null }
 
     window.removeEventListener("resize", this._onResize)
+    window.removeEventListener("scroll", this._onScroll)
+    document.body.style.removeProperty("--overlay-opacity")
 
     ScrollTrigger.getAll()
       .filter(t => t.trigger && this.element.contains(t.trigger))
@@ -47,9 +50,16 @@ export default class extends Controller {
       ".particle-world",
       ".s5",
     ], { clearProps: "all" })
+  }
 
-    // Restore body background so other pages inherit their CSS-defined color.
-    gsap.set(document.body, { clearProps: "backgroundColor" })
+  // ── Overlay opacity — holds BASE through S1, rises to MAX after S1 ──
+  _updateOverlay() {
+    const BASE = 0.55
+    const MAX  = 0.80
+    const s1 = this.element.querySelector(".s1")
+    const threshold = s1 ? s1.offsetHeight : window.innerHeight
+    const progress = Math.max(0, Math.min(1, (window.scrollY - threshold) / 300))
+    document.body.style.setProperty("--overlay-opacity", BASE + progress * (MAX - BASE))
   }
 
   // ── Viewport custom properties ────────────────────────────
