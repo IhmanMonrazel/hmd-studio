@@ -114,14 +114,31 @@ function mount3D(tile,key){
 /* ---------- vidéos ---------- */
 const clip=id=>'clips/'+id+'.mp4';
 let thumb=null,playing=false,after=null,closeT=0;
+/* charge un clip dans une balise vidéo : URL directe, puis blob, puis data URI si l'hébergeur bloque les précédentes */
+const MODES=['direct','blob','data'],srcCache={};let mode0=0;
+function loadClip(v,id,fail){
+ const tok=v._tok=(v._tok||0)+1;let n=mode0;
+ const ok=()=>v._tok===tok;
+ const go=u=>{if(!ok())return;v.src=u;const p=v.play();if(p&&p.catch)p.catch(()=>{if(!ok()||v.error)return;v.muted=true;const q=v.play();if(q&&q.catch)q.catch(()=>{});});};
+ const next=()=>{if(!ok())return;const i=n++,m=MODES[i];if(!m){if(fail)fail();return;}
+  const key=m+':'+id;
+  if(m==='direct'){go(clip(id));return;}
+  if(srcCache[key]){go(srcCache[key]);return;}
+  fetch(clip(id)).then(r=>{if(!r.ok)throw 0;return r.blob();})
+   .then(b=>m==='blob'?URL.createObjectURL(b):new Promise((res,rej)=>{const f=new FileReader();f.onload=()=>res(f.result);f.onerror=rej;f.readAsDataURL(b);}))
+   .then(u=>{srcCache[key]=u;go(u);}).catch(next);};
+ v.onerror=()=>{if(ok()&&v.getAttribute('src'))next();};
+ v.onloadeddata=()=>{if(ok())mode0=Math.max(mode0,n-1);};
+ next();
+}
+function unload(v){v._tok=(v._tok||0)+1;v.onerror=null;v.pause();v.removeAttribute('src');v.load();}
 function playClip(id,done){
  if(playing)return;playing=true;after=done||null;clearTimeout(closeT);
  const box=$('cine'),v=$('cineVid');
  if(thumb)thumb.pause();
- v.muted=false;v.src=clip(id);v.currentTime=0;
+ v.muted=false;
  box.classList.add('show');box.setAttribute('aria-hidden','false');$('hero').classList.add('play');
- const p=v.play();
- if(p&&p.catch)p.catch(()=>{v.muted=true;const q=v.play();if(q&&q.catch)q.catch(stopClip);});
+ loadClip(v,id,stopClip);
 }
 function stopClip(){
  if(!playing)return;playing=false;
@@ -129,10 +146,9 @@ function stopClip(){
  box.classList.remove('show');box.setAttribute('aria-hidden','true');$('hero').classList.remove('play');
  if(thumb){const p=thumb.play();if(p&&p.catch)p.catch(()=>{});}
  if(done)done();
- closeT=setTimeout(()=>{v.pause();v.removeAttribute('src');v.load();},450);
+ closeT=setTimeout(()=>unload(v),450);
 }
 $('cineVid').addEventListener('ended',stopClip);
-$('cineVid').addEventListener('error',()=>{if($('cineVid').getAttribute('src'))stopClip();});
 $('cine').addEventListener('click',stopClip);$('hero').addEventListener('click',stopClip);
 addEventListener('keydown',e=>{
  if(e.key==='Escape'){if(playing){e.preventDefault();stopClip();}return;}
@@ -143,8 +159,8 @@ function mountClip(tile,id){
  const v=document.createElement('video');
  v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='auto';
  v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('aria-hidden','true');
- v.addEventListener('error',()=>{if(thumb===v)thumb=null;v.remove();placeholder(tile,2);});
- v.src=clip(id);tile.appendChild(v);thumb=v;
+ tile.appendChild(v);thumb=v;
+ loadClip(v,id,()=>{if(thumb===v)thumb=null;v.remove();placeholder(tile,2);});
  if(playing)v.pause();
 }
 function placeholder(tile,i){const p=document.createElement('div');p.className='fl';p.style.animationDelay=(-i)+'s';p.innerHTML='<div class="ph">OBJET 3D</div>';tile.appendChild(p);}
@@ -161,7 +177,7 @@ function renderInfo(){
  const c=C.find(x=>x.id===cur);
  $('cls').textContent=c.cls;$('name').textContent=c.name;$('org').textContent=c.org;$('tag').textContent=c.tag;
  viewers.forEach(v=>v.alive=false);viewers=[];
- if(thumb){thumb.pause();thumb.removeAttribute('src');thumb.load();thumb=null;}
+ if(thumb){unload(thumb);thumb=null;}
  const G=$('gear');G.innerHTML='';
  c.gear.forEach((it,i)=>{const w=document.createElement('div');
   w.innerHTML='<div class="tile"><div class="n">0'+(i+1)+'</div></div><div class="slot">'+SLOT[i]+'</div><div class="item">'+it+'</div>';
