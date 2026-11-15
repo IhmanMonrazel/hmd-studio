@@ -1,4 +1,5 @@
-const IMG={ball:'img/ball.jpg',iron:'img/iron.jpg',thor:'img/thor.jpg',pop:'img/pop.jpg',sum:'img/sum.jpg',corp:'img/corp.jpg',work:'img/work.jpg'};
+const IMG={ball:'img/ball.jpg',iron:'img/iron.jpg',thor:'img/thor.jpg',pop:'img/pop.jpg',sum:'img/sum.jpg',corp:'img/corp.jpg',work:'img/work.jpg',spider:'img/spider.jpg'};
+const TH={spider:'img/spider-th.jpg'};
 const C=[
  {id:'ball',name:'BALLGIRL',org:'FRANCE',cls:'ASSAUT',tag:'Déterminée, endurante, compétitrice',gear:['Ballon taille 2','Résine extra-collante','Tir en suspension'],st:[90,70,60],models:['handball']},
  {id:'iron',name:'IRONGIRL',org:'NEW YORK',cls:'AÉRIENNE',tag:'Stratégique, protectrice',gear:['Propulseurs','Armure grenat','Décollage + vrille 360°'],st:[95,85,70]},
@@ -6,7 +7,8 @@ const C=[
  {id:'pop',name:'HIIIHMAN',org:'NEVERLAND',cls:'DIVERSION',tag:'Charismatique, audacieuse',gear:['Gant de strass','Lunettes aviateur','Moonwalk'],st:[50,100,80],models:[null,'aviators']},
  {id:'sum',name:'IHMEN',org:'COPENHAGUE',cls:'ÉCLAIREUSE',tag:'Solaire, esprit libre',gear:['Maxi-scooter','Créoles dorées','Wheeling'],st:[45,90,95]},
  {id:'corp',name:'IHMAN',org:'PARIS',cls:'INFILTRATION',tag:'Calme, ambitieuse, observatrice',gear:['Pince à cravate','Sac à main','Le défilé'],st:[55,95,30],models:['tieclip']},
- {id:'work',name:'IHMAN',org:'SILICON VALLEY',cls:'STRATÈGE',tag:'Rigoureuse, posée',gear:['Ordinateur portable','Tableau de bord IA','Deal conclu'],st:[60,85,25],models:['laptop']}
+ {id:'work',name:'IHMAN',org:'SILICON VALLEY',cls:'STRATÈGE',tag:'Rigoureuse, posée',gear:['Ordinateur portable','Tableau de bord IA','Deal conclu'],st:[60,85,25],models:['laptop']},
+ {id:'spider',name:'SPIDERGIRL',org:'NEW YORK',cls:'VOLTIGE',tag:'Déterminée, courageuse, loyale',gear:['Lance-toile','Bijoux dorés','Toile géante'],st:[70,85,75]}
 ];
 const SLOT=['PRINCIPALE','SECONDAIRE','COUP SPÉCIAL'],STAT=['PUISSANCE','STYLE','CHAOS'];
 const $=id=>document.getElementById(id);
@@ -169,9 +171,8 @@ function placeholder(tile,i){const p=document.createElement('div');p.className='
 function renderList(){
  const L=$('list');L.innerHTML='';
  C.forEach(c=>{const b=document.createElement('button');b.type='button';if(c.id===cur)b.className='on';
-  b.innerHTML='<span class="th"><img alt="" src="'+IMG[c.id]+'"></span><span><span class="nm">'+c.name+'</span><span class="cl">'+c.cls+' · '+c.org+'</span></span>';
+  b.innerHTML='<span class="th"><img alt="" src="'+(TH[c.id]||IMG[c.id])+'"></span><span><span class="nm">'+c.name+'</span><span class="cl">'+c.cls+' · '+c.org+'</span></span>';
   b.onclick=()=>select(c.id);L.appendChild(b);});
- const k=document.createElement('button');k.type='button';k.disabled=true;k.className='lock';k.textContent='VERROUILLÉE · NIVEAU 30';L.appendChild(k);
 }
 function renderInfo(){
  const c=C.find(x=>x.id===cur);
