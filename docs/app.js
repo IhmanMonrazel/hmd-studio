@@ -1,20 +1,26 @@
 const IMG={ball:'img/ball.jpg',iron:'img/iron.jpg',thor:'img/thor.jpg',pop:'img/pop.jpg',sum:'img/sum.jpg',corp:'img/corp.jpg',work:'img/work.jpg',spider:'img/spider.jpg'};
 const TH={spider:'img/spider-th.jpg'};
 const C=[
- {id:'ball',name:'BALLGIRL',org:'FRANCE',cls:'ASSAUT',tag:'Déterminée, endurante, compétitrice',gear:['Ballon taille 2','Résine extra-collante','Tir en suspension'],st:[90,70,60],models:['handball']},
- {id:'iron',name:'IRONGIRL',org:'NEW YORK',cls:'AÉRIENNE',tag:'Stratégique, protectrice',gear:['Propulseurs','Armure grenat','Décollage + vrille 360°'],st:[95,85,70]},
- {id:'thor',name:'THIRHMAN',org:'ASGARD',cls:'TANK',tag:'Fière, inébranlable',gear:['Marteau','Cape en fourrure','Frappe sismique'],st:[100,75,95],models:['hammer']},
- {id:'pop',name:'HIIIHMAN',org:'NEVERLAND',cls:'DIVERSION',tag:'Charismatique, audacieuse',gear:['Gant de strass','Lunettes aviateur','Moonwalk'],st:[50,100,80],models:[null,'aviators']},
- {id:'sum',name:'IHMEN',org:'COPENHAGUE',cls:'ÉCLAIREUSE',tag:'Solaire, esprit libre',gear:['Maxi-scooter','Créoles dorées','Wheeling'],st:[45,90,95]},
- {id:'corp',name:'IHMAN',org:'PARIS',cls:'INFILTRATION',tag:'Calme, ambitieuse, observatrice',gear:['Pince à cravate','Sac à main','Le défilé'],st:[55,95,30],models:['tieclip']},
- {id:'work',name:'IHMAN',org:'SILICON VALLEY',cls:'STRATÈGE',tag:'Rigoureuse, posée',gear:['Ordinateur portable','Tableau de bord IA','Deal conclu'],st:[60,85,25],models:['laptop']},
- {id:'spider',name:'SPIDERGIRL',org:'NEW YORK',cls:'VOLTIGE',tag:'Déterminée, courageuse, loyale',gear:['Lance-toile','Bijoux dorés','Toile géante'],st:[70,85,75]}
+ {id:'ball',name:'BALLGIRL',org:'FRANCE',cls:'ASSAUT',tag:'Déterminée, endurante, compétitrice',gear:['Ballon taille 2','Résine extra-collante','Tir en suspension'],st:[90,70,60],models:['handball','resin','jumpshot']},
+ {id:'iron',name:'IRONGIRL',org:'NEW YORK',cls:'AÉRIENNE',tag:'Stratégique, protectrice',gear:['Propulseurs','Armure grenat','Décollage + vrille 360°'],st:[95,85,70],models:['thruster','armor','spin']},
+ {id:'thor',name:'THIRHMAN',org:'ASGARD',cls:'TANK',tag:'Fière, inébranlable',gear:['Marteau','Cape en fourrure','Frappe sismique'],st:[100,75,95],models:['hammer','cape','quake']},
+ {id:'pop',name:'HIIIHMAN',org:'NEVERLAND',cls:'DIVERSION',tag:'Charismatique, audacieuse',gear:['Gant de strass','Lunettes aviateur','Moonwalk'],st:[50,100,80],models:['glove','aviators','moonwalk']},
+ {id:'sum',name:'IHMEN',org:'COPENHAGUE',cls:'ÉCLAIREUSE',tag:'Solaire, esprit libre',gear:['Maxi-scooter','Créoles dorées','Wheeling'],st:[45,90,95],models:['scooter','hoops','wheel']},
+ {id:'corp',name:'IHMAN',org:'PARIS',cls:'INFILTRATION',tag:'Calme, ambitieuse, observatrice',gear:['Pince à cravate','Sac à main','Le défilé'],st:[55,95,30],models:['tieclip','handbag','runway']},
+ {id:'work',name:'IHMAN',org:'SILICON VALLEY',cls:'STRATÈGE',tag:'Rigoureuse, posée',gear:['Ordinateur portable','Tableau de bord IA','Deal conclu'],st:[60,85,25],models:['laptop','dashboard','deal']},
+ {id:'spider',name:'SPIDERGIRL',org:'NEW YORK',cls:'VOLTIGE',tag:'Déterminée, courageuse, loyale',gear:['Lance-toile','Bijoux dorés','Toile géante'],st:[70,85,75],models:['webshooter','jewels','web']}
 ];
 const SLOT=['PRINCIPALE','SECONDAIRE','COUP SPÉCIAL'],STAT=['PUISSANCE','STYLE','CHAOS'];
 const $=id=>document.getElementById(id);
 let cur='thor',viewers=[];
 
 /* ---------- objets 3D ---------- */
+/* matériaux et raccourci de pose partagés par les objets */
+const KIT=T=>{const M=(c,o)=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.5},o||{}));
+ return{M,bronze:M(0x8f5f30,{metalness:.5,roughness:.38}),dark:M(0x4a3220,{metalness:.6,roughness:.5}),leather:M(0x3a2416,{roughness:.85}),
+  gold:M(0xc9a05a,{metalness:.85,roughness:.25}),cream:M(0xe9dccb,{roughness:.72}),garnet:M(0x7a2a2a,{metalness:.45,roughness:.38}),
+  glow:M(0xffd9a0,{emissive:0xffb060,emissiveIntensity:1.6}),
+  put(g,geo,mat,x,y,z,rx,ry,rz){const m=new T.Mesh(geo,mat);m.position.set(x||0,y||0,z||0);m.rotation.set(rx||0,ry||0,rz||0);g.add(m);return m;}};};
 const MODELS={
  hammer(T){
   const g=new T.Group();
@@ -91,6 +97,245 @@ const MODELS={
   const inlay=new T.Mesh(new T.BoxGeometry(1.1,.06,.02),rune);inlay.position.set(0,0,.165);g.add(inlay);
   for(const z of[.12,-.12]){for(let i=0;i<4;i++){const t=new T.Mesh(new T.BoxGeometry(.05,.3,.03),dark);t.position.set(.55+i*.14,0,z>0?.07:-.085);g.add(t);}}
   g.rotation.z=.35;g.rotation.x=-.25;g.scale.set(1.05,1.5,1.5);return g;
+ },
+ resin(T){
+  const k=KIT(T),g=new T.Group();
+  k.put(g,new T.CylinderGeometry(.72,.72,1.1,32),k.dark,0,-.15,0);
+  k.put(g,new T.CylinderGeometry(.735,.735,.5,32),k.cream,0,-.15,0);
+  k.put(g,new T.BoxGeometry(.5,.07,.02),k.leather,0,-.08,.74);k.put(g,new T.BoxGeometry(.34,.05,.02),k.leather,0,-.24,.74);
+  k.put(g,new T.CylinderGeometry(.78,.78,.2,32),k.gold,0,.5,0);
+  k.put(g,new T.CylinderGeometry(.6,.6,.06,32),k.bronze,0,.62,0);
+  k.put(g,new T.SphereGeometry(.2,16,12),k.glow,.5,.42,.5).scale.set(1,.6,1);
+  k.put(g,new T.CylinderGeometry(.06,.05,.5,10),k.glow,.56,.15,.56);k.put(g,new T.SphereGeometry(.085,12,10),k.glow,.56,-.12,.56);
+  k.put(g,new T.CylinderGeometry(.045,.04,.28,10),k.glow,.36,.28,.66);
+  g.rotation.z=.2;g.scale.setScalar(1.15);return g;
+ },
+ jumpshot(T){
+  const k=KIT(T),g=new T.Group();
+  for(const s of[-1,1])k.put(g,new T.BoxGeometry(.12,1.7,.12),k.cream,s*1.05,-.45,-.5);
+  k.put(g,new T.BoxGeometry(2.22,.12,.12),k.cream,0,.4,-.5);
+  for(let i=0;i<5;i++){k.put(g,new T.BoxGeometry(.125,.17,.125),k.garnet,-1.05,-1.1+i*.34,-.5);k.put(g,new T.BoxGeometry(.125,.17,.125),k.garnet,1.05,-1.1+i*.34,-.5);}
+  for(let i=0;i<6;i++)k.put(g,new T.BoxGeometry(.2,.125,.125),k.garnet,-.9+i*.36,.4,-.5);
+  for(let i=1;i<6;i++)k.put(g,new T.BoxGeometry(.015,1.7,.015),k.dark,-1.05+i*.35,-.45,-.9);
+  for(let i=0;i<5;i++)k.put(g,new T.BoxGeometry(2.1,.015,.015),k.dark,0,-1.15+i*.36,-.9);
+  k.put(g,new T.SphereGeometry(.36,24,18),k.cream,.25,.95,.7);
+  k.put(g,new T.TorusGeometry(.362,.015,6,32),k.leather,.25,.95,.7);k.put(g,new T.TorusGeometry(.362,.015,6,32),k.leather,.25,.95,.7,Math.PI/2);
+  [[.34,.2],[.26,.5],[.18,.76],[.1,.98]].forEach((r,i)=>k.put(g,new T.SphereGeometry(r[0]*.5,12,10),k.glow,.25-r[1]*.35,.95-r[1]*.75,.7+r[1]*.8));
+  g.position.y=.1;const o=new T.Group();o.add(g);o.scale.setScalar(.95);return o;
+ },
+ thruster(T){
+  const k=KIT(T),g=new T.Group();
+  k.put(g,new T.CylinderGeometry(.42,.6,.7,28),k.garnet,0,.75,0);
+  k.put(g,new T.CylinderGeometry(.6,.6,.3,28),k.gold,0,.3,0);
+  k.put(g,new T.CylinderGeometry(.5,.78,.75,28,1,true),k.bronze,0,-.2,0).material.side=T.DoubleSide;
+  for(const y of[.47,.13,-.56])k.put(g,new T.TorusGeometry(y<0?.78:.61,.035,8,36),k.dark,0,y,0,Math.PI/2);
+  for(let i=0;i<4;i++){const a=i*Math.PI/2;k.put(g,new T.BoxGeometry(.08,.5,.3),k.dark,Math.cos(a)*.62,.6,Math.sin(a)*.62,0,-a,0);}
+  k.put(g,new T.CylinderGeometry(.44,.44,.05,24),k.glow,0,-.1,0);
+  const f=k.M(0xffd9a0,{emissive:0xffb060,emissiveIntensity:1.4,transparent:true,opacity:.75});
+  k.put(g,new T.ConeGeometry(.4,1.3,24),f,0,-.95,0,Math.PI);k.put(g,new T.ConeGeometry(.2,1.7,16),k.glow,0,-1.05,0,Math.PI);
+  g.position.y=.25;const o=new T.Group();o.add(g);o.rotation.z=.3;return o;
+ },
+ armor(T){
+  const k=KIT(T),g=new T.Group();
+  k.put(g,new T.SphereGeometry(.95,32,20),k.garnet,0,.35,0).scale.set(1.1,.85,.62);
+  k.put(g,new T.CylinderGeometry(.72,.6,.9,28),k.garnet,0,-.55,0).scale.set(1,1,.62);
+  for(const y of[-.3,-.58,-.86])k.put(g,new T.TorusGeometry(.67+y*.1,.03,8,36),k.gold,0,y,0,Math.PI/2).scale.set(1,.62,1);
+  for(const s of[-1,1]){k.put(g,new T.SphereGeometry(.4,24,16),k.gold,s*1.05,.72,0).scale.set(1,.8,.9);
+   k.put(g,new T.BoxGeometry(.5,.12,.04),k.gold,s*.42,.62,.5,0,0,s*-.35);}
+  k.put(g,new T.CylinderGeometry(.4,.46,.3,24),k.dark,0,1.08,0);
+  k.put(g,new T.CylinderGeometry(.22,.22,.06,6),k.gold,0,.38,.59,Math.PI/2);
+  k.put(g,new T.CylinderGeometry(.16,.16,.08,6),k.glow,0,.38,.6,Math.PI/2);
+  k.put(g,new T.BoxGeometry(.9,.2,.4),k.gold,0,-1.05,0).scale.set(1,1,1.4);
+  g.scale.setScalar(.92);return g;
+ },
+ spin(T){
+  const k=KIT(T),g=new T.Group();
+  for(let i=0;i<34;i++){const t=i/33,a=t*Math.PI*4,r=.95-t*.55;k.put(g,new T.SphereGeometry(.05+t*.06,10,8),k.glow,Math.cos(a)*r,-1.3+t*2.1,Math.sin(a)*r);}
+  k.put(g,new T.TorusGeometry(.95,.03,8,40),k.gold,0,-1.3,0,Math.PI/2);k.put(g,new T.TorusGeometry(.6,.02,8,40),k.gold,0,-1.3,0,Math.PI/2);
+  const r=new T.Group();r.position.set(0,1.05,0);g.add(r);
+  k.put(r,new T.CylinderGeometry(.16,.2,.6,16),k.garnet,0,0,0);k.put(r,new T.ConeGeometry(.16,.36,16),k.gold,0,.48,0);
+  for(let i=0;i<3;i++){const a=i*Math.PI*2/3;k.put(r,new T.BoxGeometry(.03,.3,.24),k.gold,Math.cos(a)*.24,-.2,Math.sin(a)*.24,0,-a,0);}
+  k.put(r,new T.ConeGeometry(.13,.5,12),k.glow,0,-.55,0,Math.PI);
+  g.position.y=-.1;const o=new T.Group();o.add(g);o.rotation.z=.15;return o;
+ },
+ cape(T){
+  const k=KIT(T),g=new T.Group();
+  const cloth=k.M(0x4a3220,{roughness:.8,side:T.DoubleSide}),fur=k.M(0xb89a72,{roughness:1});
+  k.put(g,new T.CylinderGeometry(.62,1.15,2.2,28,6,true,Math.PI*.5,Math.PI),cloth,0,-.35,0);
+  for(let i=0;i<7;i++){const a=Math.PI*.5+i*Math.PI/6;k.put(g,new T.CylinderGeometry(.035,.06,2.2,8),k.leather,Math.sin(a)*.89,-.35,Math.cos(a)*.89,Math.cos(a)*-.24,0,Math.sin(a)*.24);}
+  for(let i=0;i<22;i++){const a=i/22*Math.PI*2,r=.68;k.put(g,new T.SphereGeometry(.2+(i%3)*.035,10,8),fur,Math.cos(a)*r,.88+((i*7)%5)*.02,Math.sin(a)*r*.8);}
+  for(let i=0;i<14;i++){const a=i/14*Math.PI*2+.2;k.put(g,new T.ConeGeometry(.08,.3,6),fur,Math.cos(a)*.82,.74,Math.sin(a)*.66,Math.PI);}
+  for(const s of[-1,1])k.put(g,new T.CylinderGeometry(.13,.13,.06,20),k.gold,s*.36,.8,.6,Math.PI/2);
+  k.put(g,new T.BoxGeometry(.72,.045,.03),k.gold,0,.8,.62);
+  g.scale.setScalar(.95);return g;
+ },
+ quake(T){
+  const k=KIT(T),g=new T.Group();
+  k.put(g,new T.CylinderGeometry(1.35,1.2,.22,9),k.dark,0,-.7,0);
+  for(let i=0;i<7;i++){const a=i*Math.PI*2/7+.3,L=.7+(i%3)*.22;
+   k.put(g,new T.BoxGeometry(L,.03,.06),k.glow,Math.cos(a)*L*.55,-.58,Math.sin(a)*L*.55,0,-a,0);
+   k.put(g,new T.BoxGeometry(L*.5,.03,.04),k.glow,Math.cos(a+.25)*L*.9,-.58,Math.sin(a+.25)*L*.9,0,-(a+.7),0);}
+  k.put(g,new T.CylinderGeometry(.2,.2,.04,16),k.glow,0,-.58,0);
+  k.put(g,new T.TorusGeometry(.75,.03,8,48),k.glow,0,-.35,0,Math.PI/2);k.put(g,new T.TorusGeometry(1.15,.02,8,48),k.glow,0,-.15,0,Math.PI/2);
+  [[.7,.35,.3,.26],[-.6,.7,.5,.2],[.1,1.05,-.6,.17],[-.85,.2,-.5,.22],[.9,.9,-.2,.14],[-.2,.5,.9,.16],[.4,1.4,.3,.11]].forEach((r,i)=>k.put(g,new T.DodecahedronGeometry(r[3],0),i%2?k.bronze:k.leather,r[0],r[1],r[2],i,i*2,i*3));
+  g.position.y=-.1;const o=new T.Group();o.add(g);o.rotation.x=.3;return o;
+ },
+ glove(T){
+  const k=KIT(T),g=new T.Group();
+  const white=k.M(0xf3ebe0,{roughness:.45,metalness:.15});
+  k.put(g,new T.BoxGeometry(.95,.95,.34),white,0,0,0);
+  [[-.36,.62,.72],[-.12,.72,.92],[.12,.7,.86],[.36,.6,.66]].forEach(f=>{k.put(g,new T.CylinderGeometry(.1,.115,f[2],12),white,f[0],.45+f[2]/2,0);k.put(g,new T.SphereGeometry(.1,12,10),white,f[0],.45+f[2],0);});
+  k.put(g,new T.CylinderGeometry(.105,.125,.6,12),white,-.66,.05,0,0,0,.75);k.put(g,new T.SphereGeometry(.105,12,10),white,-.87,.27,0);
+  k.put(g,new T.CylinderGeometry(.42,.52,.55,24),white,0,-.72,0).scale.set(1,1,.5);
+  k.put(g,new T.TorusGeometry(.45,.035,8,32),k.gold,0,-.48,0,Math.PI/2).scale.set(1,.5,1);
+  for(let i=0;i<5;i++)for(let j=0;j<5;j++)if((i+j)%2===0)k.put(g,new T.OctahedronGeometry(.055,0),k.glow,-.36+i*.18,-.34+j*.17,-.185);
+  for(let i=0;i<4;i++)for(let j=0;j<3;j++)k.put(g,new T.OctahedronGeometry(.04,0),k.glow,[-.36,-.12,.12,.36][i],.62+j*.2,-.11);
+  g.position.y=-.2;const o=new T.Group();o.add(g);o.rotation.z=-.2;o.scale.setScalar(1.05);return o;
+ },
+ moonwalk(T){
+  const k=KIT(T),g=new T.Group(),s=new T.Group();g.add(s);
+  const shoe=k.M(0x1c1410,{roughness:.25,metalness:.3});
+  k.put(s,new T.BoxGeometry(1.7,.1,.58),k.leather,0,-.05,0);
+  k.put(s,new T.BoxGeometry(.4,.14,.56),k.leather,-.62,-.17,0);
+  k.put(s,new T.SphereGeometry(.34,24,16),shoe,.45,.14,0).scale.set(1.5,.62,.82);
+  k.put(s,new T.BoxGeometry(.75,.42,.54),shoe,-.42,.2,0);
+  k.put(s,new T.BoxGeometry(.3,.05,.5),k.gold,.12,.3,0,0,0,-.3);
+  k.put(s,new T.CylinderGeometry(.22,.24,.55,20),k.cream,-.4,.62,0);
+  k.put(s,new T.CylinderGeometry(.34,.3,.7,20),k.dark,-.4,1.2,0);
+  s.rotation.z=-.5;s.position.set(.1,-.35,0);
+  k.put(g,new T.CylinderGeometry(1.25,1.25,.05,40),k.dark,0,-1.25,0);
+  k.put(g,new T.TorusGeometry(1.0,.02,8,48),k.glow,0,-1.2,0,Math.PI/2);
+  [[.75,.5],[.5,.72],[.3,.9]].forEach(r=>k.put(g,new T.BoxGeometry(r[0],.035,.035),k.glow,1.05,-1.15+r[1]*.55,r[1]*.5-.35));
+  g.position.y=.25;const o=new T.Group();o.add(g);o.scale.setScalar(.88);return o;
+ },
+ scooter(T){
+  const k=KIT(T),g=new T.Group();
+  const body=k.M(0xe9dccb,{roughness:.35,metalness:.2});
+  for(const x of[-1.05,1.05]){k.put(g,new T.TorusGeometry(.36,.15,12,28),k.leather,x,-.75,0);k.put(g,new T.CylinderGeometry(.24,.24,.2,20),k.gold,x,-.75,0,Math.PI/2);}
+  k.put(g,new T.BoxGeometry(1.1,.12,.5),body,.05,-.6,0);
+  k.put(g,new T.SphereGeometry(.6,28,18),body,-.85,-.38,0).scale.set(1.25,.85,.62);
+  k.put(g,new T.BoxGeometry(1.0,.16,.42),k.leather,-.72,.16,0);k.put(g,new T.BoxGeometry(.3,.2,.4),k.leather,-.3,.18,0);
+  k.put(g,new T.BoxGeometry(.14,1.35,.66),body,.72,-.05,0,0,0,-.22);
+  k.put(g,new T.SphereGeometry(.42,24,14,0,Math.PI*2,0,Math.PI/2),body,1.05,-.72,0).scale.set(1.15,1,.55);
+  k.put(g,new T.CylinderGeometry(.05,.05,.5,10),k.gold,.86,.72,0,0,0,-.22);
+  k.put(g,new T.CylinderGeometry(.04,.04,1.0,10),k.gold,.92,.98,0,Math.PI/2);
+  for(const z of[-.5,.5])k.put(g,new T.CylinderGeometry(.055,.055,.24,10),k.leather,.92,.98,z,Math.PI/2);
+  k.put(g,new T.SphereGeometry(.17,16,12),k.glow,1.0,.62,0).scale.set(.6,1,1);
+  k.put(g,new T.SphereGeometry(.08,10,8),k.glow,-1.58,-.3,0);
+  k.put(g,new T.CylinderGeometry(.03,.03,.7,8),k.gold,0,-.85,.2,0,0,.5);
+  g.position.y=.1;const o=new T.Group();o.add(g);o.scale.setScalar(.82);return o;
+ },
+ hoops(T){
+  const k=KIT(T),g=new T.Group();
+  for(const s of[-1,1]){const e=new T.Group();e.position.set(s*.72,0,0);e.rotation.y=s*.5;g.add(e);
+   k.put(e,new T.TorusGeometry(.6,.07,14,56),k.gold,0,-.25,0);
+   k.put(e,new T.TorusGeometry(.6,.075,8,8,.5),k.bronze,0,-.25,0,0,0,-1.82);
+   k.put(e,new T.SphereGeometry(.1,16,12),k.gold,0,.38,0);k.put(e,new T.CylinderGeometry(.02,.02,.5,8),k.gold,0,.62,0);
+   k.put(e,new T.SphereGeometry(.06,12,10),k.glow,0,.9,0);}
+  g.position.y=-.15;g.scale.setScalar(1.05);return g;
+ },
+ wheel(T){
+  const k=KIT(T),g=new T.Group(),w=new T.Group();g.add(w);
+  k.put(w,new T.TorusGeometry(.95,.24,16,48),k.leather);
+  for(let i=0;i<20;i++){const a=i*Math.PI/10;k.put(w,new T.BoxGeometry(.1,.2,.5),k.dark,Math.cos(a)*1.14,Math.sin(a)*1.14,0,0,0,a);}
+  k.put(w,new T.TorusGeometry(.68,.06,10,40),k.gold);
+  k.put(w,new T.CylinderGeometry(.2,.2,.3,20),k.gold,0,0,0,Math.PI/2);k.put(w,new T.CylinderGeometry(.09,.09,.42,12),k.dark,0,0,0,Math.PI/2);
+  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;k.put(w,new T.BoxGeometry(.62,.1,.06),k.cream,Math.cos(a)*.38,Math.sin(a)*.38,0,0,0,a);}
+  w.rotation.y=.25;w.position.set(-.1,.15,0);
+  for(let i=0;i<3;i++)k.put(g,new T.TorusGeometry(1.35+i*.16,.022,8,28,.9-i*.2),k.glow,-.1,.15,0,0,0,3.5+i*.1);
+  k.put(g,new T.BoxGeometry(2.2,.04,.5),k.dark,0,-1.15,0);
+  g.scale.setScalar(.85);return g;
+ },
+ handbag(T){
+  const k=KIT(T),g=new T.Group();
+  const hide=k.M(0x1c1410,{roughness:.4,metalness:.2});
+  k.put(g,new T.BoxGeometry(1.7,1.15,.62),hide,0,-.3,0);
+  k.put(g,new T.CylinderGeometry(.31,.31,1.7,20,1,false,0,Math.PI),hide,0,.27,0,0,0,Math.PI/2).rotation.set(Math.PI/2,0,Math.PI/2);
+  k.put(g,new T.BoxGeometry(1.74,.55,.05),k.leather,0,.05,.32);
+  k.put(g,new T.BoxGeometry(.34,.24,.06),k.gold,0,-.22,.35);k.put(g,new T.BoxGeometry(.14,.08,.08),k.glow,0,-.22,.37);
+  k.put(g,new T.TorusGeometry(.5,.05,10,32,Math.PI),k.gold,0,.55,0);
+  for(const s of[-1,1]){k.put(g,new T.CylinderGeometry(.08,.08,.1,12),k.gold,s*.5,.56,0);
+   for(const z of[-.22,.22])k.put(g,new T.SphereGeometry(.06,10,8),k.gold,s*.7,-.9,z);
+   k.put(g,new T.BoxGeometry(.04,1.15,.64),k.leather,s*.84,-.3,0);}
+  g.position.y=.1;const o=new T.Group();o.add(g);o.rotation.x=.15;return o;
+ },
+ runway(T){
+  const k=KIT(T),g=new T.Group();
+  k.put(g,new T.BoxGeometry(1.1,.05,2.8),k.garnet,0,-.9,0);
+  for(const s of[-1,1]){k.put(g,new T.BoxGeometry(.05,.055,2.8),k.gold,s*.55,-.9,0);
+   for(const z of[-1.1,0,1.1]){k.put(g,new T.CylinderGeometry(.2,.22,.06,16),k.gold,s*.95,-.9,z);k.put(g,new T.CylinderGeometry(.04,.04,.9,10),k.gold,s*.95,-.45,z);k.put(g,new T.SphereGeometry(.09,12,10),k.gold,s*.95,.03,z);}
+   for(const z of[-.55,.55]){k.put(g,new T.CylinderGeometry(.03,.03,.58,8),k.garnet,s*.95,-.2,z-.27,1.1);k.put(g,new T.CylinderGeometry(.03,.03,.58,8),k.garnet,s*.95,-.2,z+.27,-1.1);}}
+  const h=new T.Group();h.position.set(0,-.86,.3);g.add(h);
+  k.put(h,new T.BoxGeometry(.22,.04,.3),k.leather,0,.02,.25);k.put(h,new T.BoxGeometry(.2,.04,.45),k.leather,0,.2,-.12,.75);
+  k.put(h,new T.CylinderGeometry(.03,.015,.4,8),k.leather,0,.2,-.3);k.put(h,new T.SphereGeometry(.13,12,10),k.leather,0,.1,.3).scale.set(.85,.6,1.2);
+  k.put(g,new T.CylinderGeometry(.5,.05,1.6,20,1,true),k.M(0xffd9a0,{emissive:0xffb060,emissiveIntensity:.9,transparent:true,opacity:.22,side:T.DoubleSide}),0,.1,.3,Math.PI);
+  g.position.y=.25;const o=new T.Group();o.add(g);o.rotation.x=.35;o.scale.setScalar(.92);return o;
+ },
+ dashboard(T){
+  const k=KIT(T),g=new T.Group(),s=new T.Group();g.add(s);
+  k.put(s,new T.BoxGeometry(2.5,1.6,.08),k.bronze);k.put(s,new T.BoxGeometry(2.34,1.44,.02),k.leather,0,0,.045);
+  [.3,.52,.4,.74,.95].forEach((h,i)=>k.put(s,new T.BoxGeometry(.15,h*.8,.03),k.glow,-.98+i*.22,-.6+h*.4,.07));
+  k.put(s,new T.TorusGeometry(.3,.055,10,36,Math.PI*1.5),k.gold,.65,.3,.07);k.put(s,new T.TorusGeometry(.3,.055,10,12,Math.PI*.45),k.dark,.65,.3,.07,0,0,Math.PI*1.52);
+  k.put(s,new T.CylinderGeometry(.09,.09,.04,16),k.glow,.65,.3,.07,Math.PI/2);
+  [[.25,-.25,.3,.5],[.52,-.12,.32,.1],[.8,-.02,.3,.55]].forEach(r=>k.put(s,new T.BoxGeometry(r[2],.035,.03),k.glow,r[0],r[1]-.2,.07,0,0,r[3]));
+  for(let i=0;i<3;i++)k.put(s,new T.BoxGeometry(.5-i*.1,.045,.03),k.cream,-.82+i*-.05+.02*i,.55-i*.13,.07);
+  for(let i=0;i<4;i++)k.put(s,new T.SphereGeometry(.035,8,8),k.cream,.2+i*.3,-.6,.07);
+  s.rotation.x=-.18;s.position.y=.25;
+  k.put(g,new T.CylinderGeometry(.06,.08,.6,12),k.dark,0,-.8,-.05);k.put(g,new T.CylinderGeometry(.55,.6,.06,28),k.dark,0,-1.1,0);
+  g.scale.setScalar(.9);return g;
+ },
+ deal(T){
+  const k=KIT(T),g=new T.Group();
+  k.put(g,new T.BoxGeometry(1.6,2.1,.03),k.cream,.04,-.04,-.05,0,0,-.05);
+  k.put(g,new T.BoxGeometry(1.6,2.1,.03),k.M(0xf3ebe0,{roughness:.8}));
+  k.put(g,new T.BoxGeometry(.8,.1,.02),k.leather,-.28,.8,.02);
+  for(let i=0;i<7;i++)k.put(g,new T.BoxGeometry(i%3===2?.9:1.3,.035,.02),k.dark,i%3===2?-.2:0,.55-i*.16,.02);
+  k.put(g,new T.BoxGeometry(.7,.02,.02),k.leather,-.3,-.82,.02);
+  [[-.58,-.72,.2,.9],[-.44,-.7,.16,-.8],[-.3,-.72,.22,.7],[-.14,-.7,.18,-.6],[.0,-.73,.14,.3]].forEach(r=>k.put(g,new T.BoxGeometry(r[2],.03,.02),k.bronze,r[0],r[1],.025,0,0,r[3]));
+  k.put(g,new T.CylinderGeometry(.27,.27,.06,10),k.garnet,.45,-.68,.04,Math.PI/2);k.put(g,new T.TorusGeometry(.19,.025,8,24),k.gold,.45,-.68,.075);
+  k.put(g,new T.BoxGeometry(.14,.4,.02),k.garnet,.38,-1.0,.03,0,0,.2);k.put(g,new T.BoxGeometry(.14,.4,.02),k.garnet,.56,-1.0,.03,0,0,-.2);
+  const p=new T.Group();p.position.set(.2,-.15,.3);p.rotation.set(.5,0,-.9);g.add(p);
+  k.put(p,new T.CylinderGeometry(.055,.055,1.2,12),k.leather);k.put(p,new T.ConeGeometry(.055,.2,12),k.gold,0,-.7,0,Math.PI);
+  k.put(p,new T.CylinderGeometry(.06,.06,.08,12),k.gold,0,.3,0);k.put(p,new T.BoxGeometry(.02,.4,.03),k.gold,.065,.38,0);
+  g.rotation.z=.12;g.rotation.x=-.2;g.scale.setScalar(1.02);return g;
+ },
+ webshooter(T){
+  const k=KIT(T),g=new T.Group();
+  const cuff=k.put(g,new T.CylinderGeometry(.62,.68,.8,28,1,true),k.M(0x4a3220,{metalness:.6,roughness:.5,side:T.DoubleSide}));cuff.scale.set(1,1,.8);
+  for(const y of[-.4,.4])k.put(g,new T.TorusGeometry(y<0?.68:.62,.04,8,36),k.gold,0,y,0,Math.PI/2).scale.set(1,.8,1);
+  k.put(g,new T.BoxGeometry(.62,.5,.26),k.garnet,0,0,.6);k.put(g,new T.BoxGeometry(.5,.38,.06),k.dark,0,0,.75);
+  k.put(g,new T.CylinderGeometry(.09,.12,.38,14),k.gold,0,.42,.62);k.put(g,new T.CylinderGeometry(.05,.05,.1,10),k.glow,0,.62,.62);
+  for(let i=0;i<6;i++){const a=-1.0+i*.4;k.put(g,new T.CylinderGeometry(.075,.075,.42,10),i%2?k.gold:k.cream,Math.sin(a+Math.PI)*.68,0,Math.cos(a+Math.PI)*.56);}
+  const web=k.M(0xf3ebe0,{emissive:0xe9dccb,emissiveIntensity:.5,roughness:.6});
+  k.put(g,new T.CylinderGeometry(.02,.02,.9,6),web,0,1.1,.62);
+  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;k.put(g,new T.CylinderGeometry(.012,.012,.5,5),web,Math.cos(a)*.16,1.75,.62+Math.sin(a)*.16,Math.sin(a)*.65,0,-Math.cos(a)*.65);}
+  k.put(g,new T.TorusGeometry(.2,.01,5,5),web,0,1.82,.62,Math.PI/2);
+  g.position.y=-.55;const o=new T.Group();o.add(g);o.rotation.z=-.3;o.scale.setScalar(.95);return o;
+ },
+ jewels(T){
+  const k=KIT(T),g=new T.Group();
+  const amber=k.M(0xe0a050,{emissive:0x8a4a10,emissiveIntensity:.6,roughness:.15,metalness:.3,transparent:true,opacity:.92});
+  for(const s of[-1,1]){const e=new T.Group();e.position.set(s*.62,0,0);g.add(e);
+   k.put(e,new T.SphereGeometry(.07,12,10),k.gold,0,1.15,0);k.put(e,new T.TorusGeometry(.12,.02,8,20,Math.PI),k.gold,0,1.15,0);
+   for(let i=0;i<6;i++){const a=i*Math.PI/3;k.put(e,new T.SphereGeometry(.1,12,10),k.gold,Math.cos(a)*.17,.78+Math.sin(a)*.17,0).scale.set(1,1,.5);}
+   k.put(e,new T.SphereGeometry(.09,12,10),k.glow,0,.78,.04);
+   k.put(e,new T.SphereGeometry(.15,16,12),amber,0,.36,0);k.put(e,new T.TorusGeometry(.08,.02,6,16),k.gold,0,.56,0);
+   k.put(e,new T.SphereGeometry(.19,16,12),amber,0,-.02,0);k.put(e,new T.TorusGeometry(.08,.02,6,16),k.gold,0,.2,0);
+   k.put(e,new T.SphereGeometry(.23,16,12),amber,0,-.48,0);k.put(e,new T.TorusGeometry(.08,.02,6,16),k.gold,0,-.23,0);
+   k.put(e,new T.ConeGeometry(.1,.3,12),k.gold,0,-.88,0,Math.PI);}
+  g.position.y=-.1;g.scale.setScalar(1.15);return g;
+ },
+ web(T){
+  const k=KIT(T),g=new T.Group();
+  const web=k.M(0xf3ebe0,{emissive:0xe9dccb,emissiveIntensity:.55,roughness:.6});
+  for(let i=0;i<4;i++)k.put(g,new T.CylinderGeometry(.014,.014,2.9,5),web,0,0,0,0,0,i*Math.PI/4+Math.PI/8);
+  [.28,.58,.9,1.24].forEach((r,i)=>k.put(g,new T.TorusGeometry(r,.012,5,8),web,0,0,0,0,0,Math.PI/8+(i%2)*.05));
+  k.put(g,new T.TorusGeometry(1.45,.03,8,8),k.gold,0,0,0,0,0,Math.PI/8);
+  const sp=new T.Group();sp.position.set(.2,.1,.08);g.add(sp);
+  k.put(sp,new T.SphereGeometry(.13,14,10),k.leather,0,-.1,0).scale.set(1,1.4,.8);k.put(sp,new T.SphereGeometry(.09,12,10),k.leather,0,.14,0);
+  k.put(sp,new T.BoxGeometry(.05,.14,.02),k.garnet,0,-.1,.11);
+  for(const s of[-1,1])for(let i=0;i<4;i++)k.put(sp,new T.CylinderGeometry(.012,.012,.42,5),k.leather,s*.2,.12-i*.1,0,0,0,s*(1.0+i*.25-.4));
+  g.scale.setScalar(.98);return g;
  }
 };
 function mount3D(tile,key){
@@ -106,7 +351,7 @@ function mount3D(tile,key){
   const f=new T.PointLight(0xffc9a0,.35,20);f.position.set(0,-3,4);sc.add(f);
   const pivot=new T.Group();pivot.add(MODELS[key](T));sc.add(pivot);
   const v={alive:true};viewers.push(v);const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  (function loop(t){if(!v.alive){r.dispose();return;}
+  (function loop(t){if(!v.alive){r.dispose();r.forceContextLoss();return;}
    if(!still){pivot.rotation.y=t*.0011;pivot.position.y=Math.sin(t*.002)*.14;}else pivot.rotation.y=.6;
    r.render(sc,cam);requestAnimationFrame(loop);})(0);
   return true;
