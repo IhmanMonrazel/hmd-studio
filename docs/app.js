@@ -441,7 +441,9 @@ function toast(c){const t=$('toast');t.textContent=c.name+' · '+c.org+' DÉPLOY
 $('go').onclick=()=>{const c=C.find(x=>x.id===cur);deploy(()=>toast(c));};
 $('prev').onclick=()=>deploy();
 $('prev').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();deploy();}};
-function fit(){const s=Math.min(innerWidth/1280,innerHeight/720);$('fit').style.transform='scale('+s+') translate(-50%,-50%)';}
+/* la scène fait 1280x720 ; sur un écran plus allongé elle s'élargit (jusqu'à 2000) pour occuper la largeur, les panneaux restant aux bords */
+function fit(){const W=Math.max(1280,Math.min(2000,Math.round(720*innerWidth/innerHeight)))||1280,s=Math.min(innerWidth/W,innerHeight/720);
+ $('fit').style.width=$('stage').style.width=W+'px';$('fit').style.transform='scale('+s+') translate(-50%,-50%)';}
 addEventListener('resize',fit);addEventListener('orientationchange',()=>{fit();setTimeout(fit,300);});
 if(window.visualViewport)visualViewport.addEventListener('resize',fit);
 if(window.ResizeObserver)new ResizeObserver(fit).observe(document.documentElement);
