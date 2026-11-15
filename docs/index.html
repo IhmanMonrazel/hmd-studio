@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sélection de l'opératrice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="fit"><div id="stage">
+  <div class="glow"></div><div class="floor"></div>
+  <div class="top"><div style="display:flex;align-items:center;gap:36px"><h1>OPÉRATRICES</h1><div class="tabs"><span class="on">SÉLECTION</span><span>ÉQUIPEMENT</span><span>TENUES</span></div></div><div class="who">JOUEUSE 1 <b>· EN LIGNE</b></div></div>
+  <div id="list"></div>
+  <div id="hero"><img id="heroImg" alt=""></div>
+  <div id="info">
+    <div><div id="cls"></div><div id="name"></div><div id="org"></div><div id="tag"></div></div>
+    <div class="lbl">ÉQUIPEMENT</div>
+    <div id="gear"></div>
+    <div id="stats"></div>
+  </div>
+  <div class="bot"><div class="hints"><span><span class="k">B</span>RETOUR</span><span id="prev" role="button" tabindex="0"><span class="k">Y</span>APERÇU DU COUP SPÉCIAL</span></div><button id="go" type="button">DÉPLOYER</button></div>
+  <div id="toast" role="status"></div>
+</div></div>
+<div id="cine" aria-hidden="true"><video id="cineVid" playsinline preload="none"></video></div>
+<script src="vendor/three.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
