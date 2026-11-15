@@ -63,3 +63,58 @@ body{font-family:'Rajdhani',sans-serif;color:#f6e9dd}
 .glow,.floor{transition:opacity .45s}
 #stage.vid .glow,#stage.vid .floor{opacity:0}
 @media (prefers-reduced-motion:reduce){#cine video{transition:none}}
+
+/* ---------- finitions ---------- */
+/* profondeur du décor : vignette + trame fine */
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,rgba(17,12,10,0) 36%,rgba(0,0,0,.6) 100%),repeating-linear-gradient(0deg,rgba(246,233,221,.02) 0 1px,transparent 1px 4px)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes slide{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+/* liste : entrée en cascade, survol, appui */
+#list button{transition:background .18s,border-color .18s,transform .18s,color .18s;animation:slide .45s both}
+#list button:nth-child(2){animation-delay:.04s}#list button:nth-child(3){animation-delay:.08s}#list button:nth-child(4){animation-delay:.12s}
+#list button:nth-child(5){animation-delay:.16s}#list button:nth-child(6){animation-delay:.2s}#list button:nth-child(7){animation-delay:.24s}#list button:nth-child(8){animation-delay:.28s}
+#list button:not(.on):hover{background:rgba(246,233,221,.11);border-color:#8a6a58;transform:translateX(4px)}
+#list button.on{transform:translateX(8px)}
+#list button:active{transform:translateX(8px) scale(.985)}
+#list .th img{transition:transform .3s}
+#list button:hover .th img{transform:scale(2.05) translateY(18%)}
+/* fiche : le texte et les vitrines arrivent en cascade à chaque sélection */
+.in{animation:rise .4s both}
+#name.in{animation-delay:.05s}#org.in{animation-delay:.1s}#tag.in{animation-delay:.15s}
+#gear>div{animation:rise .45s both}
+#gear>div:nth-child(1){animation-delay:.12s}#gear>div:nth-child(2){animation-delay:.2s}#gear>div:nth-child(3){animation-delay:.28s}
+.tile{transition:border-color .2s,background .2s}
+.tile:hover{border-color:#e8a487}
+.tile canvas{z-index:1}
+.tile::after{content:"";position:absolute;left:20%;right:20%;bottom:13px;height:14px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 70%)}
+.st b{width:28px;text-align:right;font-size:15px;font-weight:700;color:#e8a487;font-variant-numeric:tabular-nums}
+.bar i{transition:width .8s cubic-bezier(.2,.7,.2,1)}
+/* boutons du bas */
+#go{transition:filter .15s,transform .15s}
+#go:hover{filter:brightness(1.1)}
+#go:active{transform:scale(.97)}
+#go:focus-visible{outline:2px solid #f6e9dd;outline-offset:3px}
+#prev{transition:color .15s}
+#prev:hover{color:#f6e9dd}
+/* vidéo : fondu sur les quatre bords, fondu au rebouclage */
+#cine video{transform-origin:50% 62%;transition:opacity .45s,transform .7s cubic-bezier(.2,.7,.2,1);
+ -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 26%,#000 74%,transparent 100%),linear-gradient(180deg,transparent 0,#000 9%,#000 90%,transparent 100%);
+ mask-image:linear-gradient(90deg,transparent 0,#000 26%,#000 74%,transparent 100%),linear-gradient(180deg,transparent 0,#000 9%,#000 90%,transparent 100%);
+ -webkit-mask-composite:source-in;mask-composite:intersect}
+#cine.dip video{opacity:0;transition-duration:.22s,.7s}
+/* déploiement : l'interface s'efface, la vidéo avance, le coup spécial est annoncé */
+#list,#info{transition:opacity .4s}
+#stage.deploying #list,#stage.deploying #info{opacity:.14}
+#stage.deploying #cine video{transform:scale(1.14)}
+#callout{position:absolute;left:50%;bottom:84px;transform:translate(-50%,12px);text-align:center;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .35s,transform .45s cubic-bezier(.2,.7,.2,1)}
+#stage.deploying #callout{opacity:1;transform:translate(-50%,0)}
+#callout .c1{font-size:13px;font-weight:600;letter-spacing:5px;color:#e8a487}
+#callout .c2{font-size:38px;font-weight:700;letter-spacing:4px;line-height:1.05;text-transform:uppercase;text-shadow:0 2px 18px rgba(0,0,0,.8)}
+#callout .c3{margin-top:6px;font-size:12px;font-weight:600;letter-spacing:3px;color:#b59c8c}
+#prog{position:absolute;left:0;right:0;bottom:56px;height:2px;background:rgba(246,233,221,.08);opacity:0;transition:opacity .3s;pointer-events:none}
+#prog i{display:block;height:2px;background:#e8a487;transform-origin:0 50%;transform:scaleX(0)}
+#stage.deploying #prog{opacity:1}
+/* téléphone tenu à la verticale */
+#rot{display:none}
+@media (orientation:portrait) and (max-width:700px){#rot{display:block;position:fixed;left:0;right:0;top:calc(50% + 28vw + 18px);text-align:center;font-size:12px;font-weight:600;letter-spacing:3px;color:#b59c8c}}
+@media (prefers-reduced-motion:reduce){#list button,.in,#gear>div{animation:none}#list button,#cine video,#callout,.bar i{transition:none}#stage.deploying #cine video{transform:none}}
