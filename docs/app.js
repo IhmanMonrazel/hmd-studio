@@ -443,6 +443,8 @@ $('prev').onclick=()=>deploy();
 $('prev').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();deploy();}};
 /* la scène fait 1280x720 ; sur un écran plus allongé elle s'élargit (jusqu'à 2000) pour occuper la largeur, les panneaux restant aux bords */
 function fit(){const W=Math.max(1280,Math.min(2000,Math.round(720*innerWidth/innerHeight)))||1280,s=Math.min(innerWidth/W,innerHeight/720);
+ const cs=getComputedStyle($('safe')),gx=Math.max(40,Math.ceil(Math.max(parseFloat(cs.paddingLeft)||0,parseFloat(cs.paddingRight)||0)/s));
+ $('stage').style.setProperty('--gx',gx+'px');
  $('fit').style.width=$('stage').style.width=W+'px';$('fit').style.transform='scale('+s+') translate(-50%,-50%)';}
 addEventListener('resize',fit);addEventListener('orientationchange',()=>{fit();setTimeout(fit,300);});
 if(window.visualViewport)visualViewport.addEventListener('resize',fit);
