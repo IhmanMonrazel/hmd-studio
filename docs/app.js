@@ -442,5 +442,8 @@ $('go').onclick=()=>{const c=C.find(x=>x.id===cur);deploy(()=>toast(c));};
 $('prev').onclick=()=>deploy();
 $('prev').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();deploy();}};
 function fit(){const s=Math.min(innerWidth/1280,innerHeight/720);$('fit').style.transform='scale('+s+') translate(-50%,-50%)';}
-addEventListener('resize',fit);fit();
+addEventListener('resize',fit);addEventListener('orientationchange',()=>{fit();setTimeout(fit,300);});
+if(window.visualViewport)visualViewport.addEventListener('resize',fit);
+if(window.ResizeObserver)new ResizeObserver(fit).observe(document.documentElement);
+fit();
 $('heroImg').src=IMG[cur];$('heroImg').alt='THIRHMAN ASGARD';renderList();renderInfo();loopClip();
