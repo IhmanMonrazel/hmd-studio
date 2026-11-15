@@ -133,7 +133,7 @@ function loadClip(v,id,fail){
  next();
 }
 function unload(v){v._tok=(v._tok||0)+1;v.onerror=null;v.pause();v.removeAttribute('src');v.load();}
-function reveal(on){$('cine').classList.toggle('show',on);$('hero').classList.toggle('play',on);}
+function reveal(on){$('cine').classList.toggle('show',on);$('hero').classList.toggle('play',on);$('stage').classList.toggle('vid',on);}
 function tryPlay(v){const p=v.play();if(p&&p.catch)p.catch(()=>{v.muted=true;const q=v.play();if(q&&q.catch)q.catch(()=>{});});}
 /* boucle muette de l'opératrice sélectionnée ; le portrait reste affiché tant que la vidéo n'a pas démarré */
 function loopClip(){

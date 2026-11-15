@@ -58,4 +58,6 @@ body{font-family:'Rajdhani',sans-serif;color:#f6e9dd}
 #cine video{width:100%;height:100%;object-fit:contain;display:block;opacity:0;mix-blend-mode:lighten;transition:opacity .45s;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 26%,#000 74%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 26%,#000 74%,transparent 100%)}
 #cine.show video{opacity:1}
 #hero.play img{opacity:0}
+.glow,.floor{transition:opacity .45s}
+#stage.vid .glow,#stage.vid .floor{opacity:0}
 @media (prefers-reduced-motion:reduce){#cine video{transition:none}}
