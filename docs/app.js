@@ -580,13 +580,14 @@ function endcard(c){
 
 /* ---------- vibrations (écrans tactiles) ----------
    Android : API de vibration. iPhone : pas d'API, on bascule un interrupteur caché, ce qui déclenche un léger retour haptique (Safari 17.4+). */
-const coarse=matchMedia('(pointer:coarse)').matches;let tickEl=null;
+const coarse=matchMedia('(pointer:coarse)').matches;
 function haptic(p){
  if(!coarse)return;
  try{
   if(navigator.vibrate){navigator.vibrate(p);return;}
-  if(!tickEl){const l=document.createElement('label');l.setAttribute('aria-hidden','true');l.style.cssText='position:fixed;left:-99px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none';
-   const i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');i.tabIndex=-1;l.appendChild(i);document.body.appendChild(l);tickEl=l;}
-  tickEl.click();
+  /* iPhone : un interrupteur neuf à chaque fois, basculé par son libellé, puis retiré. Un motif à plusieurs temps donne plusieurs tics. */
+  const tick=()=>{const l=document.createElement('label'),i=document.createElement('input');l.setAttribute('aria-hidden','true');l.style.display='none';
+   i.type='checkbox';i.setAttribute('switch','');l.appendChild(i);document.head.appendChild(l);l.click();document.head.removeChild(l);};
+  tick();if(Array.isArray(p)&&p.length>2)tick();
  }catch(e){}
 }
