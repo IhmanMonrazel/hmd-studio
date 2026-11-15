@@ -12,7 +12,7 @@ const C=[
 ];
 const SLOT=['PRINCIPALE','SECONDAIRE','COUP SPÉCIAL'],STAT=['PUISSANCE','STYLE','CHAOS'];
 const $=id=>document.getElementById(id);
-let cur='thor',viewers=[];
+let cur='work',viewers=[];
 
 /* ---------- objets 3D ---------- */
 /* matériaux et raccourci de pose partagés par les objets */
@@ -514,7 +514,7 @@ addEventListener('resize',fit);addEventListener('orientationchange',()=>{fit();s
 if(window.visualViewport)visualViewport.addEventListener('resize',fit);
 if(window.ResizeObserver)new ResizeObserver(fit).observe(document.documentElement);
 fit();
-$('heroImg').src=IMG[cur];$('heroImg').alt='THIRHMAN ASGARD';renderList();renderInfo();loopClip();
+$('heroImg').src=IMG[cur];$('heroImg').alt=C.find(x=>x.id===cur).name+' '+C.find(x=>x.id===cur).org;renderList();renderInfo();loopClip();
 
 /* ---------- son : tout est synthétisé, aucun fichier audio ---------- */
 let AC=null,master=null,amb=null,started=false,soundOn=true;
