@@ -119,21 +119,21 @@ function playClip(id,done){
  const box=$('cine'),v=$('cineVid');
  if(thumb)thumb.pause();
  v.muted=false;v.src=clip(id);v.currentTime=0;
- box.classList.add('show');box.setAttribute('aria-hidden','false');
+ box.classList.add('show');box.setAttribute('aria-hidden','false');$('hero').classList.add('play');
  const p=v.play();
  if(p&&p.catch)p.catch(()=>{v.muted=true;const q=v.play();if(q&&q.catch)q.catch(stopClip);});
 }
 function stopClip(){
  if(!playing)return;playing=false;
  const box=$('cine'),v=$('cineVid'),done=after;after=null;
- box.classList.remove('show');box.setAttribute('aria-hidden','true');
+ box.classList.remove('show');box.setAttribute('aria-hidden','true');$('hero').classList.remove('play');
  if(thumb){const p=thumb.play();if(p&&p.catch)p.catch(()=>{});}
  if(done)done();
  closeT=setTimeout(()=>{v.pause();v.removeAttribute('src');v.load();},450);
 }
 $('cineVid').addEventListener('ended',stopClip);
 $('cineVid').addEventListener('error',()=>{if($('cineVid').getAttribute('src'))stopClip();});
-$('cine').addEventListener('click',stopClip);
+$('cine').addEventListener('click',stopClip);$('hero').addEventListener('click',stopClip);
 addEventListener('keydown',e=>{
  if(e.key==='Escape'){if(playing){e.preventDefault();stopClip();}return;}
  if(playing||e.ctrlKey||e.metaKey||e.altKey)return;
@@ -172,13 +172,14 @@ function renderInfo(){
  $('stats').innerHTML=c.st.map((v,i)=>'<div class="st"><span>'+STAT[i]+'</span><div class="bar"><i style="width:'+v+'%"></i></div></div>').join('');
 }
 function select(id){
+ if(playing){after=null;stopClip();}
  if(id===cur)return;cur=id;renderList();
  const im=$('heroImg');im.classList.add('swap');
  setTimeout(()=>{const c=C.find(x=>x.id===cur);im.src=IMG[cur];im.alt=c.name+' '+c.org;im.classList.remove('swap');},200);
  renderInfo();
 }
 function toast(c){const t=$('toast');t.textContent=c.name+' · '+c.org+' DÉPLOYÉE';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
-$('go').onclick=()=>{const c=C.find(x=>x.id===cur);playClip(c.id,()=>toast(c));};
+$('go').onclick=()=>{if(playing){stopClip();return;}const c=C.find(x=>x.id===cur);playClip(c.id,()=>toast(c));};
 $('prev').onclick=()=>playClip(cur);
 $('prev').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();playClip(cur);}};
 function fit(){const s=Math.min(innerWidth/1280,innerHeight/720);$('fit').style.transform='scale('+s+') translate(-50%,-50%)';}
