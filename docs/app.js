@@ -425,7 +425,7 @@ function loopClip(){
 }
 function deploy(done){
  if(playing){endDeploy();return;}
- const v=$('cineVid');setDeploy(true);after=done||null;v.loop=false;v.muted=!soundOn;SFX.deploy();setTimeout(()=>{if(playing)impact();},360);
+ const v=$('cineVid');setDeploy(true);after=done||null;v.loop=false;v.muted=!soundOn;SFX.deploy();haptic(25);setTimeout(()=>{if(playing){impact();haptic([70,40,30]);}},360);
  if(v.getAttribute('src')&&v.readyState>=2&&!v.error){v.currentTime=0;tryPlay(v);}
  else loadClip(v,cur,endDeploy);
 }
@@ -479,7 +479,7 @@ function renderInfo(){
  const bars=$('stats').querySelectorAll('.bar i');requestAnimationFrame(()=>requestAnimationFrame(()=>bars.forEach((b,i)=>b.style.width=c.st[i]+'%')));
 }
 function select(id){
- if(id===cur)return;after=null;setDeploy(false);cur=id;[...$('list').children].forEach((b,i)=>b.classList.toggle('on',C[i].id===cur));centre();SFX.select();loopClip();
+ if(id===cur)return;after=null;setDeploy(false);cur=id;[...$('list').children].forEach((b,i)=>b.classList.toggle('on',C[i].id===cur));centre();SFX.select();haptic(12);loopClip();
  const im=$('heroImg');im.classList.add('swap');
  setTimeout(()=>{const c=C.find(x=>x.id===cur);im.src=IMG[cur];im.alt=c.name+' '+c.org;im.classList.remove('swap');},200);
  renderInfo();
@@ -490,7 +490,7 @@ function centre(){const L=$('list'),b=L.querySelector('.on');if(!b||!$('stage').
 $('go').onclick=()=>{const c=C.find(x=>x.id===cur);deploy(()=>endcard(c));};
 $('go').onmouseenter=()=>SFX.hover();
 /* mobile : déplier ou replier l'équipement */
-$('more').onclick=()=>{const o=$('stage').classList.toggle('open');$('more').setAttribute('aria-expanded',o?'true':'false');SFX.select();};
+$('more').onclick=()=>{const o=$('stage').classList.toggle('open');$('more').setAttribute('aria-expanded',o?'true':'false');SFX.select();haptic(10);};
 /* glisser sur l'opératrice pour passer à la suivante ou à la précédente */
 let sx=null;
 $('hero').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
@@ -559,13 +559,13 @@ function setSound(on){soundOn=on;try{localStorage.setItem('op-son',on?'1':'0');}
  const b=$('snd');b.setAttribute('aria-pressed',on?'true':'false');b.textContent=on?'SON ACTIVÉ':'SON COUPÉ';
  if(master&&AC)master.gain.setTargetAtTime(on?.55:0,AC.currentTime,.05);
  if(playing)$('cineVid').muted=!on;}
-$('snd').onclick=()=>{setSound(!soundOn);SFX.select();};
+$('snd').onclick=()=>{setSound(!soundOn);SFX.select();haptic(10);};
 setSound(soundOn);
 
 /* ---------- écran d'accueil ---------- */
 function start(){
  if(started)return;started=true;$('title').classList.add('gone');
- SFX.start();ambience(true);renderList();renderInfo();
+ SFX.start();haptic(30);ambience(true);renderList();renderInfo();
 }
 $('title').addEventListener('click',start);
 
@@ -574,6 +574,19 @@ function replay(el,cls){el.classList.remove(cls);void el.offsetWidth;el.classLis
 function impact(){if(still)return;replay($('flash'),'go');replay($('stage'),'shake');}
 let endT=0;
 function endcard(c){
- const e=$('endcard');$('endName').textContent=c.name;clearTimeout(endT);replay(e,'show');SFX.end();
+ const e=$('endcard');$('endName').textContent=c.name;clearTimeout(endT);replay(e,'show');SFX.end();haptic([20,60,20]);
  endT=setTimeout(()=>e.classList.remove('show'),2100);
+}
+
+/* ---------- vibrations (écrans tactiles) ----------
+   Android : API de vibration. iPhone : pas d'API, on bascule un interrupteur caché, ce qui déclenche un léger retour haptique (Safari 17.4+). */
+const coarse=matchMedia('(pointer:coarse)').matches;let tickEl=null;
+function haptic(p){
+ if(!coarse)return;
+ try{
+  if(navigator.vibrate){navigator.vibrate(p);return;}
+  if(!tickEl){const l=document.createElement('label');l.setAttribute('aria-hidden','true');l.style.cssText='position:fixed;left:-99px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none';
+   const i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');i.tabIndex=-1;l.appendChild(i);document.body.appendChild(l);tickEl=l;}
+  tickEl.click();
+ }catch(e){}
 }
