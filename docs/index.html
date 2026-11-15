@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sélection de l'opératrice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -10,10 +10,10 @@
 </head>
 <body>
 <div id="safe"></div>
-<div id="fit"><div id="stage">
+<div id="view"><div id="fit"><div id="stage">
   <div class="glow"></div><div class="floor"></div>
   <div id="cine" aria-hidden="true"><video id="cineVid" playsinline preload="none"></video></div>
-  <div class="top"><div style="display:flex;align-items:center;gap:36px"><h1>OPÉRATRICES</h1><div class="tabs"><span class="on">SÉLECTION</span><span>ÉQUIPEMENT</span><span>TENUES</span></div></div><div class="who">JOUEUSE 1 <b>· EN LIGNE</b></div></div>
+  <div class="top"><div style="display:flex;align-items:center;gap:36px"><h1>OPÉRATRICES</h1><div class="tabs"><span class="on">SÉLECTION</span><span>ÉQUIPEMENT</span><span>TENUES</span></div></div><div class="who"><span>JOUEUSE 1 <b>· EN LIGNE</b></span><button id="snd" type="button" aria-pressed="true">SON ACTIVÉ</button></div></div>
   <div id="list"></div>
   <div id="hero"><img id="heroImg" alt=""></div>
   <div id="info">
@@ -25,9 +25,10 @@
   <div class="bot"><div class="hints"><span><span class="k">B</span>RETOUR</span><span id="prev" role="button" tabindex="0"><span class="k">Y</span>APERÇU DU COUP SPÉCIAL</span></div><button id="go" type="button">DÉPLOYER</button></div>
   <div id="callout" aria-hidden="true"><div class="c1">COUP SPÉCIAL</div><div class="c2" id="callName"></div><div class="c3">ÉCHAP OU CLIC · PASSER</div></div>
   <div id="prog" aria-hidden="true"><i></i></div>
-  <div id="toast" role="status"></div>
-</div></div>
-<div id="rot" aria-hidden="true">TOURNE TON TÉLÉPHONE POUR AGRANDIR</div>
+  <div id="endcard" role="status"><div class="e1">OPÉRATRICE</div><div class="e2" id="endName"></div><div class="e3">DÉPLOYÉE</div></div>
+  <div id="flash" aria-hidden="true"></div>
+  <div id="title" role="button" tabindex="0" aria-label="Appuyer pour commencer"><div class="t0">JOUEUSE 1</div><div class="t1">OPÉRATRICES</div><div class="t2">APPUYER POUR COMMENCER</div></div>
+</div></div></div>
 <script src="vendor/three.min.js"></script>
 <script src="app.js"></script>
 </body>
