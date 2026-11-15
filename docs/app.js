@@ -1,8 +1,8 @@
 const IMG={ball:'img/ball.jpg',iron:'img/iron.jpg',thor:'img/thor.jpg',pop:'img/pop.jpg',sum:'img/sum.jpg',corp:'img/corp.jpg',work:'img/work.jpg',spider:'img/spider.jpg'};
 const TH={spider:'img/spider-th.jpg'};
 const C=[
- {id:'ball',ac:'#f0683e',name:'BALLGIRL',org:'FRANCE',cls:'ASSAUT',tag:'Déterminée, endurante, compétitrice',gear:['Ballon taille 2','Résine extra-collante','Tir en suspension'],st:[90,70,60],models:['handball','resin','jumpshot']},
- {id:'iron',ac:'#d4557a',name:'IRONGIRL',org:'NEW YORK',cls:'AÉRIENNE',tag:'Stratégique, protectrice',gear:['Propulseurs','Armure grenat','Décollage + vrille 360°'],st:[95,85,70],models:['thruster','armor','spin']},
+ {id:'ball',ac:'#d4557a',name:'BALLGIRL',org:'FRANCE',cls:'ASSAUT',tag:'Déterminée, endurante, compétitrice',gear:['Ballon taille 2','Résine extra-collante','Tir en suspension'],st:[90,70,60],models:['handball','resin','jumpshot']},
+ {id:'iron',ac:'#f0683e',name:'IRONGIRL',org:'NEW YORK',cls:'AÉRIENNE',tag:'Stratégique, protectrice',gear:['Propulseurs','Armure grenat','Décollage + vrille 360°'],st:[95,85,70],models:['thruster','armor','spin']},
  {id:'thor',ac:'#dba63f',name:'THIRHMAN',org:'ASGARD',cls:'TANK',tag:'Fière, inébranlable',gear:['Marteau','Cape en fourrure','Frappe sismique'],st:[100,75,95],models:['hammer','cape','quake']},
  {id:'pop',ac:'#6d8cff',name:'HIIIHMAN',org:'NEVERLAND',cls:'DIVERSION',tag:'Charismatique, audacieuse',gear:['Gant de strass','Lunettes aviateur','Moonwalk'],st:[50,100,80],models:['glove','aviators','moonwalk']},
  {id:'sum',ac:'#f1e2b8',name:'IHMEN',org:'COPENHAGUE',cls:'ÉCLAIREUSE',tag:'Solaire, esprit libre',gear:['Maxi-scooter','Créoles dorées','Wheeling'],st:[45,90,95],models:['scooter','hoops','wheel']},
@@ -497,13 +497,13 @@ $('hero').addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changed
 $('prev').onclick=()=>deploy();
 $('prev').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();deploy();}};
 /* paysage : scène de 1280x720, élargie jusqu'à 2000 sur les écrans allongés.
-   portrait (téléphone à la verticale) : scène de 720 de large, la hauteur suit l'écran et profite à l'opératrice */
+   portrait (téléphone à la verticale) : scène de 430 de large (textes à taille réelle), la hauteur suit l'écran et profite à l'opératrice */
 let wasPt=null;
 function fit(){
  const iw=innerWidth,ih=innerHeight,pt=ih>iw*1.12,st=$('stage'),cs=getComputedStyle($('safe'));
- const W=pt?720:(Math.max(1280,Math.min(2000,Math.round(720*iw/ih)))||1280),H=pt?Math.max(1280,Math.min(1900,Math.round(720*ih/iw))):720,s=Math.min(iw/W,ih/H);
+ const W=pt?430:(Math.max(1280,Math.min(2000,Math.round(720*iw/ih)))||1280),H=pt?Math.max(764,Math.min(1100,Math.round(430*ih/iw))):720,s=Math.min(iw/W,ih/H);
  const inset=Math.max(parseFloat(cs.paddingLeft)||0,parseFloat(cs.paddingRight)||0);
- st.classList.toggle('pt',pt);st.style.setProperty('--gx',Math.max(pt?28:40,Math.ceil(inset/s))+'px');st.style.setProperty('--hh',(H-778)+'px');
+ st.classList.toggle('pt',pt);st.style.setProperty('--gx',Math.max(pt?16:40,Math.ceil(inset/s))+'px');st.style.setProperty('--hh',(H-512)+'px');
  $('fit').style.width=st.style.width=W+'px';$('fit').style.height=st.style.height=H+'px';$('fit').style.transform='scale('+s+') translate(-50%,-50%)';
  if(wasPt!==null&&wasPt!==pt){renderInfo();centre();}
  wasPt=pt;
